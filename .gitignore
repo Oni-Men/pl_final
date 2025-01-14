@@ -1,0 +1,9 @@
+# Java class files and archives
+*.class
+*.jar
+
+# Test reports
+/test-report/
+
+# Javadoc
+/JavaDoc/

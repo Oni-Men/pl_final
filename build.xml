@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="PL_FINAL" default="all" basedir=".">
+
+	<property name="homedir" value="${user.home}" />
+	<property name="parser" value="parser" />
+	<property name="vm" value="vm" />
+	<property name="packagenames" value="${parser},${vm}" />
+	<property name="srcdir" value="./src" />
+	<property name="destdir" value="./Classes" />
+	<property name="testdir" value="./test" />
+	<property name="docdir" value="./JavaDoc" />
+	<property name="manifest" value="pl_final.mf" />
+	<property name="instdir" value="./${ant.project.name}.app/Contents/Resources/Java" />
+	<property name="copyright" value="Copyright 2025 YAMAMOTO Ryotaro. All Rights Reserved." />
+	<property name="reportdir" value="${basedir}/test-report" />
+
+	<target name="all" depends="jar" description="build all">
+		<exec executable="date" spawn="false" />
+	</target>
+
+	<target name="prepare" depends="" description="prepare to compile">
+		<mkdir dir="${destdir}" />
+		<exec executable="date" spawn="false" />
+	</target>
+
+	<target name="prepare-junit" depends="prepare" description="prepare to run junit">
+		<mkdir dir="${reportdir}" />
+		<exec executable="bash">
+			<arg value="${basedir}/setup_junit.sh" />
+		</exec>
+		<exec executable="date" spawn="false" />
+	</target>
+
+	<target name="compile" depends="prepare" description="compile all sources">
+		<javac
+			fork="true"
+			srcdir="${srcdir}"
+			destdir="${destdir}"
+			includeAntRuntime="true"
+			encoding="UTF-8"
+			deprecation="on"
+			verbose="false">
+			<compilerarg value="-J-Dfile.encoding=UTF8" />
+			<compilerarg value="-Xlint:all" />
+			<classpath>
+				<pathelement location="${srcdir}" />
+			</classpath>
+		</javac>
+		<exec executable="date" spawn="false" />
+	</target>
+
+	<target name="jar" depends="compile" description="make jar file">
+		<jar
+			jarfile="${vm}.jar"
+			basedir="${destdir}"
+			manifest="${manifest}">
+		</jar>
+		<exec executable="date" spawn="false" />
+	</target>
+
+	<target name="clean" description="cleaning">
+		<delete dir="${destdir}" />
+		<delete file="${vm}.jar" />
+		<delete dir="${docdir}" />
+		<delete dir="${instdir}" />
+		<exec executable="date" spawn="false" />
+	</target>
+
+	<target name="test" depends="all" description="test">
+		<exec executable="java" spawn="false">
+			<arg line="-Dfile.encoding=UTF-8 -Xmx512m -Xss1024k -jar ${vm}.jar" />
+		</exec>
+		<exec executable="date" spawn="false" />
+	</target>
+
+	<!-- 以下を追加、単体テストのために。console.launcher -->
+	<target name="junit" depends="prepare-junit" description="console launcher">
+		<java classpath="${vm}.jar" classname="org.junit.platform.console.ConsoleLauncher" fork="true" failonerror="false">
+			<classpath>
+				<pathelement location="${destdir}/test" />
+				<pathelement location="./junit-platform-console-standalone-1.11.3.jar" />
+			</classpath>
+			<arg value="--scan-class-path=${destdir}" />
+			<arg line="--reports-dir ${reportdir}" />
+			<jvmarg value="-Dfile.encoding=UTF-8 -Xmx512m -Xss1024k" />
+		</java>
+		<junitreport todir="${reportdir}">
+			<fileset dir="${reportdir}">
+				<include name="TEST-*.xml"/>
+			</fileset>
+			<report format="noframes" todir="${reportdir}/html"/>
+		</junitreport>
+		<exec executable="open" spawn="true">
+			<arg line="-a 'Safari' ${reportdir}/html/junit-noframes.html" />
+		</exec>
+		<exec executable="date" spawn="false" />
+	</target>
+
+	<target name="install" depends="all" description="install into application">
+		<copy file="${vm}.jar" todir="${instdir}" />
+		<exec executable="chmod">
+			<arg line="755 ${instdir}/../../MacOS/applet" />
+		</exec>
+		<exec executable="date" spawn="false" />
+	</target>
+
+	<target name="doc" depends="all" description="make document (javadoc)">
+		<mkdir dir="${docdir}" />
+		<javadoc
+			locale="ja_JP"
+			sourcepath="${srcdir}"
+			destdir="${docdir}"
+			packagenames="${packagenames}"
+			author="true"
+			version="true"
+			charset="UTF-8"
+			encoding="UTF-8"
+			docencoding="UTF-8"
+			linksource="yes"
+			additionalparam="-J-Dfile.encoding=UTF-8"
+			access="private">
+			<doctitle>${doc-title}</doctitle>
+			<bottom>${copyright}</bottom>
+			<classpath>
+				<pathelement location="." />
+			</classpath>
+		</javadoc>
+		<exec executable="open">
+			<arg line="${docdir}/index.html" />
+		</exec>
+		<exec executable="date" spawn="false" />
+	</target>
+
+</project>

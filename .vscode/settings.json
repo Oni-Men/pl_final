@@ -1,0 +1,13 @@
+{
+  "java.project.sourcePaths": [
+    "test",
+    "src"
+  ],
+  "java.project.referencedLibraries": [],
+  "java.format.settings.url": ".vscode/java-formatter.xml",
+  "[java]": {
+    "editor.detectIndentation": false
+  },
+  "java.format.enabled": true,
+  "editor.formatOnSave": true
+}
