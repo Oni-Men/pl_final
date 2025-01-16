@@ -1,9 +1,11 @@
 {
   "java.project.sourcePaths": [
-    "test",
-    "src"
+    "src",
+    "test"
   ],
-  "java.project.referencedLibraries": [],
+  "java.project.referencedLibraries": [
+    "junit-platform-console-standalone-1.11.3.jar"
+  ],
   "java.format.settings.url": ".vscode/java-formatter.xml",
   "[java]": {
     "editor.detectIndentation": false

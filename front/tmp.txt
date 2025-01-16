@@ -1,0 +1,392 @@
+
+    node(ASSERT 
+        cons(
+            leaf(UPPER_ID A5)
+            node(INTENSION 
+                cons(
+                    leaf(LOWER_ID x)
+                    node(AND 
+                        cons(
+                            node(AND 
+                                cons(
+                                    node(= 
+                                        cons(
+                                            leaf(LOWER_ID x)
+                                            node(* 
+                                                cons(
+                                                    leaf(INTEGER 2)
+                                                    leaf(LOWER_ID y)))))
+                                    node(~ 
+                                        cons(
+                                            leaf(LOWER_ID y)
+                                            leaf(UPPER_ID N)))))
+                            node(!~ 
+                                cons(
+                                    leaf(LOWER_ID y)
+                                    leaf(UPPER_ID N)))))))))
+
+    node(ASSERT 
+        cons(
+            leaf(UPPER_ID N)
+            node(range 
+                node(, 
+                    cons(
+                        node(, 
+                            cons(
+                                leaf(INTEGER 1)
+                                leaf(INTEGER 100)))
+                        leaf(INTEGER 5))))))
+
+    node(ASSERT 
+        cons(
+            node(UNIFY 
+                cons(
+                    leaf(UPPER_ID A)
+                    leaf(UPPER_ID X)))
+            node(INTENSION 
+                cons(
+                    leaf(LOWER_ID x)
+                    node(AND 
+                        cons(
+                            node(= 
+                                cons(
+                                    leaf(LOWER_ID x)
+                                    node(+ 
+                                        cons(
+                                            node(* 
+                                                cons(
+                                                    leaf(INTEGER 2)
+                                                    leaf(LOWER_ID y)))
+                                            leaf(INTEGER 1)))))
+                            node(~ 
+                                cons(
+                                    leaf(LOWER_ID y)
+                                    leaf(UPPER_ID X)))))))))
+
+    node(PROVE 
+        node(~ 
+            cons(
+                leaf(INTEGER 3)
+                node(UNIFY 
+                    cons(
+                        leaf(UPPER_ID A)
+                        leaf(UPPER_ID Y))))))
+
+    node(ASSERT 
+        cons(
+            leaf(UPPER_ID Y)
+            node(EXTENSION 
+                node(, 
+                    cons(
+                        node(, 
+                            cons(
+                                leaf(INTEGER 1)
+                                leaf(INTEGER 2)))
+                        leaf(INTEGER 3))))))
+
+    node(ASSERT 
+        cons(
+            node(UNIFY 
+                cons(
+                    leaf(UPPER_ID A)
+                    node(, 
+                        cons(
+                            leaf(UPPER_ID X)
+                            leaf(UPPER_ID Y)))))
+            node(+ 
+                cons(
+                    leaf(UPPER_ID X)
+                    leaf(UPPER_ID Y)))))
+
+    node(ASSERT 
+        cons(
+            node(UNIFY 
+                cons(
+                    leaf(UPPER_ID A)
+                    node(, 
+                        cons(
+                            leaf(UPPER_ID X)
+                            leaf(UPPER_ID Y)))))
+            node(- 
+                cons(
+                    leaf(UPPER_ID X)
+                    leaf(UPPER_ID Y)))))
+
+    node(ASSERT 
+        cons(
+            node(UNIFY 
+                cons(
+                    leaf(UPPER_ID A)
+                    node(, 
+                        cons(
+                            leaf(UPPER_ID X)
+                            leaf(UPPER_ID Y)))))
+            node(* 
+                cons(
+                    leaf(UPPER_ID X)
+                    leaf(UPPER_ID Y)))))
+
+    node(ASSERT 
+        cons(
+            node(UNIFY 
+                cons(
+                    leaf(UPPER_ID A)
+                    node(, 
+                        cons(
+                            leaf(UPPER_ID X)
+                            leaf(UPPER_ID Y)))))
+            node(^ 
+                cons(
+                    leaf(UPPER_ID X)
+                    leaf(UPPER_ID Y)))))
+
+    node(ASSERT 
+        cons(
+            leaf(UPPER_ID A1)
+            node(INTENSION 
+                cons(
+                    leaf(LOWER_ID x)
+                    node(OR 
+                        cons(
+                            node(AND 
+                                cons(
+                                    node(= 
+                                        cons(
+                                            leaf(LOWER_ID x)
+                                            node(* 
+                                                cons(
+                                                    leaf(INTEGER 5)
+                                                    leaf(LOWER_ID y)))))
+                                    node(~ 
+                                        cons(
+                                            leaf(LOWER_ID y)
+                                            leaf(UPPER_ID N)))))
+                            node(AND 
+                                cons(
+                                    node(= 
+                                        cons(
+                                            leaf(LOWER_ID x)
+                                            node(* 
+                                                cons(
+                                                    leaf(INTEGER 6)
+                                                    leaf(LOWER_ID y)))))
+                                    node(~ 
+                                        cons(
+                                            leaf(LOWER_ID y)
+                                            leaf(UPPER_ID N)))))))))))
+
+    node(ASSERT 
+        cons(
+            leaf(UPPER_ID A2)
+            node(INTENSION 
+                cons(
+                    leaf(LOWER_ID x)
+                    node(AND 
+                        cons(
+                            node(OR 
+                                cons(
+                                    node(= 
+                                        cons(
+                                            leaf(LOWER_ID x)
+                                            node(* 
+                                                cons(
+                                                    leaf(INTEGER 5)
+                                                    leaf(LOWER_ID y)))))
+                                    node(= 
+                                        cons(
+                                            leaf(LOWER_ID x)
+                                            node(* 
+                                                cons(
+                                                    leaf(INTEGER 6)
+                                                    leaf(LOWER_ID y)))))))
+                            node(~ 
+                                cons(
+                                    leaf(LOWER_ID y)
+                                    leaf(UPPER_ID N)))))))))
+
+    node(ASSERT 
+        cons(
+            leaf(UPPER_ID A3)
+            node(INTENSION 
+                cons(
+                    leaf(LOWER_ID x)
+                    node(AND 
+                        cons(
+                            node(AND 
+                                cons(
+                                    node(AND 
+                                        cons(
+                                            node(= 
+                                                cons(
+                                                    leaf(LOWER_ID x)
+                                                    node(* 
+                                                        cons(
+                                                            leaf(INTEGER 2)
+                                                            leaf(LOWER_ID y)))))
+                                            node(~ 
+                                                cons(
+                                                    leaf(LOWER_ID y)
+                                                    leaf(UPPER_ID N)))))
+                                    node(> 
+                                        cons(
+                                            leaf(LOWER_ID x)
+                                            leaf(INTEGER 5)))))
+                            node(< 
+                                cons(
+                                    leaf(LOWER_ID x)
+                                    leaf(INTEGER 12)))))))))
+
+    node(ASSERT 
+        cons(
+            leaf(UPPER_ID A4)
+            node(INTENSION 
+                cons(
+                    leaf(LOWER_ID x)
+                    node(AND 
+                        cons(
+                            node(!= 
+                                cons(
+                                    leaf(LOWER_ID x)
+                                    node(* 
+                                        cons(
+                                            leaf(INTEGER 2)
+                                            leaf(LOWER_ID y)))))
+                            node(~ 
+                                cons(
+                                    leaf(LOWER_ID y)
+                                    leaf(UPPER_ID N)))))))))
+
+    node(PROVE 
+        node(~ 
+            cons(
+                leaf(INTEGER 10)
+                leaf(UPPER_ID A1))))
+
+    node(PROVE 
+        node(~ 
+            cons(
+                leaf(LOWER_ID x)
+                leaf(UPPER_ID A1))))
+
+    node(ASSERT 
+        cons(
+            leaf(UPPER_ID AA1)
+            node(INTENSION 
+                cons(
+                    node(, 
+                        cons(
+                            leaf(LOWER_ID x)
+                            leaf(LOWER_ID y)))
+                    node(AND 
+                        cons(
+                            node(= 
+                                cons(
+                                    leaf(LOWER_ID x)
+                                    node(* 
+                                        cons(
+                                            leaf(INTEGER 2)
+                                            leaf(LOWER_ID y)))))
+                            node(~ 
+                                cons(
+                                    leaf(LOWER_ID y)
+                                    leaf(UPPER_ID N)))))))))
+
+    node(ASSERT 
+        cons(
+            leaf(UPPER_ID AA2)
+            node(INTENSION 
+                cons(
+                    node(+ 
+                        cons(
+                            leaf(LOWER_ID x)
+                            leaf(LOWER_ID y)))
+                    node(AND 
+                        cons(
+                            node(AND 
+                                cons(
+                                    node(= 
+                                        cons(
+                                            leaf(LOWER_ID x)
+                                            node([ 
+                                                cons(
+                                                    leaf(LOWER_ID z)
+                                                    leaf(INTEGER 0)))))
+                                    node(= 
+                                        cons(
+                                            leaf(LOWER_ID y)
+                                            node([ 
+                                                cons(
+                                                    leaf(LOWER_ID z)
+                                                    leaf(INTEGER 1)))))))
+                            node(~ 
+                                cons(
+                                    leaf(LOWER_ID z)
+                                    leaf(UPPER_ID AA)))))))))
+
+    node(ASSERT 
+        cons(
+            leaf(UPPER_ID AAA1)
+            node(INTENSION 
+                cons(
+                    node(, 
+                        cons(
+                            node(, 
+                                cons(
+                                    leaf(LOWER_ID x)
+                                    leaf(LOWER_ID y)))
+                            leaf(LOWER_ID z)))
+                    node(AND 
+                        cons(
+                            node(AND 
+                                cons(
+                                    node(~ 
+                                        cons(
+                                            leaf(LOWER_ID x)
+                                            leaf(UPPER_ID N)))
+                                    node(~ 
+                                        cons(
+                                            leaf(LOWER_ID y)
+                                            leaf(UPPER_ID N)))))
+                            node(~ 
+                                cons(
+                                    leaf(LOWER_ID z)
+                                    leaf(UPPER_ID N)))))))))
+
+    node(PROVE 
+        node(~ 
+            cons(
+                node(, 
+                    cons(
+                        leaf(INTEGER 6)
+                        leaf(INTEGER 3)))
+                leaf(UPPER_ID AA1))))
+
+    node(PROVE 
+        node(~ 
+            cons(
+                node(, 
+                    cons(
+                        leaf(LOWER_ID x)
+                        leaf(LOWER_ID y)))
+                leaf(UPPER_ID AA1))))
+
+    node(ASSERT 
+        cons(
+            leaf(UPPER_ID Extent)
+            node(EXTENSION 
+                node(, 
+                    cons(
+                        node(, 
+                            cons(
+                                node(, 
+                                    cons(
+                                        node(, 
+                                            cons(
+                                                node(, 
+                                                    cons(
+                                                        leaf(INTEGER 1)
+                                                        leaf(INTEGER 2)))
+                                                leaf(INTEGER 3)))
+                                        leaf(INTEGER 4)))
+                                leaf(INTEGER 5)))
+                        leaf(INTEGER 6))))))
