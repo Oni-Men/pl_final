@@ -1,45 +1,75 @@
 
-    node(ASSERT 
-        cons(
-            leaf(UPPER_ID A5)
-            node(INTENSION 
-                cons(
-                    leaf(LOWER_ID x)
-                    node(AND 
-                        cons(
-                            node(AND 
+    node(PROVE 
+        node(~ 
+            cons(
+                leaf(INTEGER 6)
+                node(PARAMS 
+                    cons(
+                        leaf(UPPER_ID A)
+                        leaf(UPPER_ID N))))))
+
+    node(PROVE 
+        node(~ 
+            cons(
+                leaf(INTEGER 6)
+                node(PARAMS 
+                    cons(
+                        leaf(UPPER_ID A)
+                        node(EXTENSION 
+                            node(, 
                                 cons(
-                                    node(= 
+                                    node(, 
                                         cons(
-                                            leaf(LOWER_ID x)
-                                            node(* 
+                                            leaf(INTEGER 1)
+                                            leaf(INTEGER 2)))
+                                    leaf(INTEGER 3)))))))))
+
+    node(PROVE 
+        node(~ 
+            cons(
+                leaf(INTEGER 6)
+                node(INTENSION 
+                    cons(
+                        leaf(LOWER_ID x)
+                        node(AND 
+                            cons(
+                                node(= 
+                                    cons(
+                                        leaf(LOWER_ID x)
+                                        node(+ 
+                                            cons(
+                                                node(* 
+                                                    cons(
+                                                        leaf(INTEGER 2)
+                                                        leaf(LOWER_ID y)))
+                                                leaf(INTEGER 1)))))
+                                node(~ 
+                                    cons(
+                                        leaf(LOWER_ID y)
+                                        node(EXTENSION 
+                                            node(, 
                                                 cons(
-                                                    leaf(INTEGER 2)
-                                                    leaf(LOWER_ID y)))))
-                                    node(~ 
-                                        cons(
-                                            leaf(LOWER_ID y)
-                                            leaf(UPPER_ID N)))))
-                            node(!~ 
-                                cons(
-                                    leaf(LOWER_ID y)
-                                    leaf(UPPER_ID N)))))))))
+                                                    node(, 
+                                                        cons(
+                                                            leaf(INTEGER 1)
+                                                            leaf(INTEGER 2)))
+                                                    leaf(INTEGER 3)))))))))))))
 
     node(ASSERT 
         cons(
             leaf(UPPER_ID N)
-            node(range 
+            node(RANGE 
                 node(, 
                     cons(
                         node(, 
                             cons(
                                 leaf(INTEGER 1)
-                                leaf(INTEGER 100)))
-                        leaf(INTEGER 5))))))
+                                leaf(INTEGER 10)))
+                        leaf(INTEGER 1))))))
 
     node(ASSERT 
         cons(
-            node(UNIFY 
+            node(PARAMS 
                 cons(
                     leaf(UPPER_ID A)
                     leaf(UPPER_ID X)))
@@ -67,10 +97,10 @@
         node(~ 
             cons(
                 leaf(INTEGER 3)
-                node(UNIFY 
+                node(PARAMS 
                     cons(
                         leaf(UPPER_ID A)
-                        leaf(UPPER_ID Y))))))
+                        leaf(UPPER_ID N))))))
 
     node(ASSERT 
         cons(
@@ -86,7 +116,7 @@
 
     node(ASSERT 
         cons(
-            node(UNIFY 
+            node(PARAMS 
                 cons(
                     leaf(UPPER_ID A)
                     node(, 
@@ -100,7 +130,7 @@
 
     node(ASSERT 
         cons(
-            node(UNIFY 
+            node(PARAMS 
                 cons(
                     leaf(UPPER_ID A)
                     node(, 
@@ -114,7 +144,7 @@
 
     node(ASSERT 
         cons(
-            node(UNIFY 
+            node(PARAMS 
                 cons(
                     leaf(UPPER_ID A)
                     node(, 
@@ -128,7 +158,7 @@
 
     node(ASSERT 
         cons(
-            node(UNIFY 
+            node(PARAMS 
                 cons(
                     leaf(UPPER_ID A)
                     node(, 
@@ -252,6 +282,32 @@
                                             leaf(INTEGER 2)
                                             leaf(LOWER_ID y)))))
                             node(~ 
+                                cons(
+                                    leaf(LOWER_ID y)
+                                    leaf(UPPER_ID N)))))))))
+
+    node(ASSERT 
+        cons(
+            leaf(UPPER_ID A5)
+            node(INTENSION 
+                cons(
+                    leaf(LOWER_ID x)
+                    node(AND 
+                        cons(
+                            node(AND 
+                                cons(
+                                    node(= 
+                                        cons(
+                                            leaf(LOWER_ID x)
+                                            node(* 
+                                                cons(
+                                                    leaf(INTEGER 2)
+                                                    leaf(LOWER_ID y)))))
+                                    node(~ 
+                                        cons(
+                                            leaf(LOWER_ID y)
+                                            leaf(UPPER_ID N)))))
+                            node(!~ 
                                 cons(
                                     leaf(LOWER_ID y)
                                     leaf(UPPER_ID N)))))))))

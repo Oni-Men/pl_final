@@ -1,5 +1,6 @@
 ANT	= env LC_ALL=ja_JP.UTF-8 ant
 ARCHIVE	= $(shell basename `pwd`)
+PYTHON = env python
 
 .PHONY:	test
 
@@ -20,6 +21,9 @@ install:
 
 doc:
 	$(ANT) doc
+
+railroad:
+	$(PYTHON) ./bin/yacc_to_railroad_diagram.py
 
 zip: clean
 	find . -name ".DS_Store" | xargs rm

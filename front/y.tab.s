@@ -26,54 +26,56 @@ _yyparse:                               ## @yyparse
 	movq	%rax, -48(%rbp)
 	movq	_yynerrs@GOTPCREL(%rip), %rax
 	movl	$0, (%rax)
-	movq	_yychar@GOTPCREL(%rip), %r13
-	movl	$-2, (%r13)
+	movq	_yychar@GOTPCREL(%rip), %rax
+	movl	$-2, (%rax)
 	xorl	%ebx, %ebx
-	movl	$200, %r12d
+	movl	$200, %r13d
 	leaq	-2048(%rbp), %rcx
 	leaq	-448(%rbp), %rax
+	leaq	_yypact(%rip), %r14
 	movq	%rax, %rdi
 	movq	%rax, %r8
 	movq	%rcx, -2080(%rbp)               ## 8-byte Spill
 	movq	%rcx, %r9
-	jmp	LBB0_4
+	jmp	LBB0_3
 	.p2align	4, 0x90
-LBB0_1:                                 ##   in Loop: Header=BB0_4 Depth=1
+LBB0_1:                                 ##   in Loop: Header=BB0_3 Depth=1
 	leaq	_yydefgoto(%rip), %rcx
 	movsbl	-33(%rax,%rcx), %ebx
-LBB0_2:                                 ##   in Loop: Header=BB0_4 Depth=1
-	movq	%r14, %r12
-LBB0_3:                                 ##   in Loop: Header=BB0_4 Depth=1
+LBB0_2:                                 ##   in Loop: Header=BB0_3 Depth=1
 	addq	$2, %r8
-LBB0_4:                                 ## =>This Inner Loop Header: Depth=1
+LBB0_3:                                 ## =>This Inner Loop Header: Depth=1
 	movw	%bx, (%r8)
-	leaq	(%rdi,%r12,2), %rax
+	leaq	(%rdi,%r13,2), %rax
 	addq	$-2, %rax
 	cmpq	%r8, %rax
-	ja	LBB0_11
-## %bb.5:                               ##   in Loop: Header=BB0_4 Depth=1
-	cmpq	$9999, %r12                     ## imm = 0x270F
-	ja	LBB0_89
-## %bb.6:                               ##   in Loop: Header=BB0_4 Depth=1
-	movq	%r8, %r13
+	ja	LBB0_10
+## %bb.4:                               ##   in Loop: Header=BB0_3 Depth=1
+	cmpq	$9999, %r13                     ## imm = 0x270F
+	ja	LBB0_88
+## %bb.5:                               ##   in Loop: Header=BB0_3 Depth=1
+	movq	%r8, %r12
 	movq	%rdi, %r14
-	addq	%r12, %r12
-	cmpq	$10000, %r12                    ## imm = 0x2710
+	addq	%r13, %r13
+	cmpq	$10000, %r13                    ## imm = 0x2710
 	movl	$10000, %eax                    ## imm = 0x2710
-	cmovaeq	%rax, %r12
-	leaq	(%r12,%r12,4), %rax
+	cmovaeq	%rax, %r13
+	leaq	(,%r13,4), %rax
+	addq	%r13, %rax
 	leaq	7(,%rax,2), %rdi
 	callq	_malloc
 	testq	%rax, %rax
-	je	LBB0_89
-## %bb.7:                               ##   in Loop: Header=BB0_4 Depth=1
+	je	LBB0_88
+## %bb.6:                               ##   in Loop: Header=BB0_3 Depth=1
 	movq	%rax, %r15
-	subq	%r14, %r13
-	sarq	%r13
-	movq	%r13, -2064(%rbp)               ## 8-byte Spill
-	incq	%r13
+	movq	%r12, %rax
+	subq	%r14, %rax
+	sarq	%rax
+	movq	%r13, %r12
+	movq	%rax, -2064(%rbp)               ## 8-byte Spill
+	leaq	1(%rax), %r13
 	leaq	(,%r13,2), %rdx
-	movq	%rax, %rdi
+	movq	%r15, %rdi
 	movq	%r14, %rsi
 	callq	_memcpy
 	movq	%r12, -2056(%rbp)               ## 8-byte Spill
@@ -86,121 +88,120 @@ LBB0_4:                                 ## =>This Inner Loop Header: Depth=1
 	callq	_memcpy
 	leaq	-448(%rbp), %rax
 	cmpq	%rax, %r14
-	je	LBB0_9
-## %bb.8:                               ##   in Loop: Header=BB0_4 Depth=1
+	je	LBB0_8
+## %bb.7:                               ##   in Loop: Header=BB0_3 Depth=1
 	movq	%r14, %rdi
 	callq	_free
-LBB0_9:                                 ##   in Loop: Header=BB0_4 Depth=1
+LBB0_8:                                 ##   in Loop: Header=BB0_3 Depth=1
 	cmpq	%r13, -2056(%rbp)               ## 8-byte Folded Reload
-	jle	LBB0_84
-## %bb.10:                              ##   in Loop: Header=BB0_4 Depth=1
+	jle	LBB0_83
+## %bb.9:                               ##   in Loop: Header=BB0_3 Depth=1
 	movq	-2064(%rbp), %r8                ## 8-byte Reload
 	leaq	(%r15,%r8,2), %r8
 	leaq	(%r12,%r13,8), %r9
 	addq	$-8, %r9
 	movq	%r15, %rdi
 	movq	%r12, -2080(%rbp)               ## 8-byte Spill
-	movq	_yychar@GOTPCREL(%rip), %r13
-	movq	-2056(%rbp), %r12               ## 8-byte Reload
-LBB0_11:                                ## %.thread295
-                                        ##   in Loop: Header=BB0_4 Depth=1
+	movq	-2056(%rbp), %r13               ## 8-byte Reload
+	leaq	_yypact(%rip), %r14
+LBB0_10:                                ## %.thread298
+                                        ##   in Loop: Header=BB0_3 Depth=1
 	movslq	%ebx, %rbx
-	leaq	_yypact(%rip), %rax
-	movsbl	(%rbx,%rax), %r15d
-	cmpl	$-52, %r15d
-	je	LBB0_25
-## %bb.12:                              ##   in Loop: Header=BB0_4 Depth=1
-	movl	(%r13), %eax
+	movsbl	(%rbx,%r14), %r15d
+	cmpl	$-51, %r15d
+	je	LBB0_24
+## %bb.11:                              ##   in Loop: Header=BB0_3 Depth=1
+	movq	_yychar@GOTPCREL(%rip), %rax
+	movl	(%rax), %eax
 	cmpl	$-2, %eax
-	jne	LBB0_14
-## %bb.13:                              ##   in Loop: Header=BB0_4 Depth=1
-	movq	%rdi, -2056(%rbp)               ## 8-byte Spill
-	movq	%r8, %r13
-	movq	%r9, %r14
+	jne	LBB0_13
+## %bb.12:                              ##   in Loop: Header=BB0_3 Depth=1
+	movq	%rdi, %r12
+	movq	%r13, -2056(%rbp)               ## 8-byte Spill
+	movq	%r8, %r14
+	movq	%r9, %r13
 	callq	_yylex
-	movq	%r14, %r9
-	movq	%r13, %r8
-	movq	_yychar@GOTPCREL(%rip), %r13
-	movq	-2056(%rbp), %rdi               ## 8-byte Reload
-	movl	%eax, (%r13)
-LBB0_14:                                ##   in Loop: Header=BB0_4 Depth=1
+	movq	%r13, %r9
+	movq	%r14, %r8
+	leaq	_yypact(%rip), %r14
+	movq	-2056(%rbp), %r13               ## 8-byte Reload
+	movq	%r12, %rdi
+	movq	_yychar@GOTPCREL(%rip), %rcx
+	movl	%eax, (%rcx)
+LBB0_13:                                ##   in Loop: Header=BB0_3 Depth=1
 	testl	%eax, %eax
-	jle	LBB0_17
-## %bb.15:                              ##   in Loop: Header=BB0_4 Depth=1
+	jle	LBB0_16
+## %bb.14:                              ##   in Loop: Header=BB0_3 Depth=1
 	movl	$2, %ecx
 	cmpl	$287, %eax                      ## imm = 0x11F
-	ja	LBB0_18
-## %bb.16:                              ##   in Loop: Header=BB0_4 Depth=1
+	ja	LBB0_17
+## %bb.15:                              ##   in Loop: Header=BB0_3 Depth=1
 	movl	%eax, %ecx
 	leaq	_yytranslate(%rip), %rdx
 	movzbl	(%rcx,%rdx), %ecx
-	jmp	LBB0_18
-LBB0_17:                                ##   in Loop: Header=BB0_4 Depth=1
-	movl	$0, (%r13)
+	jmp	LBB0_17
+LBB0_16:                                ##   in Loop: Header=BB0_3 Depth=1
+	movq	_yychar@GOTPCREL(%rip), %rcx
+	movl	$0, (%rcx)
 	xorl	%ecx, %ecx
-LBB0_18:                                ##   in Loop: Header=BB0_4 Depth=1
+LBB0_17:                                ##   in Loop: Header=BB0_3 Depth=1
 	addl	%ecx, %r15d
-	cmpl	$127, %r15d
-	ja	LBB0_25
-## %bb.19:                              ##   in Loop: Header=BB0_4 Depth=1
+	cmpl	$131, %r15d
+	ja	LBB0_24
+## %bb.18:                              ##   in Loop: Header=BB0_3 Depth=1
 	movl	%r15d, %edx
 	leaq	_yycheck(%rip), %rsi
-	movsbl	(%rdx,%rsi), %esi
+	movzbl	(%rdx,%rsi), %esi
 	cmpl	%esi, %ecx
-	jne	LBB0_25
-## %bb.20:                              ##   in Loop: Header=BB0_4 Depth=1
+	jne	LBB0_24
+## %bb.19:                              ##   in Loop: Header=BB0_3 Depth=1
 	leaq	_yytable(%rip), %rcx
 	movsbl	(%rdx,%rcx), %ebx
-	testl	%ebx, %ebx
-	jle	LBB0_29
-## %bb.21:                              ##   in Loop: Header=BB0_4 Depth=1
-	cmpl	$15, %r15d
-	je	LBB0_88
-## %bb.22:                              ##   in Loop: Header=BB0_4 Depth=1
+	cmpl	$78, %r15d
+	je	LBB0_28
+## %bb.20:                              ##   in Loop: Header=BB0_3 Depth=1
+	cmpl	$32, %r15d
+	je	LBB0_87
+## %bb.21:                              ##   in Loop: Header=BB0_3 Depth=1
 	testl	%eax, %eax
-	jle	LBB0_24
-## %bb.23:                              ##   in Loop: Header=BB0_4 Depth=1
-	movl	$-2, (%r13)
-LBB0_24:                                ##   in Loop: Header=BB0_4 Depth=1
+	jle	LBB0_23
+## %bb.22:                              ##   in Loop: Header=BB0_3 Depth=1
+	movq	_yychar@GOTPCREL(%rip), %rax
+	movl	$-2, (%rax)
+LBB0_23:                                ##   in Loop: Header=BB0_3 Depth=1
 	movq	_yylval@GOTPCREL(%rip), %rax
 	movq	(%rax), %rax
 	movq	%rax, 8(%r9)
 	addq	$8, %r9
-	jmp	LBB0_3
+	jmp	LBB0_2
 	.p2align	4, 0x90
-LBB0_25:                                ##   in Loop: Header=BB0_4 Depth=1
-	movq	%r12, %r14
+LBB0_24:                                ##   in Loop: Header=BB0_3 Depth=1
 	leaq	_yydefact(%rip), %rax
 	movzbl	(%rbx,%rax), %ebx
 	testl	%ebx, %ebx
-	je	LBB0_90
-LBB0_26:                                ##   in Loop: Header=BB0_4 Depth=1
+	je	LBB0_89
+LBB0_25:                                ##   in Loop: Header=BB0_3 Depth=1
 	movl	%ebx, %edx
 	leaq	_yyr2(%rip), %rax
 	movzbl	(%rdx,%rax), %r12d
 	addl	$-2, %ebx
-	cmpl	$62, %ebx
-	ja	LBB0_42
-## %bb.27:                              ##   in Loop: Header=BB0_4 Depth=1
+	cmpl	$65, %ebx
+	ja	LBB0_82
+## %bb.26:                              ##   in Loop: Header=BB0_3 Depth=1
 	leaq	LJTI0_0(%rip), %rcx
 	movslq	(%rcx,%rbx,4), %rax
 	addq	%rcx, %rax
 	jmpq	*%rax
-LBB0_43:                                ##   in Loop: Header=BB0_4 Depth=1
+LBB0_42:                                ##   in Loop: Header=BB0_3 Depth=1
 	movq	(%r9), %r15
-	jmp	LBB0_81
-LBB0_36:                                ##   in Loop: Header=BB0_4 Depth=1
+	jmp	LBB0_79
+LBB0_34:                                ##   in Loop: Header=BB0_3 Depth=1
 	movq	-8(%r9), %r15
-	jmp	LBB0_81
-LBB0_29:                                ##   in Loop: Header=BB0_4 Depth=1
-	addl	$-125, %r15d
-	cmpl	$2, %r15d
-	jb	LBB0_90
-## %bb.30:                              ##   in Loop: Header=BB0_4 Depth=1
-	movq	%r12, %r14
+	jmp	LBB0_79
+LBB0_28:                                ##   in Loop: Header=BB0_3 Depth=1
 	negl	%ebx
-	jmp	LBB0_26
-LBB0_33:                                ##   in Loop: Header=BB0_4 Depth=1
+	jmp	LBB0_25
+LBB0_31:                                ##   in Loop: Header=BB0_3 Depth=1
 	movq	%rdi, -2056(%rbp)               ## 8-byte Spill
 	movq	-16(%r9), %rdi
 	movq	(%r9), %rsi
@@ -209,8 +210,8 @@ LBB0_33:                                ##   in Loop: Header=BB0_4 Depth=1
 	movq	%rdx, %rbx
 	callq	_cons
 	leaq	L_.str.20(%rip), %rdi
-	jmp	LBB0_75
-LBB0_35:                                ##   in Loop: Header=BB0_4 Depth=1
+	jmp	LBB0_73
+LBB0_33:                                ##   in Loop: Header=BB0_3 Depth=1
 	movq	(%r9), %r15
 	movq	%rdi, -2056(%rbp)               ## 8-byte Spill
 	movq	%r15, %rdi
@@ -222,8 +223,8 @@ LBB0_35:                                ##   in Loop: Header=BB0_4 Depth=1
 	movq	-2064(%rbp), %r9                ## 8-byte Reload
 	movq	%rbx, %r8
 	movq	-2056(%rbp), %rdi               ## 8-byte Reload
-	jmp	LBB0_81
-LBB0_37:                                ##   in Loop: Header=BB0_4 Depth=1
+	jmp	LBB0_79
+LBB0_35:                                ##   in Loop: Header=BB0_3 Depth=1
 	movq	%rdi, -2056(%rbp)               ## 8-byte Spill
 	movq	-16(%r9), %rdi
 	movq	(%r9), %rsi
@@ -232,8 +233,8 @@ LBB0_37:                                ##   in Loop: Header=BB0_4 Depth=1
 	movq	%rdx, %rbx
 	callq	_cons
 	leaq	L_.str(%rip), %rdi
-	jmp	LBB0_75
-LBB0_38:                                ##   in Loop: Header=BB0_4 Depth=1
+	jmp	LBB0_73
+LBB0_36:                                ##   in Loop: Header=BB0_3 Depth=1
 	movq	%rdi, -2056(%rbp)               ## 8-byte Spill
 	movq	-16(%r9), %rdi
 	movq	(%r9), %rsi
@@ -242,8 +243,8 @@ LBB0_38:                                ##   in Loop: Header=BB0_4 Depth=1
 	movq	%rdx, %rbx
 	callq	_cons
 	leaq	L_.str.4(%rip), %rdi
-	jmp	LBB0_75
-LBB0_39:                                ##   in Loop: Header=BB0_4 Depth=1
+	jmp	LBB0_73
+LBB0_37:                                ##   in Loop: Header=BB0_3 Depth=1
 	movq	%rdi, -2056(%rbp)               ## 8-byte Spill
 	movq	-16(%r9), %rdi
 	movq	(%r9), %rsi
@@ -252,8 +253,8 @@ LBB0_39:                                ##   in Loop: Header=BB0_4 Depth=1
 	movq	%rdx, %rbx
 	callq	_cons
 	leaq	L_.str.5(%rip), %rdi
-	jmp	LBB0_75
-LBB0_40:                                ##   in Loop: Header=BB0_4 Depth=1
+	jmp	LBB0_73
+LBB0_39:                                ##   in Loop: Header=BB0_3 Depth=1
 	movq	%rdi, -2056(%rbp)               ## 8-byte Spill
 	movq	-16(%r9), %rdi
 	movq	(%r9), %rsi
@@ -262,18 +263,13 @@ LBB0_40:                                ##   in Loop: Header=BB0_4 Depth=1
 	movq	%rdx, %rbx
 	callq	_cons
 	leaq	L_.str.6(%rip), %rdi
-	jmp	LBB0_75
-LBB0_42:                                ##   in Loop: Header=BB0_4 Depth=1
-	movl	$1, %eax
-	subq	%r12, %rax
-	movq	(%r9,%rax,8), %r15
-	jmp	LBB0_81
-LBB0_44:                                ##   in Loop: Header=BB0_4 Depth=1
+	jmp	LBB0_73
+LBB0_43:                                ##   in Loop: Header=BB0_3 Depth=1
 	movq	(%r9), %rsi
 	movq	%rdi, -2056(%rbp)               ## 8-byte Spill
 	leaq	L_.str.1(%rip), %rdi
-	jmp	LBB0_51
-LBB0_45:                                ##   in Loop: Header=BB0_4 Depth=1
+	jmp	LBB0_49
+LBB0_44:                                ##   in Loop: Header=BB0_3 Depth=1
 	movq	%rdi, -2056(%rbp)               ## 8-byte Spill
 	movq	-24(%r9), %rdi
 	movq	-8(%r9), %rsi
@@ -282,13 +278,13 @@ LBB0_45:                                ##   in Loop: Header=BB0_4 Depth=1
 	movq	%rdx, %rbx
 	callq	_cons
 	leaq	L_.str.2(%rip), %rdi
-	jmp	LBB0_75
-LBB0_46:                                ##   in Loop: Header=BB0_4 Depth=1
+	jmp	LBB0_73
+LBB0_45:                                ##   in Loop: Header=BB0_3 Depth=1
 	movq	-8(%r9), %rsi
 	movq	%rdi, -2056(%rbp)               ## 8-byte Spill
 	leaq	L_.str.3(%rip), %rdi
-	jmp	LBB0_51
-LBB0_48:                                ##   in Loop: Header=BB0_4 Depth=1
+	jmp	LBB0_49
+LBB0_46:                                ##   in Loop: Header=BB0_3 Depth=1
 	movq	%rdi, -2056(%rbp)               ## 8-byte Spill
 	movq	-16(%r9), %rdi
 	movq	(%r9), %rsi
@@ -297,18 +293,18 @@ LBB0_48:                                ##   in Loop: Header=BB0_4 Depth=1
 	movq	%rdx, %rbx
 	callq	_cons
 	leaq	L_.str.7(%rip), %rdi
-	jmp	LBB0_75
-LBB0_50:                                ##   in Loop: Header=BB0_4 Depth=1
+	jmp	LBB0_73
+LBB0_48:                                ##   in Loop: Header=BB0_3 Depth=1
 	movq	-8(%r9), %rsi
 	movq	%rdi, -2056(%rbp)               ## 8-byte Spill
 	leaq	L_.str.8(%rip), %rdi
-LBB0_51:                                ##   in Loop: Header=BB0_4 Depth=1
+LBB0_49:                                ##   in Loop: Header=BB0_3 Depth=1
 	movq	%r8, %r15
 	movq	%r9, %rbx
 	movq	%rdx, -2072(%rbp)               ## 8-byte Spill
 	callq	_node
-	jmp	LBB0_79
-LBB0_53:                                ##   in Loop: Header=BB0_4 Depth=1
+	jmp	LBB0_77
+LBB0_51:                                ##   in Loop: Header=BB0_3 Depth=1
 	movq	%rdi, -2056(%rbp)               ## 8-byte Spill
 	movq	-16(%r9), %rdi
 	movq	(%r9), %rsi
@@ -317,8 +313,8 @@ LBB0_53:                                ##   in Loop: Header=BB0_4 Depth=1
 	movq	%rdx, %rbx
 	callq	_cons
 	leaq	L_.str.9(%rip), %rdi
-	jmp	LBB0_75
-LBB0_55:                                ##   in Loop: Header=BB0_4 Depth=1
+	jmp	LBB0_73
+LBB0_53:                                ##   in Loop: Header=BB0_3 Depth=1
 	movq	%rdi, -2056(%rbp)               ## 8-byte Spill
 	movq	-16(%r9), %rdi
 	movq	(%r9), %rsi
@@ -327,8 +323,8 @@ LBB0_55:                                ##   in Loop: Header=BB0_4 Depth=1
 	movq	%rdx, %rbx
 	callq	_cons
 	leaq	L_.str.10(%rip), %rdi
-	jmp	LBB0_75
-LBB0_57:                                ##   in Loop: Header=BB0_4 Depth=1
+	jmp	LBB0_73
+LBB0_55:                                ##   in Loop: Header=BB0_3 Depth=1
 	movq	%rdi, -2056(%rbp)               ## 8-byte Spill
 	movq	-16(%r9), %rdi
 	movq	(%r9), %rsi
@@ -337,8 +333,8 @@ LBB0_57:                                ##   in Loop: Header=BB0_4 Depth=1
 	movq	%rdx, %rbx
 	callq	_cons
 	leaq	L_.str.11(%rip), %rdi
-	jmp	LBB0_75
-LBB0_58:                                ##   in Loop: Header=BB0_4 Depth=1
+	jmp	LBB0_73
+LBB0_56:                                ##   in Loop: Header=BB0_3 Depth=1
 	movq	%rdi, -2056(%rbp)               ## 8-byte Spill
 	movq	-16(%r9), %rdi
 	movq	(%r9), %rsi
@@ -347,8 +343,8 @@ LBB0_58:                                ##   in Loop: Header=BB0_4 Depth=1
 	movq	%rdx, %rbx
 	callq	_cons
 	leaq	L_.str.12(%rip), %rdi
-	jmp	LBB0_75
-LBB0_59:                                ##   in Loop: Header=BB0_4 Depth=1
+	jmp	LBB0_73
+LBB0_57:                                ##   in Loop: Header=BB0_3 Depth=1
 	movq	%rdi, -2056(%rbp)               ## 8-byte Spill
 	movq	-16(%r9), %rdi
 	movq	(%r9), %rsi
@@ -357,8 +353,8 @@ LBB0_59:                                ##   in Loop: Header=BB0_4 Depth=1
 	movq	%rdx, %rbx
 	callq	_cons
 	leaq	L_.str.13(%rip), %rdi
-	jmp	LBB0_75
-LBB0_60:                                ##   in Loop: Header=BB0_4 Depth=1
+	jmp	LBB0_73
+LBB0_58:                                ##   in Loop: Header=BB0_3 Depth=1
 	movq	%rdi, -2056(%rbp)               ## 8-byte Spill
 	movq	-16(%r9), %rdi
 	movq	(%r9), %rsi
@@ -367,8 +363,8 @@ LBB0_60:                                ##   in Loop: Header=BB0_4 Depth=1
 	movq	%rdx, %rbx
 	callq	_cons
 	leaq	L_.str.14(%rip), %rdi
-	jmp	LBB0_75
-LBB0_62:                                ##   in Loop: Header=BB0_4 Depth=1
+	jmp	LBB0_73
+LBB0_60:                                ##   in Loop: Header=BB0_3 Depth=1
 	movq	%rdi, -2056(%rbp)               ## 8-byte Spill
 	movq	-24(%r9), %rdi
 	movq	-8(%r9), %rsi
@@ -377,8 +373,8 @@ LBB0_62:                                ##   in Loop: Header=BB0_4 Depth=1
 	movq	%rdx, %rbx
 	callq	_cons
 	leaq	L_.str.15(%rip), %rdi
-	jmp	LBB0_75
-LBB0_63:                                ##   in Loop: Header=BB0_4 Depth=1
+	jmp	LBB0_73
+LBB0_61:                                ##   in Loop: Header=BB0_3 Depth=1
 	movq	%rdi, -2056(%rbp)               ## 8-byte Spill
 	movq	-16(%r9), %rdi
 	movq	(%r9), %rsi
@@ -387,8 +383,8 @@ LBB0_63:                                ##   in Loop: Header=BB0_4 Depth=1
 	movq	%rdx, %rbx
 	callq	_cons
 	leaq	L_.str.16(%rip), %rdi
-	jmp	LBB0_75
-LBB0_64:                                ##   in Loop: Header=BB0_4 Depth=1
+	jmp	LBB0_73
+LBB0_62:                                ##   in Loop: Header=BB0_3 Depth=1
 	movq	%rdi, -2056(%rbp)               ## 8-byte Spill
 	movq	-16(%r9), %rdi
 	movq	(%r9), %rsi
@@ -397,8 +393,8 @@ LBB0_64:                                ##   in Loop: Header=BB0_4 Depth=1
 	movq	%rdx, %rbx
 	callq	_cons
 	leaq	L_.str.17(%rip), %rdi
-	jmp	LBB0_75
-LBB0_65:                                ##   in Loop: Header=BB0_4 Depth=1
+	jmp	LBB0_73
+LBB0_63:                                ##   in Loop: Header=BB0_3 Depth=1
 	movq	%rdi, -2056(%rbp)               ## 8-byte Spill
 	movq	-16(%r9), %rdi
 	movq	(%r9), %rsi
@@ -407,8 +403,8 @@ LBB0_65:                                ##   in Loop: Header=BB0_4 Depth=1
 	movq	%rdx, %rbx
 	callq	_cons
 	leaq	L_.str.18(%rip), %rdi
-	jmp	LBB0_75
-LBB0_66:                                ##   in Loop: Header=BB0_4 Depth=1
+	jmp	LBB0_73
+LBB0_64:                                ##   in Loop: Header=BB0_3 Depth=1
 	movq	%rdi, -2056(%rbp)               ## 8-byte Spill
 	movq	-16(%r9), %rdi
 	movq	(%r9), %rsi
@@ -417,8 +413,8 @@ LBB0_66:                                ##   in Loop: Header=BB0_4 Depth=1
 	movq	%rdx, %rbx
 	callq	_cons
 	leaq	L_.str.19(%rip), %rdi
-	jmp	LBB0_75
-LBB0_70:                                ##   in Loop: Header=BB0_4 Depth=1
+	jmp	LBB0_73
+LBB0_68:                                ##   in Loop: Header=BB0_3 Depth=1
 	movq	%rdi, -2056(%rbp)               ## 8-byte Spill
 	movq	-16(%r9), %rdi
 	movq	(%r9), %rsi
@@ -427,20 +423,20 @@ LBB0_70:                                ##   in Loop: Header=BB0_4 Depth=1
 	movq	%rdx, %rbx
 	callq	_cons
 	leaq	L_.str.21(%rip), %rdi
-	jmp	LBB0_75
-LBB0_72:                                ##   in Loop: Header=BB0_4 Depth=1
+	jmp	LBB0_73
+LBB0_70:                                ##   in Loop: Header=BB0_3 Depth=1
 	movq	_yytext@GOTPCREL(%rip), %rax
 	movq	(%rax), %rsi
 	movq	%rdi, -2056(%rbp)               ## 8-byte Spill
 	leaq	L_.str.22(%rip), %rdi
-	jmp	LBB0_78
-LBB0_73:                                ##   in Loop: Header=BB0_4 Depth=1
+	jmp	LBB0_76
+LBB0_71:                                ##   in Loop: Header=BB0_3 Depth=1
 	movq	_yytext@GOTPCREL(%rip), %rax
 	movq	(%rax), %rsi
 	movq	%rdi, -2056(%rbp)               ## 8-byte Spill
 	leaq	L_.str.23(%rip), %rdi
-	jmp	LBB0_78
-LBB0_74:                                ##   in Loop: Header=BB0_4 Depth=1
+	jmp	LBB0_76
+LBB0_72:                                ##   in Loop: Header=BB0_3 Depth=1
 	movq	%rdi, -2056(%rbp)               ## 8-byte Spill
 	movq	-24(%r9), %rdi
 	movq	-8(%r9), %rsi
@@ -450,36 +446,36 @@ LBB0_74:                                ##   in Loop: Header=BB0_4 Depth=1
 	callq	_cons
 	leaq	L_.str.24(%rip), %rdi
 	.p2align	4, 0x90
-LBB0_75:                                ##   in Loop: Header=BB0_4 Depth=1
+LBB0_73:                                ##   in Loop: Header=BB0_3 Depth=1
 	movq	%rax, %rsi
 	callq	_node
 	movq	%rbx, %rdx
 	movq	-2064(%rbp), %r9                ## 8-byte Reload
-	jmp	LBB0_80
-LBB0_76:                                ##   in Loop: Header=BB0_4 Depth=1
+	jmp	LBB0_78
+LBB0_74:                                ##   in Loop: Header=BB0_3 Depth=1
 	movq	_yytext@GOTPCREL(%rip), %rax
 	movq	(%rax), %rsi
 	movq	%rdi, -2056(%rbp)               ## 8-byte Spill
 	leaq	L_.str.25(%rip), %rdi
-	jmp	LBB0_78
-LBB0_77:                                ##   in Loop: Header=BB0_4 Depth=1
+	jmp	LBB0_76
+LBB0_75:                                ##   in Loop: Header=BB0_3 Depth=1
 	movq	_yytext@GOTPCREL(%rip), %rax
 	movq	(%rax), %rsi
 	movq	%rdi, -2056(%rbp)               ## 8-byte Spill
 	leaq	L_.str.26(%rip), %rdi
-LBB0_78:                                ##   in Loop: Header=BB0_4 Depth=1
+LBB0_76:                                ##   in Loop: Header=BB0_3 Depth=1
 	movq	%r8, %r15
 	movq	%r9, %rbx
 	movq	%rdx, -2072(%rbp)               ## 8-byte Spill
 	callq	_leaf
-LBB0_79:                                ##   in Loop: Header=BB0_4 Depth=1
+LBB0_77:                                ##   in Loop: Header=BB0_3 Depth=1
 	movq	-2072(%rbp), %rdx               ## 8-byte Reload
 	movq	%rbx, %r9
-LBB0_80:                                ##   in Loop: Header=BB0_4 Depth=1
+LBB0_78:                                ##   in Loop: Header=BB0_3 Depth=1
 	movq	%r15, %r8
 	movq	-2056(%rbp), %rdi               ## 8-byte Reload
 	movq	%rax, %r15
-LBB0_81:                                ##   in Loop: Header=BB0_4 Depth=1
+LBB0_79:                                ##   in Loop: Header=BB0_3 Depth=1
 	leaq	(,%r12,8), %rax
 	subq	%rax, %r9
 	addq	%r12, %r12
@@ -492,29 +488,34 @@ LBB0_81:                                ##   in Loop: Header=BB0_4 Depth=1
 	movsbl	-33(%rax,%rcx), %edx
 	movswl	(%r8), %ecx
 	addl	%ecx, %edx
-	cmpl	$127, %edx
+	cmpl	$131, %edx
 	ja	LBB0_1
-## %bb.82:                              ##   in Loop: Header=BB0_4 Depth=1
+## %bb.80:                              ##   in Loop: Header=BB0_3 Depth=1
 	movl	%edx, %edx
 	leaq	_yycheck(%rip), %rsi
-	movsbl	(%rdx,%rsi), %esi
-	cmpw	%si, %cx
+	movzbl	(%rdx,%rsi), %esi
+	cmpl	%ecx, %esi
 	jne	LBB0_1
-## %bb.83:                              ##   in Loop: Header=BB0_4 Depth=1
+## %bb.81:                              ##   in Loop: Header=BB0_3 Depth=1
 	leaq	_yytable(%rip), %rax
 	movsbl	(%rdx,%rax), %ebx
 	jmp	LBB0_2
-LBB0_84:
+LBB0_82:                                ##   in Loop: Header=BB0_3 Depth=1
+	movl	$1, %eax
+	subq	%r12, %rax
+	movq	(%r9,%rax,8), %r15
+	jmp	LBB0_79
+LBB0_83:
 	movl	$1, %r14d
 	movq	%r15, %rdi
-LBB0_85:                                ## %.thread302.thread
+LBB0_84:                                ## %.thread305.thread
 	callq	_free
-LBB0_86:
+LBB0_85:
 	movq	___stack_chk_guard@GOTPCREL(%rip), %rax
 	movq	(%rax), %rax
 	cmpq	-48(%rbp), %rax
-	jne	LBB0_92
-## %bb.87:
+	jne	LBB0_91
+## %bb.86:
 	movl	%r14d, %eax
 	addq	$2040, %rsp                     ## imm = 0x7F8
 	popq	%rbx
@@ -524,13 +525,13 @@ LBB0_86:
 	popq	%r15
 	popq	%rbp
 	retq
-LBB0_88:                                ## %.thread302
+LBB0_87:                                ## %.thread305
 	xorl	%r14d, %r14d
 	leaq	-448(%rbp), %rax
 	cmpq	%rax, %rdi
-	jne	LBB0_85
-	jmp	LBB0_86
-LBB0_89:
+	jne	LBB0_84
+	jmp	LBB0_85
+LBB0_88:
 	movq	___stderrp@GOTPCREL(%rip), %rax
 	movq	(%rax), %rdi
 	movl	_linecounter(%rip), %ecx
@@ -538,8 +539,8 @@ LBB0_89:
 	movq	(%rax), %r8
 	leaq	L_.str.39(%rip), %rsi
 	leaq	L_.str.30(%rip), %rdx
-	jmp	LBB0_91
-LBB0_90:
+	jmp	LBB0_90
+LBB0_89:
 	movq	_yynerrs@GOTPCREL(%rip), %rax
 	incl	(%rax)
 	movq	___stderrp@GOTPCREL(%rip), %rax
@@ -549,110 +550,113 @@ LBB0_90:
 	movq	(%rax), %r8
 	leaq	L_.str.39(%rip), %rsi
 	leaq	L_.str.27(%rip), %rdx
-LBB0_91:
+LBB0_90:
 	xorl	%eax, %eax
 	callq	_fprintf
 	movl	$1, %edi
 	callq	_exit
-LBB0_92:
+LBB0_91:
 	callq	___stack_chk_fail
 	.cfi_endproc
 	.p2align	2, 0x90
 	.data_region jt32
-.set L0_0_set_43, LBB0_43-LJTI0_0
+.set L0_0_set_42, LBB0_42-LJTI0_0
+.set L0_0_set_33, LBB0_33-LJTI0_0
+.set L0_0_set_34, LBB0_34-LJTI0_0
 .set L0_0_set_35, LBB0_35-LJTI0_0
-.set L0_0_set_36, LBB0_36-LJTI0_0
-.set L0_0_set_37, LBB0_37-LJTI0_0
+.set L0_0_set_43, LBB0_43-LJTI0_0
 .set L0_0_set_44, LBB0_44-LJTI0_0
 .set L0_0_set_45, LBB0_45-LJTI0_0
-.set L0_0_set_46, LBB0_46-LJTI0_0
-.set L0_0_set_38, LBB0_38-LJTI0_0
+.set L0_0_set_36, LBB0_36-LJTI0_0
+.set L0_0_set_37, LBB0_37-LJTI0_0
 .set L0_0_set_39, LBB0_39-LJTI0_0
-.set L0_0_set_40, LBB0_40-LJTI0_0
+.set L0_0_set_46, LBB0_46-LJTI0_0
 .set L0_0_set_48, LBB0_48-LJTI0_0
-.set L0_0_set_50, LBB0_50-LJTI0_0
+.set L0_0_set_51, LBB0_51-LJTI0_0
 .set L0_0_set_53, LBB0_53-LJTI0_0
 .set L0_0_set_55, LBB0_55-LJTI0_0
+.set L0_0_set_56, LBB0_56-LJTI0_0
 .set L0_0_set_57, LBB0_57-LJTI0_0
 .set L0_0_set_58, LBB0_58-LJTI0_0
-.set L0_0_set_59, LBB0_59-LJTI0_0
 .set L0_0_set_60, LBB0_60-LJTI0_0
+.set L0_0_set_61, LBB0_61-LJTI0_0
 .set L0_0_set_62, LBB0_62-LJTI0_0
 .set L0_0_set_63, LBB0_63-LJTI0_0
 .set L0_0_set_64, LBB0_64-LJTI0_0
-.set L0_0_set_65, LBB0_65-LJTI0_0
-.set L0_0_set_66, LBB0_66-LJTI0_0
-.set L0_0_set_33, LBB0_33-LJTI0_0
+.set L0_0_set_31, LBB0_31-LJTI0_0
+.set L0_0_set_68, LBB0_68-LJTI0_0
 .set L0_0_set_70, LBB0_70-LJTI0_0
+.set L0_0_set_71, LBB0_71-LJTI0_0
 .set L0_0_set_72, LBB0_72-LJTI0_0
-.set L0_0_set_73, LBB0_73-LJTI0_0
 .set L0_0_set_74, LBB0_74-LJTI0_0
-.set L0_0_set_76, LBB0_76-LJTI0_0
-.set L0_0_set_77, LBB0_77-LJTI0_0
+.set L0_0_set_75, LBB0_75-LJTI0_0
 LJTI0_0:
+	.long	L0_0_set_42
+	.long	L0_0_set_33
+	.long	L0_0_set_33
+	.long	L0_0_set_34
+	.long	L0_0_set_34
+	.long	L0_0_set_35
+	.long	L0_0_set_35
 	.long	L0_0_set_43
-	.long	L0_0_set_35
-	.long	L0_0_set_35
-	.long	L0_0_set_36
-	.long	L0_0_set_36
-	.long	L0_0_set_37
-	.long	L0_0_set_37
 	.long	L0_0_set_44
 	.long	L0_0_set_45
-	.long	L0_0_set_46
-	.long	L0_0_set_38
+	.long	L0_0_set_42
+	.long	L0_0_set_36
+	.long	L0_0_set_37
+	.long	L0_0_set_42
 	.long	L0_0_set_39
-	.long	L0_0_set_43
-	.long	L0_0_set_40
+	.long	L0_0_set_46
+	.long	L0_0_set_42
+	.long	L0_0_set_42
+	.long	L0_0_set_42
+	.long	L0_0_set_34
 	.long	L0_0_set_48
-	.long	L0_0_set_43
-	.long	L0_0_set_43
-	.long	L0_0_set_43
-	.long	L0_0_set_36
-	.long	L0_0_set_50
-	.long	L0_0_set_43
+	.long	L0_0_set_42
+	.long	L0_0_set_51
+	.long	L0_0_set_42
 	.long	L0_0_set_53
-	.long	L0_0_set_43
+	.long	L0_0_set_42
+	.long	L0_0_set_42
+	.long	L0_0_set_42
+	.long	L0_0_set_34
 	.long	L0_0_set_55
-	.long	L0_0_set_43
-	.long	L0_0_set_43
-	.long	L0_0_set_43
-	.long	L0_0_set_36
+	.long	L0_0_set_56
 	.long	L0_0_set_57
 	.long	L0_0_set_58
-	.long	L0_0_set_59
+	.long	L0_0_set_42
 	.long	L0_0_set_60
-	.long	L0_0_set_43
+	.long	L0_0_set_61
 	.long	L0_0_set_62
 	.long	L0_0_set_63
 	.long	L0_0_set_64
-	.long	L0_0_set_65
-	.long	L0_0_set_66
-	.long	L0_0_set_43
-	.long	L0_0_set_33
-	.long	L0_0_set_43
+	.long	L0_0_set_42
+	.long	L0_0_set_31
+	.long	L0_0_set_42
+	.long	L0_0_set_34
+	.long	L0_0_set_42
+	.long	L0_0_set_31
 	.long	L0_0_set_36
-	.long	L0_0_set_43
-	.long	L0_0_set_33
-	.long	L0_0_set_38
+	.long	L0_0_set_37
+	.long	L0_0_set_42
 	.long	L0_0_set_39
-	.long	L0_0_set_43
-	.long	L0_0_set_40
+	.long	L0_0_set_68
+	.long	L0_0_set_42
+	.long	L0_0_set_42
+	.long	L0_0_set_42
+	.long	L0_0_set_42
+	.long	L0_0_set_34
+	.long	L0_0_set_42
+	.long	L0_0_set_42
+	.long	L0_0_set_42
+	.long	L0_0_set_31
+	.long	L0_0_set_42
+	.long	L0_0_set_42
 	.long	L0_0_set_70
-	.long	L0_0_set_43
-	.long	L0_0_set_43
-	.long	L0_0_set_43
-	.long	L0_0_set_43
-	.long	L0_0_set_36
-	.long	L0_0_set_43
-	.long	L0_0_set_43
-	.long	L0_0_set_43
-	.long	L0_0_set_33
+	.long	L0_0_set_71
 	.long	L0_0_set_72
-	.long	L0_0_set_73
 	.long	L0_0_set_74
-	.long	L0_0_set_76
-	.long	L0_0_set_77
+	.long	L0_0_set_75
 	.end_data_region
                                         ## -- End function
 	.globl	_yylex                          ## -- Begin function yylex
@@ -3077,7 +3081,7 @@ _yyrealloc:                             ## @yyrealloc
 	.section	__TEXT,__const
 	.p2align	4, 0x0                          ## @yypact
 _yypact:
-	.ascii	"6\314\001\0176\314\016\020<\376\314\314\314\314\0014U\314\314\314\314*W\377\314\314\314\314R\314\314\314\314\013^35D\001\001^^+++++++++++\025\f+\314J1\314\314\314@\314\314+\314\314U\314\314\314+YYYYYY\377\377\314\314\370\372+20\314Y)Y\025\025\025\025^\314YF\314\314FS2\314\31411\314\314\314\001\314\000\314"
+	.ascii	"\f\315\b \f\315\020R6\357\315\315\315\315\b[E\315\315\315\315\376c4\315\315\315\315P\315\315\315\315\377\004\375+D\b\b\004\004\r\r\r\r\r\r\r\r\r\r\r\000\005\r\3151S\315\315\315\357\315\3572\315\315\r\315\315E\315\315\315\rWWWWWW44\315\315-/\315\r.\033\315W\035W\000\000\000\000\004\315WF\315\315F\\.\315\315SS\315\315\315\b\315\"\315"
 
 	.p2align	4, 0x0                          ## @yytranslate
 _yytranslate:
@@ -3085,20 +3089,20 @@ _yytranslate:
 
 	.p2align	4, 0x0                          ## @yycheck
 _yycheck:
-	.ascii	"\016\016\"6\000\004\005\006\004\t\022\023\022\023\003\000\004\005\006\024\032\026\036\031\003\013\031\013\034*+,-./V\031\031\0334\03567\037()\031\004\005\006\035\nAh\004\005\006\003\nH\t\t\b\n`\027\030\007\031\024\025\036UV\n\031\034\032\n\032\f\r\016\017\020\021\022\023\022\023\032h\022\023\032\n\032\003p\f\r\016\017\020\021\022\023\022\023\\]\035^_\037()01\004523'&\377\3777"
+	.ascii	"\016\000\003\0036\004\t\003\031\004\005\006\004\005\006\003\016\004\005\006\b\027\030\032\031\031\033\013\035\035\031\033\000\031!\"\037\n\031\nZ()\t*+,-./\004\005\006\n4\03467l\036\n\007\034\022\023\022\023\022\023\032D\031\024\032\026\036\032K\n\n\f\r\016\017\020\021\022\023\022\023!YZ\013\032\000\032()\004\tdt\024\025\022\023`a\035l\f\r\016\017\020\021\022\023bc01\03723\004&5'd7"
 
 	.p2align	4, 0x0                          ## @yytable
 _yytable:
-	.ascii	"#%?X\t\013\f\r\t&01\\]\001\035\013\f\r2e3d\"\001\037\016 sIJKLMNg5U6S7Y[V\t\t5\013\f\r7Abq\013\f\r\001hc&&\002Ao()!H^_jfY`Ui@\324B*+,-./0101aY\\]C'C\001r*+,-./0101kl4mnpFGOP\036TQRED\000\000Z"
+	.ascii	"#\t\001\001\\\t&\001\"\013\f\r\013\f\r\001%\013\f\r\002()C556\03777Y6\035\016>@ZlKDk\t\t&LMNOPQ\013\f\rDVm]_und!w01`a`aEfY2i3heg\323'*+,-./01018j] F\bFIJ\b&@vbc01op4]*+,-./01qrRStTU\036GWHs^"
 
 	.comm	_yylval,8,3                     ## @yylval
 	.p2align	4, 0x0                          ## @yydefact
 _yydefact:
-	.ascii	"\000?\000\000\002\003\000\000\000\"8@<=\000\t\026\030\032\034\033\000*034659\001\004\005\006\000\000\000\000*\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\007\b\016\021\023\022\000:\035\000+7\027\031 !\000\036\037$%&'./12\000\000\000\000\000(*\000,\000\000\000\000\000#-\000>\024,\000\000\013\025\f\r\017\020;\000)\000\n"
+	.ascii	"\000B\000\000\002\003\000\000\000#9C?@\000\t\027\031\033\035\034\000+14576:\001\004\005\006\000\000\000\000+\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\007\b\017\022\024\f\023>#\000;\036\000,8\030\032!\"\000\037 %&'(/023\000\000\023\000\000\000)+\000-\000\000\000\000\000$.\000A\025-\000\000\013\026\r\016\020\021<\000*\000\n"
 
 	.p2align	4, 0x0                          ## @yyr2
 _yyr2:
-	.ascii	"\000\002\001\001\002\002\002\003\003\002\006\003\003\003\001\003\003\001\001\001\003\003\001\003\001\003\001\001\001\003\003\003\003\003\001\004\003\003\003\003\001\003\001\003\001\003\003\003\001\003\003\001\001\001\001\003\001\001\001\003\001\001\004\001\001"
+	.ascii	"\000\002\001\001\002\002\002\003\003\002\006\003\001\003\003\001\003\003\001\001\001\003\003\001\003\001\003\001\001\001\003\003\003\003\003\001\004\003\003\003\003\001\003\001\003\001\003\003\003\001\003\003\001\001\001\001\003\001\001\001\003\001\001\001\001\004\001\001"
 
 	.section	__TEXT,__cstring,cstring_literals
 L_.str:                                 ## @.str
@@ -3126,7 +3130,7 @@ L_.str.7:                               ## @.str.7
 	.asciz	"^"
 
 L_.str.8:                               ## @.str.8
-	.asciz	"range"
+	.asciz	"RANGE"
 
 L_.str.9:                               ## @.str.9
 	.asciz	"OR"
@@ -3147,7 +3151,7 @@ L_.str.14:                              ## @.str.14
 	.asciz	"!~"
 
 L_.str.15:                              ## @.str.15
-	.asciz	"UNIFY"
+	.asciz	"PARAMS"
 
 L_.str.16:                              ## @.str.16
 	.asciz	"<"
@@ -3186,15 +3190,15 @@ L_.str.26:                              ## @.str.26
 	.section	__TEXT,__const
 	.p2align	4, 0x0                          ## @yyr1
 _yyr1:
-	.ascii	"\000!\"##$$%%&''((()))***+,,--....//0011222233445566677788889:;;<<=>?"
+	.ascii	"\000!\"##$$%%&'''((()))***+,,--....//0011222233445566677788889:;;<<==>?@"
 
 	.p2align	4, 0x0                          ## @yypgoto
 _yypgoto:
-	.ascii	"\314\314\314s\314\314\314C\021\022\314\362VT\314\314K\314\314\315H\363EG\004\314\314\314\314\340\314"
+	.ascii	"\315\315\315z\315\3159K\013\025\315\362YZ\315\315_\315\315\316L\002IJ\001\315\315\036\315\315\315\315"
 
 	.p2align	4, 0x0                          ## @yydefgoto
 _yydefgoto:
-	.ascii	"\377\003\004\005\006\00789:;<\017\020\021\022\023\b\024W\025$\026\027\030=\031>\032\033\n\034"
+	.ascii	"\377\003\004\005\006\007?9:;<\017\020\021\022\023=\024[\025$\026\027\030X\031AB\032\033\n\034"
 
 	.section	__TEXT,__cstring,cstring_literals
 L_.str.27:                              ## @.str.27
