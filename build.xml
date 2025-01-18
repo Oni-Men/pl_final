@@ -27,7 +27,7 @@
 	<target name="prepare-junit" depends="prepare" description="prepare to run junit">
 		<mkdir dir="${reportdir}" />
 		<exec executable="bash">
-			<arg value="${basedir}/setup_junit.sh" />
+			<arg value="${basedir}/bin/setup_junit.sh" />
 		</exec>
 		<exec executable="date" spawn="false" />
 	</target>
@@ -91,9 +91,6 @@
 			</fileset>
 			<report format="noframes" todir="${reportdir}/html"/>
 		</junitreport>
-		<exec executable="open" spawn="true">
-			<arg line="-a 'Safari' ${reportdir}/html/junit-noframes.html" />
-		</exec>
 		<exec executable="date" spawn="false" />
 	</target>
 
