@@ -1,5 +1,6 @@
 package parser;
 
+import parser.ast.Token;
 import parser.ast.TokenType;
 
 public class Scanner
@@ -9,8 +10,8 @@ public class Scanner
 
   }
 
-  public TokenType next()
+  public Token next()
   {
-    return TokenType.UNKNOWN;
+    return new Token(TokenType.UNKNOWN, "");
   }
 }

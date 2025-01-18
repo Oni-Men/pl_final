@@ -14,6 +14,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import parser.ast.Token;
 import parser.ast.TokenType;
 import static parser.ast.TokenType.*;
 
@@ -26,11 +27,11 @@ public class ScannerTest
     Scanner aScanner = new Scanner(sourceString);
     Iterator<TokenType> anIterator = tokenTypeSequence.iterator();
 
-    TokenType tokenType;
-    while ((tokenType = aScanner.next()) != null)
+    Token token;
+    while ((token = aScanner.next()) != null)
     {
       assertTrue(anIterator.hasNext());
-      assertEquals(tokenType, anIterator.next());
+      assertEquals(token.tokenType(), anIterator.next());
     }
     assertFalse(anIterator.hasNext());
   }
