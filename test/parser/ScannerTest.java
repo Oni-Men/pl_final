@@ -5,8 +5,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
-import java.lang.classfile.components.ClassPrinter.LeafNode;
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -37,7 +35,7 @@ public class ScannerTest
     assertFalse(anIterator.hasNext());
   }
 
-  Stream<Arguments> testCaseProvider()
+  static Stream<Arguments> testCaseProvider()
   {
     return Stream.of(
         arguments("(+ X Y Z)", Arrays.asList(LPAR, ID, ID, ID, RPAR)),
