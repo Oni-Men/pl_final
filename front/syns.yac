@@ -31,6 +31,7 @@ Extention
 SetElement
         : Value                                                 { $$ = $1; }
         | Tuple                                                 { $$ = node("TUPLE", cons($1, leaf("NULL", " "))); }
+        | TupleElement                                          { $$ = $1; }
 SetElements
         : SetElement                                            { $$ = $1; }
         | SetElements COMMA SetElement                          { $$ = node(",", cons($1, $3)); }
@@ -46,6 +47,11 @@ Tuple
 Tuples
         : Tuple                                                 { $$ = $1; }
         | Tuples COMMA Tuple
+TupleElement
+        : Tuple Indexer                                         { $$ = node("TupleElement", cons($1, $2)); }
+        | Variable Indexer                                      { $$ = node("TupleElement", cons($1, $2)); }
+Indexer
+        : LBRACKET Expression RBRACKET                          { $$ = $2; }
 SetExpression
         : SetExpression ADD SetFactor                           { $$ = node("+", cons($1, $3)); }
         | SetExpression SUBTRACT SetFactor                      { $$ = node("-", cons($1, $3)); }
@@ -94,6 +100,7 @@ Factor
         : Variable                                              { $$ = $1; }
         | Constant                                              { $$ = $1; }
         | LPAR Expression RPAR                                  { $$ = $2; }
+        | TupleElement                                          { $$ = $1; }
 Variable                
         : LOWER_ID                                              { $$ = leaf("LOWER_ID", yytext); }
 Constant                
