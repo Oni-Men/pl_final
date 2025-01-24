@@ -28,8 +28,13 @@ public class ScannerTest
     Iterator<TokenType> anIterator = tokenTypeSequence.iterator();
 
     Token token;
-    while ((token = aScanner.next()) != null)
+    while (true)
     {
+      token = aScanner.next();
+      if (token.tokenType() == EOF)
+      {
+        break;
+      }
       assertTrue(anIterator.hasNext());
       assertEquals(token.tokenType(), anIterator.next());
     }
@@ -39,7 +44,7 @@ public class ScannerTest
   static Stream<Arguments> testCaseProvider()
   {
     return Stream.of(
-        arguments("(+ X Y Z)", Arrays.asList(LPAR, ID, ID, ID, RPAR)),
+        arguments("(+ X Y Z)", Arrays.asList(LPAR, PLUS, ID, ID, ID, RPAR)),
         arguments("""
             (ASSERT
               (A N)

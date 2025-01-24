@@ -1,5 +1,7 @@
 package parser.ast;
 
+import java.util.regex.Pattern;
+
 public enum TokenType
 {
   ID("[_a-zA-Z][_a-zA-Z0-9]*"),
@@ -19,16 +21,17 @@ public enum TokenType
   COMMA(","),
   DOT("\\."),
   __("\\n|\\r|\\r\\n|\\s|\\t"),
-  UNKNOWN(".");
+  UNKNOWN("."),
+  EOF("");
 
-  private final String pattern;
+  private final Pattern pattern;
 
   private TokenType(String pattern)
   {
-    this.pattern = pattern;
+    this.pattern = Pattern.compile(pattern);
   }
 
-  public String pattern()
+  public Pattern pattern()
   {
     return pattern;
   }
