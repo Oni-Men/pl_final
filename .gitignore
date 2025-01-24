@@ -19,4 +19,4 @@ y.tab.c
 # lex
 lex.yy.c
 
-./front/tmp.txt
+front/tmp.txt
