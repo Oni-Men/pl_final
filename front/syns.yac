@@ -93,7 +93,7 @@ Factor
         | Constant                                              { $$ = $1; }
         | LPAR Expression RPAR                                  { $$ = $2; }
 Variable                
-        : LOWER_ID                                              { $$ = $1; }
+        : LOWER_ID                                              { $$ = leaf("LOWER_ID", yytext); }
 Constant                
         : INTEGER                                               { $$ = leaf("INTEGER", yytext); }
         | REAL                                                  { $$ = leaf("REAL", yytext); }
