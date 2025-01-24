@@ -20,33 +20,30 @@ Proof
 Assertion
         : SetName ASSERT SetNotation                            { $$ = node("ASSERT", cons($1, $3)); }
 SetNotation
-        : Intension                                             { $$ = $1; }
-        | Extention                                             { $$ = $1; }
+        : Intension                                             { $$ = node("INTENSION", $1); }
+        | Extention                                             { $$ = node("EXTENSION", $1); }
         | SetExpression                                         { $$ = node("EXPRESSION", $1); }
 Intension
-        : LBRACE VBAR SetElement VBAR Conditions RBRACE         { $$ = node("INTENSION", cons($3, $5)); }
+        : LBRACE VBAR SetElement VBAR Conditions RBRACE         { $$ = cons($3, $5); }
 Extention
-        : LBRACE SetElements RBRACE                             { $$ = node("EXTENSION", $2); }
-        | LBRACE RBRACE                                         { $$ = node("EXTENSION", leaf("NULL", " ")); }
+        : LBRACE SetElements RBRACE                             { $$ = $2; }
+        | LBRACE RBRACE                                         { $$ = leaf("NULL", ""); }
 SetElement
-        : Value                                                 { $$ = $1; }
-        | Tuple                                                 { $$ = node("TUPLE", cons($1, leaf("NULL", " "))); }
-        | TupleElement                                          { $$ = $1; }
+        : Value                                                 { $$ = node("SETELEMENT", $1); }
+        | Tuple                                                 { $$ = node("SETELEMENT", $1); }
+        | TupleElement                                          { $$ = node("SETELEMENT", $1); }
 SetElements
         : SetElement                                            { $$ = $1; }
-        | SetElements COMMA SetElement                          { $$ = node(",", cons($1, $3)); }
+        | SetElements COMMA SetElement                          { $$ = node("SETELEMENTS", cons($1, $3)); }
 Value
         : Variable                                              { $$ = $1; }
         | Constant                                              { $$ = $1; }
         | String                                                { $$ = $1; }
 Values
-        : Value                                                 { $$ = $1; }
-        | Values COMMA Value                                    { $$ = node(",", cons($1, $3)); }
+        : Value                                                 { $$ = node("VALUE", $1); }
+        | Values COMMA Value                                    { $$ = node("VALUES", cons($1, $3)); }
 Tuple
-        : LPAR Values RPAR                                      { $$ = $2; }
-Tuples
-        : Tuple                                                 { $$ = $1; }
-        | Tuples COMMA Tuple
+        : LPAR Values RPAR                                      { $$ = node("TUPLE", $2); }
 TupleElement
         : Tuple Indexer                                         { $$ = node("TupleElement", cons($1, $2)); }
         | Variable Indexer                                      { $$ = node("TupleElement", cons($1, $2)); }
