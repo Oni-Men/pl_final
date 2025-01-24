@@ -9,3 +9,12 @@
 /JavaDoc/
 
 .DS_Store
+
+# object file
+*.o
+
+# yacc
+y.tab.c
+
+# lex
+lex.yy.c
