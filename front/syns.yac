@@ -2,110 +2,106 @@
 #include "defs.h"
 #define YYSTYPE Cell *
 %}
-%token  UPPER_ID LOWER_ID INTEGER REAL ASSERT PROVE SEMICOLON COMMA DOT EQUAL NOTEQ LT GT LE GE 
-        ADD SUBTRACT MULTIPLY HAT DIVIDE IN NOTIN LPAR RPAR LBRACE RBRACE 
-        LBRACKET RBRACKET VBAR UNKNOWN;
+%token  UPPER_ID LOWER_ID INTEGER REAL STRING
+        ASSERT PROVE SEMICOLON COMMA DOT LPAR RPAR LBRACE RBRACE LBRACKET RBRACKET VBAR
+        EQUAL NOTEQ LT GT LE GE ADD SUBTRACT MULTIPLY HAT DIVIDE IN NOTIN
+        UNKNOWN ;
 %%
 Program
-        : Statements                            { $$ = $1; }
+        : Statements                                            { $$ = $1; }
 Statements
-        : Statement                             { $$ = $1; tree($$); }
-        | Statements Statement                  { $$ = $2; tree($$); }
+        : Statement                                             { $$ = $1; tree($$); }
+        | Statements Statement                                  { $$ = $2; tree($$); }
 Statement
-        : Assertion DOT                         { $$ = $1; }
-        | Proof DOT                             { $$ = $1; }
-Assertion
-        : SetSpecifier ASSERT SetNotation       { $$ = node("ASSERT", cons($1, $3)); }
-        | SetSpecifier ASSERT SetExpression     { $$ = node("ASSERT", cons($1, $3)); }
+        : Proof DOT                                             { $$ = $1; }
+        | Assertion DOT                                         { $$ = $1; }
 Proof
-        : PROVE Conditions                      { $$ = node("PROVE", $2); }
+        : PROVE Inclusion                                       { $$ = node("PROVE", $2); }
+Assertion
+        : SetName ASSERT SetNotation                            { $$ = node("ASSERT", cons($1, $3)); }
 SetNotation
-        : LBRACE VBAR Tuple VBAR Conditions RBRACE
-                                                { $$ = node("INTENSION", cons($3, $5)); }
-        | LBRACE Tuples RBRACE                  { $$ = node("EXTENSION", $2); }
-        | SetSpecifier                          { $$ = $1; }
-SetExpression
-        : SetExpression ADD SetTerm             { $$ = node("+", cons($1, $3)); }
-        | SetExpression SUBTRACT SetTerm        { $$ = node("-", cons($1, $3)); }
-        | SetTerm                               { $$ = $1; }
-SetTerm
-        : SetTerm MULTIPLY SetFactor            { $$ = node("*", cons($1, $3)); }
-        | SetTerm HAT SetFactor                 { $$ = node("^", cons($1, $3)); }
-        | SetFactor                             { $$ = $1; }
-SetFactor
-        : SetName                               { $$ = $1; }
-        | RangeDefinition                       { $$ = $1; }
-        | LPAR SetExpression RPAR               { $$ = $2; }
-RangeDefinition
-        : LBRACKET Expressions RBRACKET         { $$ = node("RANGE", $2); }
-Conditions
-        : Conjunctive                           { $$ = $1; }
-        | Conditions SEMICOLON Conjunctive      { $$ = node("OR", cons($1, $3)); }
-Conjunctive
-        : Relation                              { $$ = $1; }
-        | Conjunctive COMMA Relation            { $$ = node("AND", cons($1, $3)); }
-Relation
-        : Equation                              { $$ = $1; }
-        | Inequation                            { $$ = $1; }
-        | Inclusion                             { $$ = $1; }
-        | LPAR Conditions RPAR                  { $$ = $2; }
-Equation
-        : Expression EQUAL Expression           { $$ = node("=", cons($1, $3)); }
-        | Expression NOTEQ Expression           { $$ = node("!=", cons($1, $3)); }
-Inclusion
-        : Tuple IN SetNotation                  { $$ = node("~", cons($1, $3)); }
-        | Tuple NOTIN SetNotation               { $$ = node("!~", cons($1, $3)); }
-SetSpecifier
-        : SetName                               { $$ = $1; }
-        | SetName LPAR Parameters RPAR          { $$ = node("PARAMS", cons($1, $3)); }
-Inequation
-        : Expression LT Expression              { $$ = node("<", cons($1, $3)); }
-        | Expression GT Expression              { $$ = node(">", cons($1, $3)); }
-        | Expression LE Expression              { $$ = node("<=", cons($1, $3)); }
-        | Expression GE Expression              { $$ = node(">=", cons($1, $3)); }
-Tuples
-        : Tuple                                 { $$ = $1; }
-        | Tuples COMMA Tuple                    { $$ = node(",", cons($1, $3)); }
+        : Intension                                             { $$ = $1; }
+        | Extention                                             { $$ = $1; }
+        | SetExpression                                         { $$ = node("EXPRESSION", $1); }
+Intension
+        : LBRACE VBAR SetElement VBAR Conditions RBRACE         { $$ = node("INTENSION", cons($3, $5)); }
+Extention
+        : LBRACE SetElements RBRACE                             { $$ = node("EXTENSION", $2); }
+        | LBRACE RBRACE                                         { $$ = node("EXTENSION", leaf("NULL", " ")); }
+SetElement
+        : Value                                                 { $$ = $1; }
+        | Tuple                                                 { $$ = node("TUPLE", cons($1, leaf("NULL", " "))); }
+SetElements
+        : SetElement                                            { $$ = $1; }
+        | SetElements COMMA SetElement                          { $$ = node(",", cons($1, $3)); }
+Value
+        : Variable                                              { $$ = $1; }
+        | Constant                                              { $$ = $1; }
+        | String                                                { $$ = $1; }
+Values
+        : Value                                                 { $$ = $1; }
+        | Values COMMA Value                                    { $$ = node(",", cons($1, $3)); }
 Tuple
-        : Expression                            { $$ = $1; }
-        | LPAR Expressions RPAR                 { $$ = $2; }
-Expressions
-        : Expression                            { $$ = $1; }
-        | Expressions COMMA Expression          { $$ = node(",", cons($1, $3)); }
-Expression
-        : Expression ADD Term                   { $$ = node("+", cons($1, $3)); }
-        | Expression SUBTRACT Term              { $$ = node("-", cons($1, $3)); }
-        | Term                                  { $$ = $1; }
-Term
-        : Term MULTIPLY Factor                  { $$ = node("*", cons($1, $3)); }
-        | Term DIVIDE Factor                    { $$ = node("/", cons($1, $3)); }
-        | Factor                                { $$ = $1; }
-Factor
-        : Variable                              { $$ = $1; }
-        | Subscription                          { $$ = $1; }
-        | Constant                              { $$ = $1; }
-        | LPAR Expression RPAR                  { $$ = $2; }
+        : LPAR Values RPAR                                      { $$ = $2; }
+Tuples
+        : Tuple                                                 { $$ = $1; }
+        | Tuples COMMA Tuple
+SetExpression
+        : SetExpression ADD SetFactor                           { $$ = node("+", cons($1, $3)); }
+        | SetExpression SUBTRACT SetFactor                      { $$ = node("-", cons($1, $3)); }
+        | SetExpression MULTIPLY SetFactor                      { $$ = node("*", cons($1, $3)); }
+        | SetExpression HAT SetFactor                           { $$ = node("^", cons($1, $3)); }
+        | SetFactor                                             { $$ = $1; }
+SetFactor
+        : SetName                                               { $$ = $1; }
+        | DomLimmitedSet                                        { $$ = $1; }
+        | LPAR SetExpression RPAR                               { $$ = $2; }
 SetName
-        : UpperIdentifier                       { $$ = $1; }
-Variable
-        : LowerIdentifier                       { $$ = $1; }
-Parameters
-        : Parameter                             { $$ = $1; }
-        | Parameters COMMA Parameter            { $$ = node(",", cons($1, $3)); }
-Parameter
-        : SetName                               { $$ = $1; }
-        | SetNotation                           { $$ = $1; }
-Constant
-        : INTEGER                               { $$ = leaf("INTEGER", yytext); }
-        | REAL                                  { $$ = leaf("REAL", yytext); }
-Subscription
-        : LowerIdentifier 
-                LBRACKET Expression RBRACKET    { $$ = node("[", cons($1, $3)); }
-UpperIdentifier
-        : UPPER_ID                              { $$ = leaf("UPPER_ID", yytext); }
-LowerIdentifier
-        : LOWER_ID                              { $$ = leaf("LOWER_ID", yytext); }
-%%
+        : UPPER_ID                                              { $$ = leaf("UPPER_ID", yytext); }
+DomLimmitedSet
+        : SetName DomLimitter                                   { $$ = node("DOMLIMMITEDSET", cons($1, $2)); }
+DomLimitter
+        : LT Constant COMMA Constant COMMA Constant GT          { $$ = node("DOMAINLIMITER", cons(node("RANGE", cons($2, $4)), $6)); }
+Conditions
+        : Condition                                             { $$ = $1; }
+        | Conditions COMMA Condition                            { $$ = node("AND", cons($1, $3)); }
+        | Conditions SEMICOLON Condition                        { $$ = node("OR", cons($1, $3)); }
+Condition               
+        : Equation                                              { $$ = $1; }
+        | Inequation                                            { $$ = $1; }
+        | Inclusion                                             { $$ = $1; }
+        | LPAR Conditions RPAR                                  { $$ = $2; }
+Inclusion               
+        : SetElement IN SetNotation                             { $$ = node("~", cons($1, $3)); }
+        | SetElement NOTIN SetNotation                          { $$ = node("!~", cons($1, $3)); }
+Equation                
+        : Expression EQUAL Expression                           { $$ = node("=", cons($1, $3)); }
+        | Expression NOTEQ Expression                           { $$ = node("!=", cons($1, $3)); }
+Inequation              
+        : Expression LT Expression                              { $$ = node("<", cons($1, $3)); }
+        | Expression GT Expression                              { $$ = node(">", cons($1, $3)); }
+        | Expression LE Expression                              { $$ = node("<=", cons($1, $3)); }
+        | Expression GE Expression                              { $$ = node(">=", cons($1, $3)); }
+Expression              
+        : Expression ADD Term                                   { $$ = node("+", cons($1, $3)); }
+        | Expression SUBTRACT Term                              { $$ = node("-", cons($1, $3)); }
+        | Term                                                  { $$ = $1; }
+Term            
+        : Term MULTIPLY Factor                                  { $$ = node("*", cons($1, $3)); }
+        | Term DIVIDE Factor                                    { $$ = node("/", cons($1, $3)); }
+        | Factor                                                { $$ = $1; }
+Factor          
+        : Variable                                              { $$ = $1; }
+        | Constant                                              { $$ = $1; }
+        | LPAR Expression RPAR                                  { $$ = $2; }
+Variable                
+        : LOWER_ID                                              { $$ = leaf("LOWER_ID", yytext); }
+Constant                
+        : INTEGER                                               { $$ = leaf("INTEGER", yytext); }
+        | REAL                                                  { $$ = leaf("REAL", yytext); }
+String
+        : STRING                                                { $$ = leaf("STRING", yytext); }
+%%              
 #include "lex.yy.c"
 void yyerror(char *s) {
 	fprintf(stderr, "\n%s at %d: nearby \"%s\"\n\n", s, linecounter, yytext);

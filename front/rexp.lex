@@ -3,41 +3,42 @@ int linecounter = 1;
 %}
 %option nounput
 %%
-[A-Z_][a-zA-Z0-9_]*                             { return(UPPER_ID); }
-[a-z_][a-zA-Z0-9_]*                             { return(LOWER_ID); }
-[0-9]+                                          { return(INTEGER); }
-[0-9]*"."[0-9]+                                 { return(REAL); }
-":="                                            { return(ASSERT); }
-"?="                                            { return(PROVE); }
-";"                                             { return(SEMICOLON); }
-","                                             { return(COMMA); }
-"\."                                            { return(DOT); }
-"="                                             { return(EQUAL); }
-"!="                                            { return(NOTEQ); }
-"<"                                             { return(LT); }
-">"                                             { return(GT); }
-"<="                                            { return(LE); }
-">="                                            { return(GE); }
-"+"                                             { return(ADD); }
-"-"                                             { return(SUBTRACT); }
-"*"                                             { return(MULTIPLY); }
-"^"                                             { return(HAT); }
-"/"                                             { return(DIVIDE); }
-"~"                                             { return(IN); }
-"!~"                                            { return(NOTIN); }
-"("                                             { return(LPAR); }
-")"                                             { return(RPAR); }
-"{"                                             { return(LBRACE); }
-"}"                                             { return(RBRACE); }
-"["                                             { return(LBRACKET); }
-"]"                                             { return(RBRACKET); }
-"|"                                             { return(VBAR); }
-"\n"                                            { linecounter++; }
-"\r\n"                                          { linecounter++; }
-"\r"                                            { linecounter++; }
-" "|"\t"                                        { }
-"/*"                                            { comment(); }
-.                                               { return(UNKNOWN); }
+[A-Z_][a-zA-Z0-9_]*                             			{ return(UPPER_ID); }
+[a-z_][a-zA-Z0-9_]*                             			{ return(LOWER_ID); }
+"-"*[0-9]+                                      			{ return(INTEGER); }
+"-"*[0-9]*"."[0-9]+                             			{ return(REAL); }
+"\""[a-zA-Z0-9_\.\-:=\\!\"#$%&'()^~\[\]\{\}<>/\?]*"\""		{ return(STRING); }
+":="                                            			{ return(ASSERT); }
+"?="                                            			{ return(PROVE); }
+";"                                             			{ return(SEMICOLON); }
+","                                             			{ return(COMMA); }
+"\."                                            			{ return(DOT); }
+"="                                             			{ return(EQUAL); }
+"!="                                            			{ return(NOTEQ); }
+"<"                                             			{ return(LT); }
+">"                                             			{ return(GT); }
+"<="                                            			{ return(LE); }
+">="                                            			{ return(GE); }
+"+"                                             			{ return(ADD); }
+"-"                                             			{ return(SUBTRACT); }
+"*"                                             			{ return(MULTIPLY); }
+"^"                                             			{ return(HAT); }
+"/"                                             			{ return(DIVIDE); }
+"~"                                             			{ return(IN); }
+"!~"                                            			{ return(NOTIN); }
+"("                                             			{ return(LPAR); }
+")"                                             			{ return(RPAR); }
+"{"                                             			{ return(LBRACE); }
+"}"                                             			{ return(RBRACE); }
+"["                                             			{ return(LBRACKET); }
+"]"                                             			{ return(RBRACKET); }
+"|"                                             			{ return(VBAR); }
+"\n"                                            			{ linecounter++; }
+"\r\n"                                          			{ linecounter++; }
+"\r"                                            			{ linecounter++; }
+" "|"\t"                                        			{ }
+"/*"                                            			{ comment(); }
+.                                               			{ return(UNKNOWN); }
 %%
 int yywrap(void) {
 	return(1);
