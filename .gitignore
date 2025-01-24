@@ -18,3 +18,5 @@ y.tab.c
 
 # lex
 lex.yy.c
+
+./front/tmp.txt
