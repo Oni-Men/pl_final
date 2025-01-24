@@ -38,6 +38,7 @@ SetElements
 Value
         : Variable                                              { $$ = $1; }
         | Constant                                              { $$ = $1; }
+        | SUBTRACT Constant                                     { $$ = node("SUBTRACT", $2); }
         | String                                                { $$ = $1; }
 Values
         : Value                                                 { $$ = node("VALUE", $1); }
