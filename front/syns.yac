@@ -2,9 +2,10 @@
 #include "defs.h"
 #define YYSTYPE Cell *
 %}
-%token  UPPER_ID LOWER_ID INTEGER REAL ASSERT PROVE SEMICOLON COMMA DOT EQUAL NOTEQ LT GT LE GE 
-        ADD SUBTRACT MULTIPLY HAT DIVIDE IN NOTIN LPAR RPAR LBRACE RBRACE 
-        LBRACKET RBRACKET VBAR UNKNOWN STRING;
+%token  UPPER_ID LOWER_ID INTEGER REAL STRING
+        ASSERT PROVE SEMICOLON COMMA DOT LPAR RPAR LBRACE RBRACE LBRACKET RBRACKET VBAR
+        EQUAL NOTEQ LT GT LE GE ADD SUBTRACT MULTIPLY HAT DIVIDE IN NOTIN
+        UNKNOWN ;
 %%
 Program
         : Statements                                            { $$ = $1; }
@@ -53,17 +54,18 @@ SetExpression
         | SetFactor                                             { $$ = $1; }
 SetFactor
         : SetName                                               { $$ = $1; }
-        | SetName DmainLimitter                                 { $$ = node("DOMAINLIMIT", cons($1, $2)); }
+        | DomLimmitedSet                                        { $$ = $1; }
         | LPAR SetExpression RPAR                               { $$ = $2; }
 SetName
         : UPPER_ID                                              { $$ = leaf("UPPER_ID", yytext); }
-DmainLimitter
-        : LPAR Constant COMMA Constant COMMA Constant RPAR      { $$ = node("DOMAINLIMITER", cons(node("RANGE", cons($2, $4)), $6)); }
+DomLimmitedSet
+        : SetName DomLimitter                                   { $$ = node("DOMLIMMITEDSET", cons($1, $2)); }
+DomLimitter
+        : LT Constant COMMA Constant COMMA Constant GT          { $$ = node("DOMAINLIMITER", cons(node("RANGE", cons($2, $4)), $6)); }
 Conditions
         : Condition                                             { $$ = $1; }
         | Conditions COMMA Condition                            { $$ = node("AND", cons($1, $3)); }
         | Conditions SEMICOLON Condition                        { $$ = node("OR", cons($1, $3)); }
-
 Condition               
         : Equation                                              { $$ = $1; }
         | Inequation                                            { $$ = $1; }
@@ -99,7 +101,6 @@ Constant
         | REAL                                                  { $$ = leaf("REAL", yytext); }
 String
         : STRING                                                { $$ = leaf("STRING", yytext); }
-
 %%              
 #include "lex.yy.c"
 void yyerror(char *s) {
