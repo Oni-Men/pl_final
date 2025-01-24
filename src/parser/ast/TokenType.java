@@ -20,7 +20,8 @@ public enum TokenType
   RPAR("\\)"),
   COMMA(","),
   DOT("\\."),
-  __("\\n|\\r|\\r\\n|\\s|\\t"),
+  LINE_FEED("\\n|\\r|\\r\\n"),
+  WHITESPACE("\\s|\\t"),
   UNKNOWN("."),
   EOF("");
 
