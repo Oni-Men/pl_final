@@ -1,11 +1,20 @@
 #include "defs.h"
 
+void indent(int level);
+
 int main(void) {
 	linecounter = 1;
 	if (yyparse() == 0) {
 		fprintf(stderr, "\nparser successfully ended\n\n");
 	}
 	return(EXIT_SUCCESS);
+}
+
+void indent(int level) {
+	int count;
+	for (count = 0; count < level; count++) {
+		printf("    ");
+	}
 }
 
 Cell *cons(Cell *car, Cell *cdr) {
@@ -39,35 +48,63 @@ Cell *leaf(char *car, char *cdr) {
 	return(pointer);
 }
 
+Cell *append(Cell *list, Cell *element) {
+	Cell *pointer = list;
+	while ((pointer->tail) != NULL){
+		pointer = pointer->tail;
+	}
+	pointer->tail = cons(element, NULL);
+
+	return list;
+}
+
 void tree(Cell *pointer) {
 	visit(pointer, 1);
 	printf("\n");
 }
 
 void visit(Cell *pointer, int level) {
-	int count;
-
-	printf("\n");
-	for (count = 0; count < level; count++) {
-		printf("    ");
+	if (pointer->head == NULL) {
+		printf("()");
+		return;
 	}
 	if (pointer->kind == CONS) {
-		printf("cons(");
 		visit(pointer->head, level + 1);
-		visit(pointer->tail, level + 1);
-		printf(")");
+		if (pointer->tail != NULL) {
+			visit_tail(pointer->tail, level + 1);
+		}
 	}
 	if (pointer->kind == NODE) {
-		printf("node(");
+		printf("\n");
+		indent(level);
+		printf("(");
 		printf("%s ", (char *)pointer->head);
 		visit(pointer->tail, level + 1);
 		printf(")");
 	}
 	if (pointer->kind == LEAF) {
-		printf("leaf(");
+		printf("(");
 		printf("%s ", (char *)pointer->head);
 		printf("%s", (char *)pointer->tail);
 		printf(")");
 	}
 	return;
+}
+
+void visit_tail(Cell *pointer, int level)
+{
+	if (pointer->head == NULL) {
+		printf("()");
+		return;
+	}
+	visit(pointer->head, level);
+	if (pointer->tail != NULL) {
+		if (pointer->tail->kind == CONS) {
+			printf(" ");
+			visit_tail(pointer->tail, level);
+		} else {
+			printf(" ");
+			visit(pointer->tail, level);
+		}
+	}
 }

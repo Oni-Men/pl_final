@@ -10,13 +10,13 @@ CCFLAGS	= $(shell \
 	XcodeMajorVersion=`xcodebuild -version | head -n 1 | cut -d " " -f 2 | cut -d "." -f 1`; \
 	if [ $${XcodeMajorVersion} -lt "12" ] ; \
 	then \
-		echo '-Weverything -Werror -Wno-reserved-id-macro -Wno-unused-macros -Wno-implicit-int-conversion -Wno-sign-conversion -Wno-comma -Wno-unreachable-code -Wno-padded -Wno-missing-noreturn -Wno-missing-variable-declarations -Wno-cast-align -save-temps -O2' ; \
+		echo '-Weverything -Werror -Wno-reserved-id-macro -Wno-unused-macros -Wno-implicit-int-conversion -Wno-sign-conversion -Wno-comma -Wno-unreachable-code -Wno-padded -Wno-missing-noreturn -Wno-missing-variable-declarations -Wno-cast-align -O2' ; \
 	else \
 		if [ $${XcodeMajorVersion} -lt "15" ] ; \
 		then \
-			echo '-Weverything -Werror -Wno-poison-system-directories -Wno-reserved-id-macro -Wno-unused-macros -Wno-implicit-int-conversion -Wno-sign-conversion -Wno-padded -Wno-missing-noreturn -Wno-unreachable-code-break -Wno-unneeded-internal-declaration -Wno-unreachable-code -Wno-unreachable-code-return -Wno-sign-compare -save-temps -O2' ; \
+			echo '-Weverything -Werror -Wno-poison-system-directories -Wno-reserved-id-macro -Wno-unused-macros -Wno-implicit-int-conversion -Wno-sign-conversion -Wno-padded -Wno-missing-noreturn -Wno-unreachable-code-break -Wno-unneeded-internal-declaration -Wno-unreachable-code -Wno-unreachable-code-return -Wno-sign-compare -O2' ; \
 		else \
-			echo '-Weverything -Werror -Wno-poison-system-directories -Wno-reserved-id-macro -Wno-unused-macros -Wno-implicit-int-conversion -Wno-sign-conversion -Wno-padded -Wno-missing-noreturn -Wno-unreachable-code-break -Wno-unneeded-internal-declaration -Wno-unreachable-code -Wno-unreachable-code-return -Wno-sign-compare -Wno-gnu-line-marker -Wno-comma -Wno-missing-variable-declarations -Wno-cast-align -save-temps -O2' ; \
+			echo '-Weverything -Werror -Wno-poison-system-directories -Wno-reserved-id-macro -Wno-unused-macros -Wno-implicit-int-conversion -Wno-sign-conversion -Wno-padded -Wno-missing-noreturn -Wno-unreachable-code-break -Wno-unneeded-internal-declaration -Wno-unreachable-code -Wno-unreachable-code-return -Wno-sign-compare -Wno-gnu-line-marker -Wno-comma -Wno-missing-variable-declarations -Wno-cast-align -O2' ; \
 		fi \
 	fi)
 CCTEMPS	= *.o *.s *.i *.bc

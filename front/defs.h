@@ -24,6 +24,7 @@ void yyerror(char*);
 Cell *cons(Cell *, Cell *);
 Cell *node(char *, Cell *);
 Cell *leaf(char *, char *);
+Cell *append(Cell *list, Cell *element);
 void tree(Cell *);
 void visit(Cell *, int);
-
+void visit_tail(Cell *pointer, int level);
