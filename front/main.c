@@ -64,14 +64,18 @@ void tree(Cell *pointer) {
 }
 
 void visit(Cell *pointer, int level) {
-	if (pointer->head == NULL) {
-		printf("()");
+	if (pointer == NULL) {
 		return;
 	}
+
 	if (pointer->kind == CONS) {
+		printf("\n");
+		indent(level);
 		visit(pointer->head, level + 1);
-		if (pointer->tail != NULL) {
-			visit_tail(pointer->tail, level + 1);
+		if (pointer->tail != NULL && pointer->tail->kind == CONS) {
+			visit_tail(pointer->tail, level + 1);	
+		} else {
+			visit(pointer->tail, level + 1);
 		}
 	}
 	if (pointer->kind == NODE) {
@@ -79,7 +83,11 @@ void visit(Cell *pointer, int level) {
 		indent(level);
 		printf("(");
 		printf("%s ", (char *)pointer->head);
-		visit(pointer->tail, level + 1);
+		if (pointer->tail != NULL && pointer->tail->kind == CONS) {
+			visit_tail(pointer->tail, level + 1);
+		} else {
+			visit(pointer->tail, level + 1);
+		}
 		printf(")");
 	}
 	if (pointer->kind == LEAF) {

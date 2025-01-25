@@ -2,99 +2,61 @@ package parser.ast;
 
 public class Node extends Cell
 {
-  private Cell carPart;
-
-  private Cell cdrPart;
 
   public Node()
   {
+    super();
   }
 
-  public void head(Cell head)
+  public Node(Cell head, Cell tail)
   {
-    this.carPart = head;
-  }
-
-  public Cell head()
-  {
-    return this.carPart;
-  }
-
-  public void tail(Cell tail)
-  {
-    this.cdrPart = tail;
-  }
-
-  public Cell tail()
-  {
-    return this.cdrPart;
-  }
-
-  public boolean nil()
-  {
-    return this.carPart == null;
-  }
-
-  public boolean isList()
-  {
-    return this.cdrPart != null && this.cdrPart instanceof Node;
+    super(head, tail);
   }
 
   public void printString(StringBuffer sb, int level)
   {
     if (this.nil())
     {
-      sb.append("nil");
+      super.printString(sb, level);
+      return;
     }
-    else
+
+    sb.append("(");
+    this.head().printString(sb, level + 1);
+    if (!this.tail().nil())
     {
-      sb.append("(");
-      if (this.carPart instanceof Node carNode)
+      sb.append(" ");
+      if (this.tail() instanceof Node cdrNode)
       {
-        carNode.printString(sb, level + 1);
+        cdrNode.printTail(sb, level);
       }
       else
       {
-        sb.append(this.carPart.printString());
+        this.tail().printString(sb, level + 1);
       }
-
-      if (this.cdrPart instanceof Node cdrNode)
-      {
-        if (!cdrNode.nil())
-        {
-          sb.append(" ");
-          cdrNode.printTail(sb, level + 1);
-        }
-      }
-      else if (this.cdrPart != null)
-      {
-        sb.append(" . ");
-        this.printString(sb, level + 1);
-      }
-
-      sb.append(")");
-
     }
-
+    sb.append(")");
   }
 
-  private void printTail(StringBuffer sb, int level)
+  public void printTail(StringBuffer sb, int level)
   {
-    sb.append(this.carPart.printString());
-    if (this.cdrPart != null)
+    if (this.nil())
     {
-      if (this.cdrPart instanceof Node cdrNode)
+      return;
+    }
+    sb.append(this.carPart.printString());
+    if (!this.cdrPart.nil())
+    {
+      sb.append(" ");
+      if (this.tail() instanceof Node cdrNode)
       {
-        if (!cdrNode.nil())
-        {
-          sb.append(" ");
-          cdrNode.printTail(sb, level);
-        }
+        cdrNode.printTail(sb, level);
       }
       else
       {
-        this.cdrPart.printString(sb, level);
+        this.tail().printString(sb, level);
       }
     }
   }
+
 }

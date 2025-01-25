@@ -157,7 +157,9 @@ public class Parser implements IParser
   {
     Cell aCell = null;
     List<TokenType> symbols = Arrays.asList(
-        ID, NUMBER, REAL, EQUAL, LT, GT, LE, GE, PLUS, MINUS, MULTIPLY, DIVIDE);
+        ID, NUMBER, REAL, EQUAL, LT, GT, LE,
+        GE, PLUS, MINUS, MULTIPLY, DIVIDE,
+        IN, EXCLUSIVE);
 
     if (symbols.contains(currToken.tokenType()))
     {

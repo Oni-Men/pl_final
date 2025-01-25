@@ -192,6 +192,13 @@ public class ParserTest
         arguments("(1 2 3 (4 5))"),
         arguments("(1 2 ())"),
         arguments("(java python smalltalk lisp)"),
-        arguments("((oop java python) (functional lisp haskell) (logic prolog))"));
+        arguments("((oop java python) (functional lisp haskell) (logic prolog))"),
+        arguments("""
+            (PROVE
+                (~
+                    (SETELEMENT
+                        (TupleElement (LOWER_ID aaa) (INTEGER 0)))
+                    (EXPRESSION (UPPER_ID A_set))))
+                    """));
   }
 }

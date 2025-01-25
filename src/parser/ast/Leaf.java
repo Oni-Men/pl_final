@@ -7,12 +7,24 @@ public class Leaf extends Cell
 
   public Leaf(Token token)
   {
+    super();
     this.token = token;
   }
 
   public Token token()
   {
     return this.token;
+  }
+
+  @Override
+  public boolean nil()
+  {
+    return false;
+  }
+
+  public String text()
+  {
+    return this.token.text();
   }
 
   @Override
