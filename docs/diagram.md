@@ -3,22 +3,8 @@
 ![Program](diagram/Program.svg)
 
 ```
-Program  ::= Statements
+Program  ::= Statement+
 ```
-
-**Statements:**
-
-![Statements](diagram/Statements.svg)
-
-```
-Statements
-         ::= Statements? Statement
-```
-
-referenced by:
-
-* Program
-* Statements
 
 **Statement:**
 
@@ -26,12 +12,24 @@ referenced by:
 
 ```
 Statement
-         ::= ( Assertion | Proof ) '.'
+         ::= ( Proof | Assertion ) '.'
 ```
 
 referenced by:
 
-* Statements
+* Program
+
+**Proof:**
+
+![Proof](diagram/Proof.svg)
+
+```
+Proof    ::= '?=' Inclusion
+```
+
+referenced by:
+
+* Statement
 
 **Assertion:**
 
@@ -39,19 +37,7 @@ referenced by:
 
 ```
 Assertion
-         ::= SetSpecifier ':=' ( SetNotation | SetExpression )
-```
-
-referenced by:
-
-* Statement
-
-**Proof:**
-
-![Proof](diagram/Proof.svg)
-
-```
-Proof    ::= '?=' Conditions
+         ::= SetName ':=' SetNotation
 ```
 
 referenced by:
@@ -64,15 +50,112 @@ referenced by:
 
 ```
 SetNotation
-         ::= '{' ( '|' Tuple '|' Conditions | Tuples ) '}'
-           | SetSpecifier
+         ::= Intension
+           | Extention
+           | SetExpression
 ```
 
 referenced by:
 
 * Assertion
 * Inclusion
-* Parameter
+
+**Intension:**
+
+![Intension](diagram/Intension.svg)
+
+```
+Intension
+         ::= '{' '|' SetElement '|' Conditions '}'
+```
+
+referenced by:
+
+* SetNotation
+
+**Extention:**
+
+![Extention](diagram/Extention.svg)
+
+```
+Extention
+         ::= '{' ( SetElement ( ',' SetElement )* )? '}'
+```
+
+referenced by:
+
+* SetNotation
+
+**SetElement:**
+
+![SetElement](diagram/SetElement.svg)
+
+```
+SetElement
+         ::= Value
+           | Tuple
+           | TupleElement
+```
+
+referenced by:
+
+* Extention
+* Inclusion
+* Intension
+
+**Value:**
+
+![Value](diagram/Value.svg)
+
+```
+Value    ::= Variable
+           | '-'? Constant
+           | String
+```
+
+referenced by:
+
+* SetElement
+* Tuple
+
+**Tuple:**
+
+![Tuple](diagram/Tuple.svg)
+
+```
+Tuple    ::= '(' Value ( ',' Value )* ')'
+```
+
+referenced by:
+
+* SetElement
+* TupleElement
+
+**TupleElement:**
+
+![TupleElement](diagram/TupleElement.svg)
+
+```
+TupleElement
+         ::= ( Tuple | Variable ) Indexer
+```
+
+referenced by:
+
+* Factor
+* SetElement
+
+**Indexer:**
+
+![Indexer](diagram/Indexer.svg)
+
+```
+Indexer  ::= '[' Expression ']'
+```
+
+referenced by:
+
+* TupleElement
 
 **SetExpression:**
 
@@ -80,27 +163,13 @@ referenced by:
 
 ```
 SetExpression
-         ::= ( SetExpression ( '+' | '-' ) )? SetTerm
+         ::= SetFactor ( ( '+' | '-' | '*' | '^' ) SetFactor )*
 ```
 
 referenced by:
 
-* Assertion
-* SetExpression
 * SetFactor
-
-**SetTerm:**
-
-![SetTerm](diagram/SetTerm.svg)
-
-```
-SetTerm  ::= ( SetTerm ( '*' | '^' ) )? SetFactor
-```
-
-referenced by:
-
-* SetExpression
-* SetTerm
+* SetNotation
 
 **SetFactor:**
 
@@ -109,26 +178,53 @@ referenced by:
 ```
 SetFactor
          ::= SetName
-           | RangeDefinition
+           | DomLimmitedSet
            | '(' SetExpression ')'
 ```
 
 referenced by:
 
-* SetTerm
+* SetExpression
 
-**RangeDefinition:**
+**SetName:**
 
-![RangeDefinition](diagram/RangeDefinition.svg)
+![SetName](diagram/SetName.svg)
 
 ```
-RangeDefinition
-         ::= '[' Expressions ']'
+SetName  ::= [A-Z_] [a-zA-Z0-9_]*
+```
+
+referenced by:
+
+* Assertion
+* DomLimmitedSet
+* SetFactor
+
+**DomLimmitedSet:**
+
+![DomLimmitedSet](diagram/DomLimmitedSet.svg)
+
+```
+DomLimmitedSet
+         ::= SetName DomLimitter
 ```
 
 referenced by:
 
 * SetFactor
+
+**DomLimitter:**
+
+![DomLimitter](diagram/DomLimitter.svg)
+
+```
+DomLimitter
+         ::= '<' Constant ',' Constant ',' Constant '>'
+```
+
+referenced by:
+
+* DomLimmitedSet
 
 **Conditions:**
 
@@ -136,36 +232,21 @@ referenced by:
 
 ```
 Conditions
-         ::= ( Conditions ';' )? Conjunctive
+         ::= Condition ( ( ',' | ';' ) Condition )*
 ```
 
 referenced by:
 
-* Conditions
-* Proof
-* Relation
-* SetNotation
+* Condition
+* Intension
 
-**Conjunctive:**
+**Condition:**
 
-![Conjunctive](diagram/Conjunctive.svg)
+![Condition](diagram/Condition.svg)
 
 ```
-Conjunctive
-         ::= ( Conjunctive ',' )? Relation
-```
-
-referenced by:
-
-* Conditions
-* Conjunctive
-
-**Relation:**
-
-![Relation](diagram/Relation.svg)
-
-```
-Relation ::= Equation
+Condition
+         ::= Equation
            | Inequation
            | Inclusion
            | '(' Conditions ')'
@@ -173,7 +254,21 @@ Relation ::= Equation
 
 referenced by:
 
-* Conjunctive
+* Conditions
+
+**Inclusion:**
+
+![Inclusion](diagram/Inclusion.svg)
+
+```
+Inclusion
+         ::= SetElement ( '~' | '!~' ) SetNotation
+```
+
+referenced by:
+
+* Condition
+* Proof
 
 **Equation:**
 
@@ -185,34 +280,7 @@ Equation ::= Expression ( '=' | '!=' ) Expression
 
 referenced by:
 
-* Relation
-
-**Inclusion:**
-
-![Inclusion](diagram/Inclusion.svg)
-
-```
-Inclusion
-         ::= Tuple ( '~' | '!~' ) SetNotation
-```
-
-referenced by:
-
-* Relation
-
-**SetSpecifier:**
-
-![SetSpecifier](diagram/SetSpecifier.svg)
-
-```
-SetSpecifier
-         ::= SetName ( '(' Parameters ')' )?
-```
-
-referenced by:
-
-* Assertion
-* SetNotation
+* Condition
 
 **Inequation:**
 
@@ -225,50 +293,7 @@ Inequation
 
 referenced by:
 
-* Relation
-
-**Tuples:**
-
-![Tuples](diagram/Tuples.svg)
-
-```
-Tuples   ::= ( Tuples ',' )? Tuple
-```
-
-referenced by:
-
-* SetNotation
-* Tuples
-
-**Tuple:**
-
-![Tuple](diagram/Tuple.svg)
-
-```
-Tuple    ::= Expression
-           | '(' Expressions ')'
-```
-
-referenced by:
-
-* Inclusion
-* SetNotation
-* Tuples
-
-**Expressions:**
-
-![Expressions](diagram/Expressions.svg)
-
-```
-Expressions
-         ::= ( Expressions ',' )? Expression
-```
-
-referenced by:
-
-* Expressions
-* RangeDefinition
-* Tuple
+* Condition
 
 **Expression:**
 
@@ -276,31 +301,27 @@ referenced by:
 
 ```
 Expression
-         ::= ( Expression ( '+' | '-' ) )? Term
+         ::= Term ( ( '+' | '-' ) Term )*
 ```
 
 referenced by:
 
 * Equation
-* Expression
-* Expressions
 * Factor
+* Indexer
 * Inequation
-* Subscription
-* Tuple
 
 **Term:**
 
 ![Term](diagram/Term.svg)
 
 ```
-Term     ::= ( Term ( '*' | '/' ) )? Factor
+Term     ::= Factor ( ( '*' | '/' ) Factor )*
 ```
 
 referenced by:
 
 * Expression
-* Term
 
 **Factor:**
 
@@ -308,68 +329,28 @@ referenced by:
 
 ```
 Factor   ::= Variable
-           | Subscription
            | Constant
            | '(' Expression ')'
+           | TupleElement
 ```
 
 referenced by:
 
 * Term
 
-**SetName:**
-
-![SetName](diagram/SetName.svg)
-
-```
-SetName  ::= UpperIdentifier
-```
-
-referenced by:
-
-* Parameter
-* SetFactor
-* SetSpecifier
-
 **Variable:**
 
 ![Variable](diagram/Variable.svg)
 
 ```
-Variable ::= LowerIdentifier
+Variable ::= [a-z_] [a-zA-Z0-9_]*
 ```
 
 referenced by:
 
 * Factor
-
-**Parameters:**
-
-![Parameters](diagram/Parameters.svg)
-
-```
-Parameters
-         ::= ( Parameters ',' )? Parameter
-```
-
-referenced by:
-
-* Parameters
-* SetSpecifier
-
-**Parameter:**
-
-![Parameter](diagram/Parameter.svg)
-
-```
-Parameter
-         ::= SetName
-           | SetNotation
-```
-
-referenced by:
-
-* Parameters
+* TupleElement
+* Value
 
 **Constant:**
 
@@ -381,35 +362,23 @@ Constant ::= [0-9]* ( [0-9] | '.' [0-9]+ )
 
 referenced by:
 
+* DomLimitter
 * Factor
+* Value
 
-**Subscription:**
-
-![Subscription](diagram/Subscription.svg)
+**String:**
+![String](diagram/String.svg) 
 
 ```
-Subscription
-         ::= LowerIdentifier '[' Expression ']'
+String   ::= '"' [a-zA-Z0-9_.:;=\!?$%&()/<>-]* '"'
 ```
 
 referenced by:
 
-* Factor
+* Value
 
-**UpperIdentifier:**
 
-![UpperIdentifier](diagram/UpperIdentifier.svg)
-
-```
-UpperIdentifier
-         ::= [A-Z_] [a-zA-Z0-9_]*
-```
-
-referenced by:
-
-* SetName
-
-## 
-![LowerIdentifier](diagram/LowerIdentifier.svg) <sup>generated by [RR - Railroad Diagram Generator][RR]</sup>
+<br>
+<sup>generated by [RR - Railroad Diagram Generator][RR]</sup>
 
 [RR]: https://www.bottlecaps.de/rr/ui
