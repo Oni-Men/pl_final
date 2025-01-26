@@ -36,7 +36,7 @@ public class ScannerTest
         break;
       }
       assertTrue(anIterator.hasNext());
-      assertEquals(token.tokenType(), anIterator.next());
+      assertEquals(anIterator.next(), token.tokenType());
     }
     assertFalse(anIterator.hasNext());
   }
@@ -45,6 +45,7 @@ public class ScannerTest
   {
     return Stream.of(
         arguments("(+ X Y Z)", Arrays.asList(LPAR, PLUS, ID, ID, ID, RPAR)),
+        arguments("0.5 -3.14 3.3333", Arrays.asList(REAL, REAL, REAL)),
         arguments("""
             (ASSERT
               (A N)

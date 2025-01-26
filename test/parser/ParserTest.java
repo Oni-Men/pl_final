@@ -199,6 +199,13 @@ public class ParserTest
                     (SETELEMENT
                         (TupleElement (LOWER_ID aaa) (INTEGER 0)))
                     (EXPRESSION (UPPER_ID A_set))))
-                    """));
+                    """),
+        arguments("""
+            (ASSERT (UPPER_ID A_set)
+              (EXPRESSION
+                (DOMLIMMITEDSET (UPPER_ID R)
+                  (DOMAINLIMITER
+                    (RANGE (INTEGER 0.0) (INTEGER 1.0)) (INTEGER 0.2)))))
+                """));
   }
 }

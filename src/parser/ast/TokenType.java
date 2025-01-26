@@ -5,14 +5,16 @@ import java.util.regex.Pattern;
 public enum TokenType
 {
   ID("[_a-zA-Z][_a-zA-Z0-9]*"),
-  NUMBER("-?[0-9]+"),
   REAL("-?[0-9]+\\.[0-9]+"),
+  NUMBER("-?[0-9]+"),
   EQUAL("="),
+  NOTEQ("!="),
   LT("<"),
   GT(">"),
   LE(">="),
   GE(">="),
   IN("~"),
+  NOTIN("!~"),
   PLUS("\\+"),
   MINUS("-"),
   MULTIPLY("\\*"),
