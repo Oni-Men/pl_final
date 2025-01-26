@@ -7,7 +7,7 @@ import util.Bool;
 
 public class Cell
 {
-  protected static final Cell nil = new Cell();
+  public static final Cell nil = new Cell();
 
   protected Cell carPart;
   protected Cell cdrPart;
@@ -58,7 +58,18 @@ public class Cell
 
   public boolean nil()
   {
-    return this == nil || (head() == nil && tail() == nil);
+    return this == nil || (head() == nil && tail() == nil) || (head() == null && tail() == null);
+  }
+
+  public Cell next()
+  {
+    return this.tail().head();
+  }
+
+  @SuppressWarnings("unchecked")
+  public <T extends Cell> T as()
+  {
+    return (T) this;
   }
 
   public String text()
@@ -68,7 +79,7 @@ public class Cell
 
   public <T> T textEquals(String other, Supplier<T> ifTrue)
   {
-    return textEquals(other, ifTrue, false);
+    return textEquals(other, ifTrue, true);
   }
 
   public <T> T textEquals(String other, Supplier<T> ifTrue, boolean ignoreCase)

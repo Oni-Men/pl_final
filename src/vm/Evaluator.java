@@ -4,44 +4,51 @@ import parser.ast.Cell;
 import parser.ast.Leaf;
 import parser.ast.Node;
 import util.Bool;
+import vm.pobject.BuiltinSet;
+import vm.pobject.PSet;
+import vm.pobject.BuiltinSet.NaturalNumberAdaptor;
+import vm.pobject.BuiltinSet.RealNumberAdaptor;
 
 import static parser.ast.TokenType.*;
 
 public class Evaluator
 {
-  private Node rootNode;
+  private Cell rootCell;
   private SymbolTable environment;
 
   StringBuffer output;
 
-  public Evaluator(Node node, SymbolTable environment)
+  public Evaluator(Cell cell, SymbolTable environment)
   {
-    this.rootNode = node;
+    this.rootCell = cell;
     this.environment = environment;
   }
 
   private void initialize()
   {
     this.output = new StringBuffer();
+
+    this.environment.put("N", new BuiltinSet(new NaturalNumberAdaptor()));
+    this.environment.put("R", new BuiltinSet(new RealNumberAdaptor()));
   }
 
   public void perform()
   {
     this.initialize();
 
-    if (rootNode.head() instanceof Leaf aLeaf)
+    if (rootCell.head() instanceof Leaf aLeaf)
     {
       if (aLeaf.token().tokenType() == ID)
       {
         String verb = aLeaf.token().text();
         if (verb.equalsIgnoreCase("assert"))
         {
-          this.handleAssert(rootNode.tail());
+          this.handleAssert(rootCell.tail());
           return;
         }
         else if (verb.equalsIgnoreCase("prove"))
         {
-          this.handleProve(rootNode.tail());
+          this.handleProve(rootCell.tail());
           return;
         }
       }
@@ -77,7 +84,7 @@ public class Evaluator
 
     Bool.of(notationType.equalsIgnoreCase("expression"))
         .ifTrue(() -> {
-          PSet pSet = handleSetExpression(notation.tail());
+          PSet pSet = handleSetExpression(notation);
           this.environment().put(aSetName, pSet);
         });
   }
@@ -94,7 +101,7 @@ public class Evaluator
 
   private PSet handleSetExpression(Cell cell)
   {
-    return null;
+    return SetExpression.of(cell.head()).evaluate(environment);
   }
 
   private String nameOfSet(Cell cell)

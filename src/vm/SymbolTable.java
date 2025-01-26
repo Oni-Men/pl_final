@@ -6,6 +6,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import vm.pobject.PObject;
+import vm.pobject.PSet;
+import vm.pobject.PTuple;
+import vm.pobject.PValue;
+import vm.pobject.PVariable;
+
 public class SymbolTable
 {
   private SymbolTable outer;

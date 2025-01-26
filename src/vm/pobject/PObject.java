@@ -1,4 +1,4 @@
-package vm;
+package vm.pobject;
 
 /**
  * 独自プログラミング言語におけるオブジェクトの祖

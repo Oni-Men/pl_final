@@ -2,11 +2,11 @@ package parser;
 
 import java.util.List;
 
-import parser.ast.Node;
+import parser.ast.Cell;
 
 public interface IParser
 {
 
-  List<Node> parse();
+  List<Cell> parse();
 
 }

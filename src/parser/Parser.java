@@ -54,7 +54,7 @@ public class Parser implements IParser
     this.peekToken = this.scanner.next();
   }
 
-  public List<Node> parse()
+  public List<Cell> parse()
   {
     return parse(anException -> {
       anException.printStackTrace();
@@ -67,17 +67,17 @@ public class Parser implements IParser
    * @param ifFail
    * @return
    */
-  public List<Node> parse(Consumer<Exception> ifFail)
+  public List<Cell> parse(Consumer<Exception> ifFail)
   {
     this.initialize();
 
-    List<Node> program = new ArrayList<>();
+    List<Cell> program = new ArrayList<>();
 
     try
     {
       while (this.currToken != null && this.currToken.tokenType() != EOF)
       {
-        Node list = this.parseList();
+        Cell list = this.parseList();
         program.add(list);
       }
     }
@@ -94,7 +94,7 @@ public class Parser implements IParser
    * 
    * @return
    */
-  private Node parseList()
+  private Cell parseList()
   {
     if (currToken.tokenType() != LPAR)
     {
@@ -102,8 +102,8 @@ public class Parser implements IParser
     }
     this.readToken();
 
-    Node listNode = new Node();
-    Node currentNode = listNode;
+    Cell listNode = new Node();
+    Cell currentNode = listNode;
     while (true)
     {
       Cell expression = this.parseExpression();
@@ -124,6 +124,10 @@ public class Parser implements IParser
     }
     this.readToken();
 
+    if (listNode.nil())
+    {
+      listNode = Cell.nil;
+    }
     return listNode;
   }
 

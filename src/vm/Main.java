@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 
 import parser.Parser;
 import parser.Scanner;
-import parser.ast.Node;
+import parser.ast.Cell;
 
 public class Main
 {
@@ -36,9 +36,9 @@ public class Main
         var aParser = new Parser(aScanner);
         var programs = aParser.parse();
 
-        for (Node node : programs)
+        for (Cell cell : programs)
         {
-          var anEvaluator = new Evaluator(node, global);
+          var anEvaluator = new Evaluator(cell, global);
           anEvaluator.perform();
           System.out.println(anEvaluator.output());
         }

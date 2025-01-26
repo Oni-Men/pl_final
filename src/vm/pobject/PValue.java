@@ -1,9 +1,9 @@
-package vm;
+package vm.pobject;
 
 import parser.ast.Cell;
 import util.Cond;
 
-public class PValue extends PObject
+public class PValue extends PObject implements Comparable<PValue>
 {
   private static final PValue nil = new PValue();
 
@@ -25,9 +25,6 @@ public class PValue extends PObject
       String elementType = cell.tail().head().head().text();
       String valueString = cell.tail().head().tail().head().text();
 
-      System.out.println(elementType);
-      System.out.println(valueString);
-
       result = Cond
           .<String, PValue>when((s) -> s.equalsIgnoreCase("string"),
               () -> new PString(valueString))
@@ -44,6 +41,12 @@ public class PValue extends PObject
   public boolean nil()
   {
     return this == nil;
+  }
+
+  @Override
+  public int compareTo(PValue o)
+  {
+    throw new UnsupportedOperationException("Unimplemented method 'compareTo'");
   }
 
 }

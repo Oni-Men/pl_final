@@ -14,9 +14,23 @@ public class Bool
     return value ? TRUE : FALSE;
   }
 
+  public static Bool isEmpty(String str)
+  {
+    if (str == null || str.isEmpty())
+    {
+      return TRUE;
+    }
+    return FALSE;
+  }
+
   private Bool(boolean value)
   {
     this.value = value;
+  }
+
+  public boolean value()
+  {
+    return this.value;
   }
 
   public <T> T ifTrue(Supplier<T> supplier)
@@ -72,5 +86,21 @@ public class Bool
       then.run();
     }
 
+  }
+
+  public <T extends RuntimeException> void throwIfTrue(Supplier<T> erroSupplier)
+  {
+    if (value)
+    {
+      throw erroSupplier.get();
+    }
+  }
+
+  public <T extends RuntimeException> void throwIfFalse(Supplier<T> erroSupplier)
+  {
+    if (!value)
+    {
+      throw erroSupplier.get();
+    }
   }
 }

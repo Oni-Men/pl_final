@@ -52,9 +52,6 @@ public class ParserTest
     expectedString = expectedString.replaceAll("[\n\s]+", " ").strip();
     resultString = resultString.replaceAll("[\n\s]+", " ").strip();
 
-    System.out.println(expectedString);
-    System.out.println(resultString);
-
     assertEquals(expectedString, resultString);
   }
 
