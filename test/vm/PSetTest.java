@@ -110,7 +110,11 @@ public class PSetTest
         arguments(
             fromStrings("X", "Y", "Z"),
             fromStrings("A", "B", "C"),
-            false));
+            false),
+        arguments(
+            fromIntegres(),
+            fromIntegres(),
+            true));
   }
 
   static Stream<Arguments> unionTestCaseProvider()

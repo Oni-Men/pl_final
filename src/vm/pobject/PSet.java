@@ -14,6 +14,10 @@ public class PSet extends PObject
   public static PSet fromExtension(Cell cell)
   {
     PSet pSet = new PSet();
+    if (cell.head().nil())
+    {
+      return pSet;
+    }
     Cell element = cell.head().head().textEquals("setelements", () -> {
       return cell.head().tail();
     }, true);

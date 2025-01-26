@@ -37,10 +37,33 @@ public class EvaluatorTest
   private static Stream<Arguments> testCaseProvider()
   {
     return Stream.of(
+        testCase00(),
         testCase01(),
         testCase02(),
         testCase03(),
         testCase05());
+  }
+
+  /**
+   * 空集合のテスト
+   * 
+   * @return
+   */
+  private static Arguments testCase00()
+  {
+    String inpuString = """
+        (ASSERT (UPPER_ID A)
+          (EXTENSION ()))
+        """;
+    List<Cell> program = new Parser(new Scanner(inpuString)).parse();
+    SymbolTable environment = new SymbolTable();
+    String expectedOutput = "";
+    String expectedEnvironment = """
+        A: {}
+        N: <builtin set (natural)>
+        R: <builtin set (real)>
+        """;
+    return arguments(program, environment, expectedOutput, expectedEnvironment);
   }
 
   /**
