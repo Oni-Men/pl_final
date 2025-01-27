@@ -32,7 +32,7 @@ public class PValue extends PObject implements Comparable<PValue>
               () -> new PInteger(valueString))
           .or((s) -> s.equalsIgnoreCase("real"),
               () -> new PReal(valueString))
-          .check(elementType, nil);
+          .get(elementType, nil);
     }
 
     return result;
@@ -41,6 +41,26 @@ public class PValue extends PObject implements Comparable<PValue>
   public boolean nil()
   {
     return this == nil;
+  }
+
+  public PValue add(PValue anothValue)
+  {
+    return this;
+  }
+
+  public PValue subtract(PValue anothValue)
+  {
+    return this;
+  }
+
+  public PValue multiply(PValue anothValue)
+  {
+    return this;
+  }
+
+  public PValue divide(PValue anothValue)
+  {
+    return this;
   }
 
   @Override

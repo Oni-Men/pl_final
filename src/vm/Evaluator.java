@@ -1,15 +1,12 @@
 package vm;
 
+import static parser.ast.TokenType.ID;
+
 import parser.ast.Cell;
 import parser.ast.Leaf;
 import parser.ast.Node;
 import util.Bool;
-import vm.pobject.BuiltinSet;
 import vm.pobject.PSet;
-import vm.pobject.BuiltinSet.NaturalNumberAdaptor;
-import vm.pobject.BuiltinSet.RealNumberAdaptor;
-
-import static parser.ast.TokenType.*;
 
 public class Evaluator
 {
@@ -27,9 +24,6 @@ public class Evaluator
   private void initialize()
   {
     this.output = new StringBuffer();
-
-    this.environment.put("N", new BuiltinSet(new NaturalNumberAdaptor()));
-    this.environment.put("R", new BuiltinSet(new RealNumberAdaptor()));
   }
 
   public void perform()
@@ -78,7 +72,7 @@ public class Evaluator
         });
     Bool.of(notationType.equalsIgnoreCase("intension"))
         .ifTrue(() -> {
-          PSet pSet = PSet.fromIntension(notation);
+          PSet pSet = PSet.fromIntension(notation, this.environment);
           this.environment().put(aSetName, pSet);
         });
 

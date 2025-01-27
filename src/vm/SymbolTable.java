@@ -6,6 +6,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import util.Bool;
+import vm.pobject.BuiltinSet;
+import vm.pobject.BuiltinSet.NaturalNumberAdaptor;
+import vm.pobject.BuiltinSet.RealNumberAdaptor;
 import vm.pobject.PObject;
 import vm.pobject.PSet;
 import vm.pobject.PTuple;
@@ -26,11 +30,26 @@ public class SymbolTable
   {
     this.outer = outer;
     this.symbolTable = new HashMap<>();
+
+    Bool.of(this.outer == null)
+        .ifTrue(() -> {
+          Bool.of(this.symbolTable.containsKey("N"))
+              .ifFalse(() -> {
+                this.symbolTable.put("N", new BuiltinSet(new NaturalNumberAdaptor()));
+              });
+
+          Bool.of(this.symbolTable.containsKey("R"))
+              .ifFalse(() -> {
+                this.symbolTable.put("R", new BuiltinSet(new RealNumberAdaptor()));
+              });
+        });
   }
 
   public void put(String name, PObject pObject)
   {
     this.symbolTable.put(name, pObject);
+
+    // System.out.printf("> %s%n", pObject.toString());
   }
 
   /**
@@ -77,6 +96,11 @@ public class SymbolTable
   public PValue getAsValue(String name)
   {
     return null;
+  }
+
+  public SymbolTable fork()
+  {
+    return new SymbolTable(this);
   }
 
   @Override

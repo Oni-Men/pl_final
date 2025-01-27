@@ -41,7 +41,9 @@ public class EvaluatorTest
         testCase01(),
         testCase02(),
         testCase03(),
-        testCase05());
+        testCase04(),
+        testCase05(),
+        testCase06());
   }
 
   /**
@@ -143,33 +145,36 @@ public class EvaluatorTest
   }
 
   /**
-   * 内包表記のテスト
+   * 内包表記のテスト(二つの帰属関係式)
    * 
    * @return
    */
   private static Arguments testCase04()
   {
     String inputString = """
-        (ASSERT (UPPER_ID A_set)
+        (ASSERT (UPPER_ID C)
         (INTENSION
-            (SETELEMENT (LOWER_ID x))
+            (SETELEMENT (LOWER_ID y))
             (AND
-                (= (LOWER_ID x)
-                    (* (INTEGER 2) (LOWER_ID y)))
                 (~
                     (SETELEMENT (LOWER_ID y))
-                    (EXPRESSION (UPPER_ID X))))))
+                    (EXPRESSION (UPPER_ID A)))
+                (~
+                    (SETELEMENT (LOWER_ID y))
+                    (EXPRESSION (UPPER_ID B))))))
             """;
     List<Cell> statement = new Parser(new Scanner(inputString)).parse();
     SymbolTable environment = new SymbolTable();
-    PSet sampleSet = PSet.fromIterator(
-        IntStream.iterate(0, i -> i + 2).takeWhile(i -> i < 10).mapToObj(i -> (PValue) new PInteger(i)).iterator());
-
-    environment.put("X", sampleSet);
+    PSet setA = PSet.fromIterator(IntStream.of(1, 3, 5, 7).mapToObj(i -> (PValue) new PInteger(i)).iterator());
+    PSet setB = PSet.fromIterator(IntStream.of(2, 3, 4, 5).mapToObj(i -> (PValue) new PInteger(i)).iterator());
+    environment.put("A", setA);
+    environment.put("B", setB);
 
     String expectedOutput = "";
     String expectedEnvironment = """
-        A_set: {}
+        A: {1, 3, 5, 7}
+        B: {2, 3, 4, 5}
+        C: {3, 5}
         N: <builtin set (natural)>
         R: <builtin set (real)>
         """;
@@ -224,6 +229,87 @@ public class EvaluatorTest
         D: {1}
         E: {2, 3}
         F: {1, 4}
+        N: <builtin set (natural)>
+        R: <builtin set (real)>
+        """;
+    return arguments(statement, environment, expectedOutput, expectedEnvironment);
+  }
+
+  /**
+   * 内包表記のテスト（一つの帰属関係式）
+   * 
+   * @return
+   */
+  private static Arguments testCase06()
+  {
+    String inputString = """
+        (ASSERT (UPPER_ID B)
+            (INTENSION
+                (SETELEMENT (LOWER_ID x))
+                (AND
+                    (= (LOWER_ID x)
+                        (+
+                            (* (INTEGER 2) (LOWER_ID y)) (INTEGER 2)))
+                    (~
+                        (SETELEMENT (LOWER_ID y))
+                        (EXPRESSION (UPPER_ID A))))))
+            """;
+    List<Cell> statement = new Parser(new Scanner(inputString)).parse();
+    SymbolTable environment = new SymbolTable();
+    PSet setA = PSet.fromIterator(IntStream.of(0, 1, 2, 3, 4).mapToObj(i -> (PValue) new PInteger(i)).iterator());
+    environment.put("A", setA);
+
+    String expectedOutput = "";
+    String expectedEnvironment = """
+        A: {0, 1, 2, 3, 4}
+        B: {1, 3, 5, 7, 9}
+        N: <builtin set (natural)>
+        R: <builtin set (real)>
+        """;
+    return arguments(statement, environment, expectedOutput, expectedEnvironment);
+  }
+
+  /**
+   * 内包表記のテスト（入れ子になった帰属関係式）
+   * 
+   * @return
+   */
+  private static Arguments testCase07()
+  {
+    String inputString = """
+        (ASSERT (UPPER_ID C)
+            (INTENSION
+                (SETELEMENT (LOWER_ID x))
+                (AND
+                    (AND
+                        (AND
+                            (= (LOWER_ID x)
+                                (+
+                                    (* (INTEGER 2) (LOWER_ID y))
+                                    (* (INTEGER 3) (LOWER_ID z))))
+                            (= (LOWER_ID x)
+                                (+
+                                    (* (INTEGER 3) (LOWER_ID y))
+                                    (* (INTEGER 4) (LOWER_ID z)))))
+                        (~
+                            (SETELEMENT (LOWER_ID y))
+                            (EXPRESSION (UPPER_ID A))))
+                    (~
+                        (SETELEMENT (LOWER_ID z))
+                        (EXPRESSION (UPPER_ID B))))))
+                """;
+    List<Cell> statement = new Parser(new Scanner(inputString)).parse();
+    SymbolTable environment = new SymbolTable();
+    PSet setA = PSet.fromIterator(IntStream.of(1, 3, 5, 7).mapToObj(i -> (PValue) new PInteger(i)).iterator());
+    PSet setB = PSet.fromIterator(IntStream.of(2, 3, 4, 5).mapToObj(i -> (PValue) new PInteger(i)).iterator());
+    environment.put("A", setA);
+    environment.put("B", setB);
+
+    String expectedOutput = "";
+    String expectedEnvironment = """
+        A: {1, 3, 5, 7}
+        B: {2, 3, 4, 5}
+        C: {11, 15, 17, 19, 21, 23, 25, 29}
         N: <builtin set (natural)>
         R: <builtin set (real)>
         """;

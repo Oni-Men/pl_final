@@ -6,6 +6,8 @@ import java.util.Set;
 
 import parser.ast.Cell;
 import util.Bool;
+import vm.SymbolTable;
+import vm.condition.Conditions;
 
 public class PSet extends PObject
 {
@@ -44,9 +46,17 @@ public class PSet extends PObject
     return pSet;
   }
 
-  public static PSet fromIntension(Cell cell)
+  public static PSet fromIntension(Cell cell, SymbolTable symbolTable)
   {
-    return null;
+    PSet pSet = new PSet();
+
+    Cell setElement = cell.head().head().textEquals("setelement", () -> cell.head().next());
+    Bool.of(setElement.nil()).throwIfTrue(() -> new RuntimeException("Invalid format: SetElement"));
+
+    Cell conditions = cell.tail();
+    Bool.of(conditions.nil()).throwIfTrue(() -> new RuntimeException("Invalid format: Conditions"));
+
+    return Conditions.of(setElement, conditions, symbolTable);
   }
 
   public PSet()
@@ -61,6 +71,11 @@ public class PSet extends PObject
     {
       this.elements.add(pValue);
     }
+  }
+
+  public Iterable<PValue> values()
+  {
+    return this.elements;
   }
 
   public Bool include(PValue value)

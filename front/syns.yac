@@ -9,6 +9,7 @@
 %%
 Program
         : Statements                                            { $$ = $1; }
+        |                                                       { }
 Statements
         : Statement                                             { $$ = $1; tree($$); }
         | Statements Statement                                  { $$ = $2; tree($$); }
@@ -109,6 +110,10 @@ String
 %%              
 #include "lex.yy.c"
 void yyerror(char *s) {
-	fprintf(stderr, "\n%s at %d: nearby \"%s\"\n\n", s, linecounter, yytext);
-	exit(EXIT_FAILURE);
+        if (s == YYEOF)
+        {
+                exit(EXIT_SUCCESS);
+        }
+        fprintf(stderr, "\n%s at %d: nearby \"%s\"\n\n", s, linecounter, yytext);
+        exit(EXIT_FAILURE);
 }

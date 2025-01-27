@@ -4,9 +4,8 @@ void indent(int level);
 
 int main(void) {
 	linecounter = 1;
-	if (yyparse() == 0) {
-		fprintf(stderr, "\nparser successfully ended\n\n");
-	}
+	yyparse();
+
 	return(EXIT_SUCCESS);
 }
 
@@ -60,7 +59,8 @@ Cell *append(Cell *list, Cell *element) {
 
 void tree(Cell *pointer) {
 	visit(pointer, 1);
-	printf("\n");
+	printf("\n\n");
+	fflush(stdout);
 }
 
 void visit(Cell *pointer, int level) {

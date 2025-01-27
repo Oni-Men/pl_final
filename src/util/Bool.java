@@ -23,6 +23,16 @@ public class Bool
     return FALSE;
   }
 
+  public static Bool isNull(Object obj)
+  {
+    return obj == null ? TRUE : FALSE;
+  }
+
+  public static Bool xor(boolean x, boolean y)
+  {
+    return Boolean.logicalXor(x, y) ? TRUE : FALSE;
+  }
+
   private Bool(boolean value)
   {
     this.value = value;
@@ -85,7 +95,6 @@ public class Bool
     {
       then.run();
     }
-
   }
 
   public <T extends RuntimeException> void throwIfTrue(Supplier<T> erroSupplier)
@@ -102,5 +111,30 @@ public class Bool
     {
       throw erroSupplier.get();
     }
+  }
+
+  public Bool and(Bool anotherBool)
+  {
+    return this.value && anotherBool.value ? TRUE : FALSE;
+  }
+
+  public Bool or(Bool anotherBool)
+  {
+    return this.value || anotherBool.value ? TRUE : FALSE;
+  }
+
+  public Bool and(boolean anotherBool)
+  {
+    return this.value && anotherBool ? TRUE : FALSE;
+  }
+
+  public Bool or(boolean anotherBool)
+  {
+    return this.value || anotherBool ? TRUE : FALSE;
+  }
+
+  public Bool not()
+  {
+    return this.value ? FALSE : TRUE;
   }
 }

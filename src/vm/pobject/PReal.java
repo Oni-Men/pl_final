@@ -2,7 +2,7 @@ package vm.pobject;
 
 public class PReal extends PValue
 {
-  private double value;
+  protected double value;
 
   public PReal(String value)
   {
@@ -46,5 +46,65 @@ public class PReal extends PValue
     }
 
     return 0;
+  }
+
+  @Override
+  public PValue add(PValue anothValue)
+  {
+    if (anothValue instanceof PInteger anotherInteger)
+    {
+      return new PReal(this.value + anotherInteger.value);
+    }
+    if (anothValue instanceof PReal anotherReal)
+    {
+      return new PReal(this.value + anotherReal.value);
+    }
+    return super.add(anothValue);
+  }
+
+  @Override
+  public PValue subtract(PValue anothValue)
+  {
+    if (anothValue instanceof PInteger anotherInteger)
+    {
+      return new PReal(this.value - anotherInteger.value);
+    }
+    if (anothValue instanceof PReal anotherReal)
+    {
+      return new PReal(this.value - anotherReal.value);
+    }
+    return super.subtract(anothValue);
+  }
+
+  @Override
+  public PValue multiply(PValue anothValue)
+  {
+    if (anothValue instanceof PInteger anotherInteger)
+    {
+      return new PReal(this.value * anotherInteger.value);
+    }
+    if (anothValue instanceof PReal anotherReal)
+    {
+      return new PReal(this.value * anotherReal.value);
+    }
+    return super.multiply(anothValue);
+  }
+
+  @Override
+  public PValue divide(PValue anothValue)
+  {
+    if (anothValue instanceof PInteger anotherInteger)
+    {
+      if (anotherInteger.value == 0)
+      {
+        throw new RuntimeException("Invalid operation: zero division");
+      }
+      return new PReal(this.value / anotherInteger.value);
+    }
+    if (anothValue instanceof PReal anotherReal)
+    {
+      return new PReal(this.value / anotherReal.value);
+    }
+    return super.divide(anothValue);
   }
 }

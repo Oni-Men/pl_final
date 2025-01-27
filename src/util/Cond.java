@@ -17,7 +17,22 @@ public class Cond<T, S>
     this.action = action;
   }
 
+  public static <T, S> Cond<T, S> when(T pattern, Supplier<S> supplier)
+  {
+    return when((t) -> t.equals(pattern), supplier);
+  }
+
+  public Cond<T, S> or(T pattern, Supplier<S> supplier)
+  {
+    return or((t) -> t.equals(pattern), supplier);
+  }
+
   public static <T, S> Cond<T, S> when(Predicate<T> predicate, Supplier<S> action)
+  {
+    return new Cond<>(predicate, action);
+  }
+
+  public static <S> Cond<String, S> whenText(Predicate<String> predicate, Supplier<S> action)
   {
     return new Cond<>(predicate, action);
   }
@@ -34,7 +49,7 @@ public class Cond<T, S>
     return this;
   }
 
-  public S check(T value, S orElse)
+  public S get(T value, S orElse)
   {
     if (this.condition.test(value))
     {
@@ -43,7 +58,7 @@ public class Cond<T, S>
 
     if (this.next != null)
     {
-      return this.next.check(value, orElse);
+      return this.next.get(value, orElse);
     }
 
     return orElse;

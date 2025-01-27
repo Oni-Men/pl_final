@@ -42,7 +42,7 @@ public class SetExpression
             .or(
                 (String _) -> true,
                 () -> variableSet(operand))
-            .check(operatorName, null);
+            .get(operatorName, null);
 
         Bool.of(expression == null).throwIfTrue(() -> new RuntimeException("Invalid expression"));
         return expression;
@@ -89,7 +89,7 @@ public class SetExpression
         .or((String s) -> s.equalsIgnoreCase("real"), () -> {
           return (Number) Double.valueOf(cell.next().text());
         })
-        .check(type, null);
+        .get(type, null);
   }
 
   public PSet evaluate(SymbolTable symbolTable)

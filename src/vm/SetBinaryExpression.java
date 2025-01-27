@@ -36,7 +36,7 @@ public class SetBinaryExpression extends SetExpression
             () -> firstSet.intersect(secondSet))
         .or(t -> t == EXCLUSIVE,
             () -> firstSet.exclusive(secondSet))
-        .check(operator.tokenType(), null);
+        .get(operator.tokenType(), null);
   }
 
 }
