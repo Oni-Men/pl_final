@@ -153,7 +153,7 @@ public class Parser implements IParser
   }
 
   /**
-   * Atom ::= ID | NUMBER | REAL | = | < | > | <= | >= | + | - | * | /
+   * Atom ::= ID | NUMBER | REAL | STRING | = | < | > | <= | >= | + | - | * | /
    * 
    * @return
    */
@@ -161,7 +161,7 @@ public class Parser implements IParser
   {
     Cell aCell = null;
     List<TokenType> symbols = Arrays.asList(
-        ID, NUMBER, REAL, EQUAL, NOTEQ, LT, GT, LE,
+        ID, NUMBER, REAL, STRING, EQUAL, NOTEQ, LT, GT, LE,
         GE, PLUS, MINUS, MULTIPLY, DIVIDE,
         IN, NOTIN, EXCLUSIVE);
 

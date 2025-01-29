@@ -203,6 +203,13 @@ public class ParserTest
                 (DOMLIMMITEDSET (UPPER_ID R)
                   (DOMAINLIMITER
                     (RANGE (INTEGER 0.0) (INTEGER 1.0)) (INTEGER 0.2)))))
-                """));
+                """),
+        arguments("""
+            (ASSERT (UPPER_ID A)
+              (EXTENSION
+                (SETELEMENTS
+                  (SETELEMENT (STRING "wine"))
+                  (SETELEMENT (STRING "mary")))))
+              """));
   }
 }

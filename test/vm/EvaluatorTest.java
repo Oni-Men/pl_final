@@ -44,7 +44,8 @@ public class EvaluatorTest
         testCase04(),
         testCase05(),
         testCase06(),
-        testCase07());
+        testCase07(),
+        testCase08());
   }
 
   /**
@@ -317,4 +318,28 @@ public class EvaluatorTest
     return arguments(statement, environment, expectedOutput, expectedEnvironment);
   }
 
+  /**
+   * 文字列からなる集合のテスト
+   * 
+   * @return
+   */
+  private static Arguments testCase08()
+  {
+    String inputString = """
+        (ASSERT (UPPER_ID A)
+            (EXTENSION
+                (SETELEMENTS
+                    (SETELEMENT (STRING "wine"))
+                    (SETELEMENT (STRING "mary")))))
+            """;
+    List<Cell> statement = new Parser(new Scanner(inputString)).parse();
+    SymbolTable environment = new SymbolTable();
+    String expectedOutput = "";
+    String expectedEnvironment = """
+        A: {"mary", "wine"}
+        N: <builtin set (natural)>
+        R: <builtin set (real)>
+        """;
+    return arguments(statement, environment, expectedOutput, expectedEnvironment);
+  }
 }

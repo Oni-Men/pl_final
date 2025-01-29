@@ -27,7 +27,7 @@ public class PValue extends PObject implements Comparable<PValue>
 
       result = Cond
           .<String, PValue>when((s) -> s.equalsIgnoreCase("string"),
-              () -> new PString(valueString))
+              () -> new PString(valueString, true))
           .or((s) -> s.equalsIgnoreCase("integer"),
               () -> new PInteger(valueString))
           .or((s) -> s.equalsIgnoreCase("real"),

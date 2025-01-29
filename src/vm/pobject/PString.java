@@ -7,6 +7,18 @@ public class PString extends PValue
 
   public PString(String value)
   {
+    this(value, false);
+  }
+
+  public PString(String value, boolean stripQuotes)
+  {
+    if (stripQuotes)
+    {
+      if (value.startsWith("\"") && value.endsWith("\""))
+      {
+        value = value.substring(1, value.length() - 1);
+      }
+    }
     this.value = value;
   }
 
@@ -41,6 +53,6 @@ public class PString extends PValue
   @Override
   public String toString()
   {
-    return this.value;
+    return "\"" + this.value + "\"";
   }
 }

@@ -5,6 +5,7 @@ import util.Cond;
 import vm.SymbolTable;
 import vm.pobject.PInteger;
 import vm.pobject.PReal;
+import vm.pobject.PString;
 import vm.pobject.PValue;
 import vm.pobject.PVariable;
 
@@ -23,6 +24,7 @@ public class ValueExpression extends MathExpression
         .when(ID, () -> (PValue) new PVariable(token.text()))
         .or(NUMBER, () -> (PValue) new PInteger(token.text()))
         .or(REAL, () -> (PValue) new PReal(token.text()))
+        .or(STRING, () -> (PValue) new PString(token.text(), true))
         .get(token.tokenType(), null);
   }
 

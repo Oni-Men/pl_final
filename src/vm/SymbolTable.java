@@ -48,8 +48,6 @@ public class SymbolTable
   public void put(String name, PObject pObject)
   {
     this.symbolTable.put(name, pObject);
-
-    // System.out.printf("> %s%n", pObject.toString());
   }
 
   public void putOuter(String name, PObject pObject)
