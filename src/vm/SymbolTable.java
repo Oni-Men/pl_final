@@ -52,6 +52,14 @@ public class SymbolTable
     // System.out.printf("> %s%n", pObject.toString());
   }
 
+  public void putOuter(String name, PObject pObject)
+  {
+    if (this.outer != null)
+    {
+      this.outer.put(name, pObject);
+    }
+  }
+
   /**
    * シンボルテーブル から name を探し，応答する．自身のシンボルテーブルで見つからなかった場合，外側のスコープへ再帰的に探しに行く．
    * 
@@ -85,17 +93,35 @@ public class SymbolTable
 
   public PTuple getAsTuple(String name)
   {
-    return null;
+    PObject pObject = this.get(name);
+    if (pObject instanceof PTuple pTuple)
+    {
+      return pTuple;
+    }
+
+    throw new ClassCastException(String.format("%s is not a tuple", name));
   }
 
   public PVariable getAsVariable(String name)
   {
-    return null;
+    PObject pObject = this.get(name);
+    if (pObject instanceof PVariable pVariable)
+    {
+      return pVariable;
+    }
+
+    throw new ClassCastException(String.format("%s is not a variable", name));
   }
 
   public PValue getAsValue(String name)
   {
-    return null;
+    PObject pObject = this.get(name);
+    if (pObject instanceof PValue pValue)
+    {
+      return pValue;
+    }
+
+    throw new ClassCastException(String.format("%s is not a value", name));
   }
 
   public SymbolTable fork()
@@ -112,6 +138,10 @@ public class SymbolTable
 
     for (String symbol : symbols)
     {
+      if (symbol.startsWith("__"))
+      {
+        continue;
+      }
       PObject pObject = this.get(symbol);
       aBuffer.append(symbol);
       aBuffer.append(": ");

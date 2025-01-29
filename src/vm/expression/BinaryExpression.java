@@ -2,10 +2,14 @@ package vm.expression;
 
 import static parser.ast.TokenType.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import parser.ast.TokenType;
 import util.Cond;
 import vm.SymbolTable;
 import vm.pobject.PValue;
+import vm.pobject.PVariable;
 
 public class BinaryExpression extends MathExpression
 {
@@ -35,5 +39,14 @@ public class BinaryExpression extends MathExpression
         .or((_) -> true, () -> {
           throw new RuntimeException("Invalid operation");
         }).get(this.operator, null);
+  }
+
+  @Override
+  public Set<PVariable> freeVariables()
+  {
+    Set<PVariable> freeVariables = new HashSet<>();
+    freeVariables.addAll(this.firstOperand.freeVariables());
+    freeVariables.addAll(this.secondOperand.freeVariables());
+    return freeVariables;
   }
 }

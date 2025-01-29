@@ -1,54 +1,32 @@
 package vm.condition;
 
 import parser.ast.Cell;
-import parser.ast.Leaf;
-import parser.ast.Token;
-import parser.ast.TokenType;
 import util.Bool;
 import util.Cond;
-import vm.SetExpression;
 import vm.SymbolTable;
+import vm.exception.VMException;
 import vm.pobject.PSet;
-import vm.pobject.PValue;
 
-import static parser.ast.TokenType.*;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-public class Conditions
+/**
+ * 条件
+ */
+public class Conditions implements IEvaluable
 {
-  public enum LogicalOperationType
+  public static Conditions of(Cell conditions)
   {
-    AND, OR
-  }
-
-  private String elementName;
-
-  private LogicalOperationType logicalOperationType;
-  private List<Conditions> conditions;
-  private SymbolTable scope;
-
-  public static PSet of(Cell setElement, Cell conditions, SymbolTable symbolTable)
-  {
-    // 集合元の変数名を求める
-    String elementName = setElement.head().textEquals("lower_id", () -> setElement.next().text());
-    Bool.isEmpty(elementName).throwIfTrue(() -> new RuntimeException("Invalid conditoin"));
-
     // 条件の種類を求める
-    String logicType = conditions.head().head().text();
-    PSet pSet = Cond
+    String logicType = conditions.head().text();
+    Conditions result = Cond
         .whenText(
             (s) -> s.equalsIgnoreCase("and"),
-            () -> handleConjunction(elementName, conditions.head().tail(), symbolTable))
+            () -> handleConjunction(conditions.tail()))
         .or(
             (s) -> s.equalsIgnoreCase("or"),
-            () -> handleDisjunction(elementName, conditions.head().tail(), symbolTable))
+            () -> handleDisjunction(conditions.tail()))
         .get(logicType, null);
 
-    Bool.isNull(pSet).throwIfTrue(() -> new RuntimeException("Invalid condition"));
-    return pSet;
+    Bool.isNull(result).throwIfTrue(() -> new VMException("Invalid condition"));
+    return result;
   }
 
   /**
@@ -56,55 +34,12 @@ public class Conditions
    * 
    * @return
    */
-  private static PSet handleConjunction(String elementName, Cell conjunction, SymbolTable outerScope)
+  private static Conditions handleConjunction(Cell conjunction)
   {
-    // 関係式の種類
-    TokenType relation1 = conjunction.head().head().<Leaf>as().token().tokenType();
-    TokenType relation2 = conjunction.next().head().<Leaf>as().token().tokenType();
+    IEvaluable evaluable1 = IEvaluable.of(conjunction.head());
+    IEvaluable evaluable2 = IEvaluable.of(conjunction.next());
 
-    Bool enumerate = Bool.of(relation1 == IN || relation2 == IN);
-    enumerate.throwIfFalse(() -> new RuntimeException("Must have at least one inclusive relation"));
-
-    if (Boolean.logicalAnd(relation1 == IN, relation2 == IN))
-    {
-      // 2つの帰属関係式における変数と集合をそれぞれ，(a, A)，(b,B)とする．
-      // aとbがどちらもsetElementに一致したとき，生成される集合はAとBの積集合となる．
-      // aとbの少なくとも片方がsetElementと不一致の場合，空集合となる．
-
-      // TODO: タプルに対応する
-
-      Cell inclusion1 = conjunction.head();
-      Cell inclusion2 = conjunction.next();
-
-      String variable1 = inclusion1.next().next().next().text();
-      String variable2 = inclusion2.next().next().next().text();
-
-      return Bool.of(variable1.equals(elementName)).and(Bool.of(variable2.equals(elementName)))
-          .ifTrueElse(
-              () -> {
-                SetExpression setExpression1 = SetExpression.of(inclusion1.tail().next().next());
-                SetExpression setExpression2 = SetExpression.of(inclusion2.tail().next().next());
-
-                PSet set1 = setExpression1.evaluate(outerScope);
-                PSet set2 = setExpression2.evaluate(outerScope);
-                Bool.of(set1 == null || set2 == null).throwIfTrue(() -> new RuntimeException("Set is not defined"));
-
-                return set1.intersect(set2);
-              },
-              () -> new PSet()); // 空集合を返す
-    }
-
-    if (Boolean.logicalXor(relation1 == IN, relation2 == IN))
-    {
-      // どちらかが帰属関係式になっている場合，帰属関係条件と，もう一つの条件にわける
-      Cell inclusion = Bool.of(relation1 == IN).ifTrueElse(() -> conjunction.head(), () -> conjunction.next());
-      Cell conditions = Bool.of(relation1 == IN).ifTrueElse(() -> conjunction.next(), () -> conjunction.head());
-
-      // 帰属関係条件を展開する
-      return expandInclusion(elementName, conditions, inclusion, outerScope);
-    }
-
-    throw new RuntimeException("Invalid condition");
+    return new Conditions(ConditionType.AND, evaluable1, evaluable2);
   }
 
   /**
@@ -112,97 +47,65 @@ public class Conditions
    * 
    * @return
    */
-  private static PSet handleDisjunction(String elementName, Cell disjunction, SymbolTable outerScope)
+  private static Conditions handleDisjunction(Cell disjunction)
   {
-    // 関係式の種類
-    Token relation1 = disjunction.head().head().<Leaf>as().token();
-    Token relation2 = disjunction.next().head().<Leaf>as().token();
+    IEvaluable evaluable1 = IEvaluable.of(disjunction.head());
+    IEvaluable evaluable2 = IEvaluable.of(disjunction.next());
 
-    System.out.println("handle 選言");
-    return null;
+    return new Conditions(ConditionType.OR, evaluable1, evaluable2);
   }
 
-  private static PSet expandInclusion(String elementName, Cell conditions, Cell inclusion,
-      SymbolTable outerScope)
+  public enum ConditionType
   {
-    String variableName = inclusion.next().next().next().text();
-    SetExpression setExpression = SetExpression.of(inclusion.tail().next().next());
-    PSet domain = setExpression.evaluate(outerScope);
-
-    // 単一の関係式か条件列か
-    String conditionName = conditions.head().text();
-    Bool isSingle = Bool
-        .of(conditionName.equalsIgnoreCase("and"))
-        .or(conditionName.equalsIgnoreCase("or"))
-        .not();
-
-    // 単一条件の場合，変数展開を行う．具体的にはこう↓
-    // P(y), y~N を P(1), P(2), P(3), ...
-    PSet expanded = isSingle.ifTrue(() -> {
-      List<PValue> values = new ArrayList<>();
-      Relation relation = Relation.of(conditions);
-
-      SymbolTable scope = outerScope.fork();
-      for (PValue value : domain.values())
-      {
-        scope.put(variableName, value);
-        // TODO 評価によって集合に追加するかどうかを確定させる
-        relation.evaluate(scope);
-
-        // 追加する処理
-      }
-      return PSet.fromIterator(values.iterator());
-    });
-
-    // 複合条件の場合，下位の条件に対して再帰的に展開を行う．
-    isSingle.ifFalse(() -> {
-      Cell firstCondition = null;
-      Cell secondCondition = null;
-    });
-
-    return expanded;
+    AND, OR
   }
 
-  public Conditions(String elementName, LogicalOperationType operationType, SymbolTable scope, Conditions... conditions)
+  private ConditionType operator;
+  private IEvaluable firstEvaluable;
+  private IEvaluable secondEvaluable;
+
+  public Conditions(ConditionType operator, IEvaluable firstEvaluable, IEvaluable secondEvaluable)
   {
-    this.elementName = elementName;
-    this.logicalOperationType = operationType;
-    this.scope = scope;
-    this.conditions = Arrays.asList(conditions);
+    this.operator = operator;
+    this.firstEvaluable = firstEvaluable;
+    this.secondEvaluable = secondEvaluable;
   }
 
-  public Conditions(String elementName, LogicalOperationType operationType, SymbolTable scope,
-      List<Conditions> conditions)
+  public EvaluateResult evaluate(SymbolTable symbolTable)
   {
-    this.elementName = elementName;
-    this.logicalOperationType = operationType;
-    this.scope = scope;
-    this.conditions = conditions;
+    SymbolTable currentScope = symbolTable.fork();
+
+    // 右項（第二項）から評価する
+    EvaluateResult secondResult = secondEvaluable.evaluate(symbolTable);
+    currentScope.put(secondResult.variableName, secondResult.generatedSet);
+
+    // 続いて左項を評価
+    EvaluateResult firstResult = firstEvaluable.evaluate(currentScope);
+
+    // 結果の変数名は左項（第一項）のものを流用する
+    String variableName = firstResult.variableName;
+
+    // 左項と右項の変数名が同じときはAND，ORに応じて集合演算
+    if (firstResult.variableName.equals(secondResult.variableName))
+    {
+      PSet generatedSet = Cond
+          .when(ConditionType.AND, () -> firstResult.generatedSet.intersect(secondResult.generatedSet))
+          .or(ConditionType.OR, () -> firstResult.generatedSet.union(secondResult.generatedSet))
+          .get(operator, null);
+
+      currentScope.put(variableName, generatedSet);
+      return new EvaluateResult(variableName, generatedSet, currentScope);
+    }
+
+    // AND演算の場合は左項によって生成される集合が選ばれる
+    if (operator == ConditionType.AND)
+    {
+      currentScope.put(variableName, firstResult.generatedSet);
+      return new EvaluateResult(variableName, firstResult.generatedSet, currentScope);
+    }
+
+    // OR演算がくると結果が不定になる
+    throw new VMException();
   }
 
-  private Conditions expand(PValue value)
-  {
-    List<Conditions> conditions = new ArrayList<>();
-    LogicalOperationType type = LogicalOperationType.OR;
-
-    return new Conditions(elementName, type, scope, conditions);
-  }
-
-  public PSet evaluate()
-  {
-    PSet pSet = new PSet();
-
-    Bool.of(this.logicalOperationType == LogicalOperationType.AND)
-        .ifTrue(() -> {
-
-        });
-    Bool.of(this.logicalOperationType == LogicalOperationType.OR)
-        .ifTrue(() -> {
-          this.conditions.forEach(cond -> {
-            PSet evaluatedSet = cond.evaluate();
-          });
-        });
-
-    return pSet;
-  }
 }

@@ -2,6 +2,8 @@ package parser.ast;
 
 import java.util.regex.Pattern;
 
+import util.Bool;
+
 public enum TokenType
 {
   ID("[_a-zA-Z][_a-zA-Z0-9]*"),
@@ -39,5 +41,10 @@ public enum TokenType
   public Pattern pattern()
   {
     return pattern;
+  }
+
+  public Bool is(TokenType tokenType)
+  {
+    return Bool.of(this == tokenType);
   }
 }

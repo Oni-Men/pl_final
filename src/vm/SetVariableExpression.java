@@ -21,4 +21,9 @@ public class SetVariableExpression extends SetExpression
 
     return pSet;
   }
+
+  public String setName()
+  {
+    return this.setName;
+  }
 }

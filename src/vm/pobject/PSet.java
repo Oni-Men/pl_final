@@ -6,8 +6,10 @@ import java.util.Set;
 
 import parser.ast.Cell;
 import util.Bool;
+import util.ConsUtil;
 import vm.SymbolTable;
 import vm.condition.Conditions;
+import vm.condition.IEvaluable.EvaluateResult;
 
 public class PSet extends PObject
 {
@@ -48,15 +50,13 @@ public class PSet extends PObject
 
   public static PSet fromIntension(Cell cell, SymbolTable symbolTable)
   {
-    PSet pSet = new PSet();
-
-    Cell setElement = cell.head().head().textEquals("setelement", () -> cell.head().next());
-    Bool.of(setElement.nil()).throwIfTrue(() -> new RuntimeException("Invalid format: SetElement"));
-
-    Cell conditions = cell.tail();
+    Cell conditions = cell.next();
     Bool.of(conditions.nil()).throwIfTrue(() -> new RuntimeException("Invalid format: Conditions"));
 
-    return Conditions.of(setElement, conditions, symbolTable);
+    EvaluateResult evaluationResult = Conditions.of(conditions).evaluate(symbolTable);
+
+    String variableName = "__" + ConsUtil.setElementName(cell.head());
+    return evaluationResult.symbolTable().getAsSet(variableName);
   }
 
   public PSet()

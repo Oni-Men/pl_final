@@ -4,8 +4,7 @@ import static parser.ast.TokenType.ID;
 
 import parser.ast.Cell;
 import parser.ast.Leaf;
-import parser.ast.Node;
-import util.Bool;
+import util.Cond;
 import vm.pobject.PSet;
 
 public class Evaluator
@@ -53,47 +52,16 @@ public class Evaluator
 
   private void handleAssert(Cell cell)
   {
-    if (!(cell instanceof Node))
-    {
-      return;
-    }
-
-    Node node = (Node) cell;
-
-    String aSetName = this.nameOfSet(node.head());
-    String notationType = this.notationType(node.tail());
-
-    Cell notation = node.tail().head().tail();
-
-    Bool.of(notationType.equalsIgnoreCase("extension"))
-        .ifTrue(() -> {
-          PSet pSet = PSet.fromExtension(notation);
-          this.environment().put(aSetName, pSet);
-        });
-    Bool.of(notationType.equalsIgnoreCase("intension"))
-        .ifTrue(() -> {
-          PSet pSet = PSet.fromIntension(notation, this.environment);
-          this.environment().put(aSetName, pSet);
-        });
-
-    Bool.of(notationType.equalsIgnoreCase("expression"))
-        .ifTrue(() -> {
-          PSet pSet = handleSetExpression(notation);
-          this.environment().put(aSetName, pSet);
-        });
+    String aSetName = this.nameOfSet(cell.head());
+    PSet pSet = handleNotation(cell.next(), environment);
+    this.environment().put(aSetName, pSet);
   }
 
   private void handleProve(Cell cell)
   {
-    if (!(cell instanceof Node))
-    {
-      return;
-    }
-
-    Node node = (Node) cell;
   }
 
-  private PSet handleSetExpression(Cell cell)
+  private static PSet handleSetExpression(Cell cell, SymbolTable environment)
   {
     return SetExpression.of(cell.head()).evaluate(environment);
   }
@@ -105,11 +73,6 @@ public class Evaluator
     }, true);
   }
 
-  private String notationType(Cell cell)
-  {
-    return cell.head().head().text();
-  }
-
   public String output()
   {
     return this.output.toString();
@@ -118,5 +81,23 @@ public class Evaluator
   public SymbolTable environment()
   {
     return this.environment;
+  }
+
+  public static PSet handleNotation(Cell cell, SymbolTable symbolTable)
+  {
+    String notationType = cell.head().text();
+    Cell notation = cell.tail();
+
+    return Cond
+        .when(
+            (String s) -> s.equalsIgnoreCase("extension"),
+            () -> PSet.fromExtension(notation))
+        .or(
+            (String s) -> s.equalsIgnoreCase("intension"),
+            () -> PSet.fromIntension(notation, symbolTable))
+        .or(
+            (String s) -> s.equalsIgnoreCase("expression"),
+            () -> handleSetExpression(notation, symbolTable))
+        .get(notationType, null);
   }
 }

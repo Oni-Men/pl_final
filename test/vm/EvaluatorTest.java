@@ -43,7 +43,8 @@ public class EvaluatorTest
         testCase03(),
         testCase04(),
         testCase05(),
-        testCase06());
+        testCase06(),
+        testCase07());
   }
 
   /**
@@ -249,7 +250,7 @@ public class EvaluatorTest
                 (AND
                     (= (LOWER_ID x)
                         (+
-                            (* (INTEGER 2) (LOWER_ID y)) (INTEGER 2)))
+                            (* (INTEGER 2) (LOWER_ID y)) (INTEGER 1)))
                     (~
                         (SETELEMENT (LOWER_ID y))
                         (EXPRESSION (UPPER_ID A))))))

@@ -1,6 +1,7 @@
 package vm.expression;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,6 +12,7 @@ import parser.ast.TokenType;
 import util.Bool;
 import vm.SymbolTable;
 import vm.pobject.PValue;
+import vm.pobject.PVariable;
 
 import static parser.ast.TokenType.*;
 
@@ -61,5 +63,10 @@ public class MathExpression
   public PValue evaluate(SymbolTable scope)
   {
     throw new RuntimeException("Invalid operation");
+  }
+
+  public Set<PVariable> freeVariables()
+  {
+    return Collections.emptySet();
   }
 }

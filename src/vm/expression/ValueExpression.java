@@ -10,6 +10,9 @@ import vm.pobject.PVariable;
 
 import static parser.ast.TokenType.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class ValueExpression extends MathExpression
 {
   PValue value;
@@ -25,6 +28,21 @@ public class ValueExpression extends MathExpression
 
   public PValue evaluate(SymbolTable scope)
   {
+    if (this.value instanceof PVariable pVariable)
+    {
+      return pVariable.getSymbol(scope);
+    }
     return this.value;
+  }
+
+  @Override
+  public Set<PVariable> freeVariables()
+  {
+    Set<PVariable> freeVriables = HashSet.newHashSet(1);
+    if (this.value instanceof PVariable pVariable)
+    {
+      freeVriables.add(pVariable);
+    }
+    return freeVriables;
   }
 }

@@ -33,6 +33,11 @@ public class Bool
     return Boolean.logicalXor(x, y) ? TRUE : FALSE;
   }
 
+  public static Bool xor(Bool x, Bool y)
+  {
+    return xor(x.value, y.value);
+  }
+
   private Bool(boolean value)
   {
     this.value = value;
