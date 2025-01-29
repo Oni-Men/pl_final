@@ -4,7 +4,10 @@ import static parser.ast.TokenType.ID;
 
 import parser.ast.Cell;
 import parser.ast.Leaf;
+import util.Bool;
 import util.Cond;
+import vm.condition.IEvaluable;
+import vm.condition.IEvaluable.EvaluateResult;
 import vm.pobject.PSet;
 
 public class Evaluator
@@ -55,15 +58,24 @@ public class Evaluator
     String aSetName = this.nameOfSet(cell.head());
     PSet pSet = handleNotation(cell.next(), environment);
     this.environment().put(aSetName, pSet);
+
+    this.output(pSet.toString());
   }
 
   private void handleProve(Cell cell)
   {
-  }
+    IEvaluable evaluable = IEvaluable.of(cell.head());
 
-  private static PSet handleSetExpression(Cell cell, SymbolTable environment)
-  {
-    return SetExpression.of(cell.head()).evaluate(environment);
+    Bool insufficient = Bool.of(evaluable.freeVariables().size() > 0);
+
+    EvaluateResult evaluationResult = evaluable.evaluate(environment);
+
+    insufficient.ifTrueElse(
+        () -> {
+          this.output(evaluationResult.generatedSet().toString());
+        }, () -> {
+          this.output(evaluationResult.status().ifTrueElse(() -> "yes.", () -> "no."));
+        });
   }
 
   private String nameOfSet(Cell cell)
@@ -76,6 +88,12 @@ public class Evaluator
   public String output()
   {
     return this.output.toString();
+  }
+
+  public void output(String line)
+  {
+    this.output.append(line);
+    this.output.append(System.lineSeparator());
   }
 
   public SymbolTable environment()
@@ -100,4 +118,10 @@ public class Evaluator
             () -> handleSetExpression(notation, symbolTable))
         .get(notationType, null);
   }
+
+  private static PSet handleSetExpression(Cell cell, SymbolTable environment)
+  {
+    return SetExpression.of(cell.head()).evaluate(environment);
+  }
+
 }

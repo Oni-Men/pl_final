@@ -5,10 +5,10 @@ import parser.ast.Leaf;
 import parser.ast.TokenType;
 import util.Bool;
 import util.Cond;
-import util.ConsUtil;
 import vm.SymbolTable;
 import vm.exception.VMException;
 import vm.expression.MathExpression;
+import vm.pobject.PValue;
 
 import static parser.ast.TokenType.*;
 
@@ -27,10 +27,13 @@ public abstract class Relation implements IEvaluable
 
   private static Relation ofInclusion(TokenType operator, Cell inclusion)
   {
-    String variableName = ConsUtil.setElementName(inclusion.head());
+    PValue setElement = PValue.fromSetElement(inclusion.head());
     Cell domainSetExpression = inclusion.next();
 
-    return new Inclusion(variableName, domainSetExpression);
+    return Cond
+        .when(IN, () -> new Inclusion(setElement, domainSetExpression))
+        .or(NOTIN, () -> new NotInclusion(setElement, domainSetExpression))
+        .get(operator, null);
   }
 
   private static Relation ofMathExpression(TokenType operator, Cell expressions)

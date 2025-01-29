@@ -1,12 +1,15 @@
 package vm.condition;
 
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import parser.ast.Cell;
+import util.Bool;
 import util.Cond;
 import vm.SymbolTable;
 import vm.pobject.PSet;
+import vm.pobject.PVariable;
 
 public interface IEvaluable
 {
@@ -17,11 +20,14 @@ public interface IEvaluable
     PSet generatedSet;
     SymbolTable symbolTable;
 
-    public EvaluateResult(String variableName, PSet generatedSet, SymbolTable symbolTable)
+    Bool status;
+
+    public EvaluateResult(String variableName, PSet generatedSet, Bool status, SymbolTable symbolTable)
     {
       this.variableName = variableName;
       this.generatedSet = generatedSet;
       this.symbolTable = symbolTable;
+      this.status = status;
     }
 
     public String variableName()
@@ -37,6 +43,11 @@ public interface IEvaluable
     public SymbolTable symbolTable()
     {
       return this.symbolTable;
+    }
+
+    public Bool status()
+    {
+      return this.status;
     }
   }
 
@@ -60,4 +71,5 @@ public interface IEvaluable
 
   EvaluateResult evaluate(SymbolTable scope);
 
+  Set<PVariable> freeVariables();
 }

@@ -25,12 +25,16 @@ public class EvaluatorTest
   @MethodSource("testCaseProvider")
   void testEvaluator(List<Cell> statement, SymbolTable environment, String expectedOutput, String expectedEnvironment)
   {
+    StringBuffer output = new StringBuffer();
     for (Cell cell : statement)
     {
       var evaluator = new Evaluator(cell, environment);
       evaluator.perform();
+
+      output.append(evaluator.output());
     }
 
+    assertEquals(expectedOutput.strip(), output.toString().strip());
     assertEquals(expectedEnvironment.strip(), environment.toString().strip());
   }
 
@@ -45,7 +49,13 @@ public class EvaluatorTest
         testCase05(),
         testCase06(),
         testCase07(),
-        testCase08());
+        testCase08(),
+        testCase09(),
+        testCase10(),
+        testCase11(),
+        testCase12(),
+        testCase13(),
+        testCase14());
   }
 
   /**
@@ -61,7 +71,7 @@ public class EvaluatorTest
         """;
     List<Cell> program = new Parser(new Scanner(inpuString)).parse();
     SymbolTable environment = new SymbolTable();
-    String expectedOutput = "";
+    String expectedOutput = "{}";
     String expectedEnvironment = """
         A: {}
         N: <builtin set (natural)>
@@ -87,7 +97,7 @@ public class EvaluatorTest
             """;
     List<Cell> statement = new Parser(new Scanner(inputString)).parse();
     SymbolTable environment = new SymbolTable();
-    String expectedOutput = "";
+    String expectedOutput = "{-3, 4, 11}";
     String expectedEnvironment = """
         A_set: {-3, 4, 11}
         N: <builtin set (natural)>
@@ -112,7 +122,7 @@ public class EvaluatorTest
                 """;
     List<Cell> statement = new Parser(new Scanner(inputString)).parse();
     SymbolTable environment = new SymbolTable();
-    String expectedOutput = "";
+    String expectedOutput = "{1, 3, 5, 7, 9}";
     String expectedEnvironment = """
         A_set: {1, 3, 5, 7, 9}
         N: <builtin set (natural)>
@@ -137,7 +147,7 @@ public class EvaluatorTest
                 """;
     List<Cell> statement = new Parser(new Scanner(inputString)).parse();
     SymbolTable environment = new SymbolTable();
-    String expectedOutput = "";
+    String expectedOutput = "{0.000, 0.200, 0.400, 0.600, 0.800, 1.000}";
     String expectedEnvironment = """
         A_set: {0.000, 0.200, 0.400, 0.600, 0.800, 1.000}
         N: <builtin set (natural)>
@@ -172,7 +182,7 @@ public class EvaluatorTest
     environment.put("A", setA);
     environment.put("B", setB);
 
-    String expectedOutput = "";
+    String expectedOutput = "{3, 5}";
     String expectedEnvironment = """
         A: {1, 3, 5, 7}
         B: {2, 3, 4, 5}
@@ -223,7 +233,14 @@ public class EvaluatorTest
                         """;
     List<Cell> statement = new Parser(new Scanner(inputString)).parse();
     SymbolTable environment = new SymbolTable();
-    String expectedOutput = "";
+    String expectedOutput = """
+        {1, 2, 3}
+        {2, 3, 4}
+        {1, 2, 3, 4}
+        {1}
+        {2, 3}
+        {1, 4}
+        """;
     String expectedEnvironment = """
         A: {1, 2, 3}
         B: {2, 3, 4}
@@ -261,7 +278,7 @@ public class EvaluatorTest
     PSet setA = PSet.fromIterator(IntStream.of(0, 1, 2, 3, 4).mapToObj(i -> (PValue) new PInteger(i)).iterator());
     environment.put("A", setA);
 
-    String expectedOutput = "";
+    String expectedOutput = "{1, 3, 5, 7, 9}";
     String expectedEnvironment = """
         A: {0, 1, 2, 3, 4}
         B: {1, 3, 5, 7, 9}
@@ -307,7 +324,7 @@ public class EvaluatorTest
     environment.put("A", setA);
     environment.put("B", setB);
 
-    String expectedOutput = "";
+    String expectedOutput = "{11, 15, 17, 19, 21, 23, 25, 29}";
     String expectedEnvironment = """
         A: {1, 3, 5, 7}
         B: {2, 3, 4, 5}
@@ -334,11 +351,218 @@ public class EvaluatorTest
             """;
     List<Cell> statement = new Parser(new Scanner(inputString)).parse();
     SymbolTable environment = new SymbolTable();
-    String expectedOutput = "";
+    String expectedOutput = "{\"mary\", \"wine\"}";
     String expectedEnvironment = """
         A: {"mary", "wine"}
         N: <builtin set (natural)>
         R: <builtin set (real)>
+        """;
+    return arguments(statement, environment, expectedOutput, expectedEnvironment);
+  }
+
+  /**
+   * 整数の集合に対する単純な質問のテスト（ふくまれる要素）
+   * 
+   * @return
+   */
+  private static Arguments testCase09()
+  {
+    String inputString = """
+        (PROVE
+                (~
+                    (SETELEMENT (INTEGER 3))
+                    (EXPRESSION
+                        (DOMLIMMITEDSET (UPPER_ID N)
+                            (DOMAINLIMITER
+                                (RANGE (INTEGER 1) (INTEGER 10)) (INTEGER 1))))))
+                """;
+    List<Cell> statement = new Parser(new Scanner(inputString)).parse();
+    SymbolTable environment = new SymbolTable();
+    String expectedOutput = "yes.";
+    String expectedEnvironment = """
+        N: <builtin set (natural)>
+        R: <builtin set (real)>
+        """;
+    return arguments(statement, environment, expectedOutput, expectedEnvironment);
+  }
+
+  /**
+   * 整数の集合に対する単純な質問のテスト（ふくまれない要素）
+   * 
+   * @return
+   */
+  private static Arguments testCase10()
+  {
+    String inputString = """
+        (PROVE
+                (~
+                    (SETELEMENT (INTEGER -1))
+                    (EXPRESSION
+                        (DOMLIMMITEDSET (UPPER_ID N)
+                            (DOMAINLIMITER
+                                (RANGE (INTEGER 1) (INTEGER 10)) (INTEGER 1))))))
+                """;
+    List<Cell> statement = new Parser(new Scanner(inputString)).parse();
+    SymbolTable environment = new SymbolTable();
+    String expectedOutput = "no.";
+    String expectedEnvironment = """
+        N: <builtin set (natural)>
+        R: <builtin set (real)>
+        """;
+    return arguments(statement, environment, expectedOutput, expectedEnvironment);
+  }
+
+  /**
+   * 「AND」を含む質問
+   * 
+   * @return
+   */
+  private static Arguments testCase11()
+  {
+    String inputString = """
+        (PROVE
+            (AND
+                (~
+                    (SETELEMENT (INTEGER 3))
+                    (EXPRESSION (UPPER_ID A)))
+                (~
+                    (SETELEMENT (INTEGER 4))
+                    (EXPRESSION (UPPER_ID A)))))
+
+        (PROVE
+            (AND
+                (~
+                    (SETELEMENT (INTEGER -1))
+                    (EXPRESSION (UPPER_ID A)))
+                (~
+                    (SETELEMENT (INTEGER 4))
+                    (EXPRESSION (UPPER_ID A)))))
+            """;
+    List<Cell> statement = new Parser(inputString).parse();
+    SymbolTable environment = new SymbolTable();
+    PSet setA = PSet.fromIterator(IntStream.of(1, 2, 3, 4).mapToObj(i -> (PValue) new PInteger(i)).iterator());
+    environment.put("A", setA);
+    String expectedOutput = """
+        yes.
+        no.
+        """;
+    String expectedEnvironment = """
+        A: {1, 2, 3, 4}
+        N: <builtin set (natural)>
+        R: <builtin set (real)>
+        """;
+    return arguments(statement, environment, expectedOutput, expectedEnvironment);
+  }
+
+  /**
+   * 「OR」をふくむ質問
+   * 
+   * @return
+   */
+  private static Arguments testCase12()
+  {
+    String inputString = """
+        (PROVE
+            (OR
+                (~
+                    (SETELEMENT (INTEGER 10))
+                    (EXPRESSION (UPPER_ID A)))
+                (~
+                    (SETELEMENT (INTEGER 15))
+                    (EXPRESSION (UPPER_ID A)))))
+
+        (PROVE
+            (OR
+                (~
+                    (SETELEMENT (INTEGER -1))
+                    (EXPRESSION (UPPER_ID A)))
+                (~
+                    (SETELEMENT (INTEGER 4))
+                    (EXPRESSION (UPPER_ID A)))))
+            """;
+    List<Cell> statement = new Parser(inputString).parse();
+    SymbolTable environment = new SymbolTable();
+    PSet setA = PSet.fromIterator(IntStream.of(1, 2, 3, 4).mapToObj(i -> (PValue) new PInteger(i)).iterator());
+    environment.put("A", setA);
+    String expectedOutput = """
+        no.
+        yes.
+        """;
+    String expectedEnvironment = """
+        A: {1, 2, 3, 4}
+        N: <builtin set (natural)>
+        R: <builtin set (real)>
+        """;
+    return arguments(statement, environment, expectedOutput, expectedEnvironment);
+  }
+
+  /**
+   * 充足試行のテスト
+   * 
+   * @return
+   */
+  private static Arguments testCase13()
+  {
+    String inputString = """
+        (PROVE
+            (~
+                (SETELEMENT (LOWER_ID x))
+                (EXPRESSION
+                    (DOMLIMMITEDSET (UPPER_ID N)
+                        (DOMAINLIMITER
+                            (RANGE (INTEGER 1) (INTEGER 5)) (INTEGER 1))))))
+            """;
+    List<Cell> statement = new Parser(inputString).parse();
+    SymbolTable environment = new SymbolTable();
+    String expectedOutput = """
+        {1, 2, 3, 4, 5}
+        """;
+    String expectedEnvironment = """
+        N: <builtin set (natural)>
+        R: <builtin set (real)>
+        """;
+    return arguments(statement, environment, expectedOutput, expectedEnvironment);
+  }
+
+  private static Arguments testCase14()
+  {
+    String inputString = """
+        (ASSERT (UPPER_ID TomLikes)
+            (EXTENSION
+                (SETELEMENTS
+                    (SETELEMENT (STRING "mary"))
+                    (SETELEMENT (STRING "wine"))
+                    (SETELEMENT (STRING "apple")))))
+
+        (ASSERT (UPPER_ID KenLikes)
+            (EXTENSION
+                (SETELEMENTS
+                    (SETELEMENT (STRING "mary"))
+                    (SETELEMENT (STRING "coffee"))
+                    (SETELEMENT (STRING "apple")))))
+
+        (PROVE
+            (AND
+                (!~
+                    (SETELEMENT (LOWER_ID x))
+                    (EXPRESSION (UPPER_ID KenLikes)))
+                (~
+                    (SETELEMENT (LOWER_ID x))
+                    (EXPRESSION (UPPER_ID TomLikes)))))
+                """;
+
+    List<Cell> statement = new Parser(inputString).parse();
+    SymbolTable environment = new SymbolTable();
+    String expectedOutput = """
+        {"apple", "mary", "wine"}
+        {"apple", "coffee", "mary"}
+        {"wine"}
+        """;
+    String expectedEnvironment = """
+        KenLikes: {"apple", "coffee", "mary"}
+        N: <builtin set (natural)>
+        R: <builtin set (real)>
+        TomLikes: {"apple", "mary", "wine"}
         """;
     return arguments(statement, environment, expectedOutput, expectedEnvironment);
   }

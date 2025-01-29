@@ -14,6 +14,7 @@ import vm.condition.IEvaluable.EvaluateResult;
 public class PSet extends PObject
 {
   private Set<PValue> elements;
+  private Set<PValue> complement;
 
   public static PSet fromExtension(Cell cell)
   {
@@ -62,15 +63,22 @@ public class PSet extends PObject
   public PSet()
   {
     this.elements = new HashSet<>();
+    this.complement = new HashSet<>();
   }
 
   public PSet(PValue... values)
   {
-    this.elements = new HashSet<>();
+    this();
     for (PValue pValue : values)
     {
       this.elements.add(pValue);
     }
+  }
+
+  public PSet(Set<PValue> elements, Set<PValue> complement)
+  {
+    this.elements = elements;
+    this.complement = complement;
   }
 
   public Iterable<PValue> values()
@@ -81,6 +89,16 @@ public class PSet extends PObject
   public Bool include(PValue value)
   {
     return Bool.of(this.elements.contains(value));
+  }
+
+  public Bool empty()
+  {
+    return Bool.of(this.elements.isEmpty());
+  }
+
+  public PSet complement()
+  {
+    return new PSet(complement, elements);
   }
 
   /**
@@ -101,6 +119,13 @@ public class PSet extends PObject
       result.elements.add(element);
     }
 
+    for (PValue value : this.complement)
+    {
+      if (anotherSet.complement.contains(value))
+      {
+        result.complement.add(value);
+      }
+    }
     return result;
   }
 
@@ -119,6 +144,14 @@ public class PSet extends PObject
           .ifFalse(() -> result.elements.add(element));
     }
 
+    for (PValue value : this.complement)
+    {
+      result.complement.add(value);
+    }
+    for (PValue value : anotherSet.elements)
+    {
+      result.complement.add(value);
+    }
     return result;
   }
 
@@ -135,6 +168,15 @@ public class PSet extends PObject
     {
       anotherSet.include(element)
           .ifTrue(() -> result.elements.add(element));
+    }
+
+    for (PValue value : this.complement)
+    {
+      result.complement.add(value);
+    }
+    for (PValue value : anotherSet.complement)
+    {
+      result.complement.add(value);
     }
     return result;
   }

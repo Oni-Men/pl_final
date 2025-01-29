@@ -17,7 +17,7 @@ Statement
         : Proof DOT                                             { $$ = $1; }
         | Assertion DOT                                         { $$ = $1; }
 Proof
-        : PROVE Inclusion                                       { $$ = node("PROVE", $2); }
+        : PROVE Conditions                                       { $$ = node("PROVE", $2); }
 Assertion
         : SetName ASSERT SetNotation                            { $$ = node("ASSERT", cons($1, $3)); }
 SetNotation

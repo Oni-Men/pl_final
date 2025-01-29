@@ -1,11 +1,15 @@
 package vm.condition;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import parser.ast.Cell;
 import util.Bool;
 import util.Cond;
 import vm.SymbolTable;
 import vm.exception.VMException;
 import vm.pobject.PSet;
+import vm.pobject.PVariable;
 
 /**
  * 条件
@@ -94,18 +98,35 @@ public class Conditions implements IEvaluable
           .get(operator, null);
 
       currentScope.put(variableName, generatedSet);
-      return new EvaluateResult(variableName, generatedSet, currentScope);
+
+      Bool status = Cond
+          .when(ConditionType.AND, () -> firstResult.status().and(secondResult.status()))
+          .or(ConditionType.OR, () -> firstResult.status().or(secondResult.status()))
+          .get(operator, Bool.of(false));
+
+      return new EvaluateResult(variableName, generatedSet, status, currentScope);
     }
 
     // AND演算の場合は左項によって生成される集合が選ばれる
     if (operator == ConditionType.AND)
     {
       currentScope.put(variableName, firstResult.generatedSet);
-      return new EvaluateResult(variableName, firstResult.generatedSet, currentScope);
+      return new EvaluateResult(variableName, firstResult.generatedSet, Bool.of(false), currentScope);
     }
 
     // OR演算がくると結果が不定になる
     throw new VMException();
   }
 
+  @Override
+  public Set<PVariable> freeVariables()
+  {
+    Set<PVariable> freePVariables1 = this.firstEvaluable.freeVariables();
+    Set<PVariable> freePVariables2 = this.firstEvaluable.freeVariables();
+    Set<PVariable> freePVariables = new HashSet<>();
+    freePVariables.addAll(freePVariables1);
+    freePVariables.addAll(freePVariables2);
+
+    return freePVariables;
+  }
 }

@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import parser.Parser;
 import parser.Scanner;
 import parser.ast.Cell;
+import vm.exception.VMException;
 
 public class Main
 {
@@ -31,9 +32,16 @@ public class Main
 
           for (Cell cell : programs)
           {
-            var anEvaluator = new Evaluator(cell, global);
-            anEvaluator.perform();
-            System.out.println(anEvaluator.output());
+            try
+            {
+              var anEvaluator = new Evaluator(cell, global);
+              anEvaluator.perform();
+              System.out.println(anEvaluator.output());
+            }
+            catch (VMException vmException)
+            {
+              System.out.println(vmException.getMessage());
+            }
           }
 
           buffer.setLength(0);

@@ -1,5 +1,6 @@
 package vm.condition;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -35,7 +36,7 @@ public class Equation extends Relation
 
     String variableName = "__" + leftFreeVariable.getSymbolName();
     PSet targetSet = doEvaluate(scope, rightFreeVariables.stream().toList(), rightExpression);
-    return new EvaluateResult(variableName, targetSet, scope);
+    return new EvaluateResult(variableName, targetSet, Bool.of(false), scope);
   }
 
   private PSet doEvaluate(SymbolTable scope, List<PVariable> freeVariables, MathExpression expression)
@@ -61,5 +62,15 @@ public class Equation extends Relation
       }
       return target;
     }
+  }
+
+  @Override
+  public Set<PVariable> freeVariables()
+  {
+    Set<PVariable> freeVariables = new HashSet<>();
+    freeVariables.addAll(this.leftExpression.freeVariables());
+    freeVariables.addAll(this.rightExpression.freeVariables());
+
+    return freeVariables;
   }
 }

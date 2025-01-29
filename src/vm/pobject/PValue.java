@@ -32,6 +32,8 @@ public class PValue extends PObject implements Comparable<PValue>
               () -> new PInteger(valueString))
           .or((s) -> s.equalsIgnoreCase("real"),
               () -> new PReal(valueString))
+          .or((s) -> s.equalsIgnoreCase("lower_id"),
+              () -> new PVariable(valueString))
           .get(elementType, nil);
     }
 

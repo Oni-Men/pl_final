@@ -102,6 +102,18 @@ public class Bool
     }
   }
 
+  public void ifTrueElse(Runnable then, Runnable orElse)
+  {
+    if (value)
+    {
+      then.run();
+    }
+    else
+    {
+      orElse.run();
+    }
+  }
+
   public <T extends RuntimeException> void throwIfTrue(Supplier<T> erroSupplier)
   {
     if (value)

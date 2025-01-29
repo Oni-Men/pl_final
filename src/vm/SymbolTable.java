@@ -86,7 +86,7 @@ public class SymbolTable
       return pSet;
     }
 
-    throw new ClassCastException(String.format("%s is not a set", name));
+    return null;
   }
 
   public PTuple getAsTuple(String name)
