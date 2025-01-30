@@ -2,7 +2,7 @@ ANT	= env LC_ALL=ja_JP.UTF-8 ant
 ARCHIVE	= $(shell basename `pwd`)
 PYTHON = env python
 
-.PHONY:	test
+.PHONY:	test start
 
 all:
 	$(ANT) all
@@ -12,6 +12,8 @@ clean:
 
 test:
 	$(ANT) test
+	(cd front ; make)
+	java -jar vm.jar
 
 junit:
 	$(ANT) junit

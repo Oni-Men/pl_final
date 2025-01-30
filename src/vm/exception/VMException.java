@@ -11,4 +11,14 @@ public class VMException extends RuntimeException
   {
     super(message);
   }
+
+  protected String quote(String word)
+  {
+    return "\"" + word + "\"";
+  }
+
+  protected String digest(String message)
+  {
+    return this.getClass().getSimpleName() + ": " + message;
+  }
 }

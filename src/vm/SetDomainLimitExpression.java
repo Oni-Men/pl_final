@@ -1,5 +1,6 @@
 package vm;
 
+import vm.exception.NoSetError;
 import vm.pobject.PSet;
 
 public class SetDomainLimitExpression extends SetExpression
@@ -23,7 +24,7 @@ public class SetDomainLimitExpression extends SetExpression
     PSet domainSet = symbolTable.getAsSet(domainName);
     if (domainSet == null)
     {
-      throw new RuntimeException("No set: " + domainName);
+      throw new NoSetError(domainName);
     }
 
     return domainSet.limitDomain(lowerBound, upperBound, step);

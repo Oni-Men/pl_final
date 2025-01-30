@@ -97,7 +97,7 @@ public class SymbolTable
       return pTuple;
     }
 
-    throw new ClassCastException(String.format("%s is not a tuple", name));
+    return null;
   }
 
   public PVariable getAsVariable(String name)
@@ -108,7 +108,7 @@ public class SymbolTable
       return pVariable;
     }
 
-    throw new ClassCastException(String.format("%s is not a variable", name));
+    return null;
   }
 
   public PValue getAsValue(String name)
@@ -119,7 +119,7 @@ public class SymbolTable
       return pValue;
     }
 
-    throw new ClassCastException(String.format("%s is not a value", name));
+    return null;
   }
 
   public SymbolTable fork()

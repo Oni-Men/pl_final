@@ -1,6 +1,7 @@
 package vm;
 
 import util.Bool;
+import vm.exception.NoSetError;
 import vm.pobject.PSet;
 
 public class SetVariableExpression extends SetExpression
@@ -17,7 +18,7 @@ public class SetVariableExpression extends SetExpression
   public PSet evaluate(SymbolTable symbolTable)
   {
     PSet pSet = symbolTable.getAsSet(setName);
-    Bool.of(pSet == null).throwIfTrue(() -> new RuntimeException("No set:" + setName));
+    Bool.of(pSet == null).throwIfTrue(() -> new NoSetError(setName));
 
     return pSet;
   }
