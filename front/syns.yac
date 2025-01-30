@@ -13,9 +13,11 @@ Program
 Statements
         : Statement                                             { $$ = $1; tree($$); }
         | Statements Statement                                  { $$ = $2; tree($$); }
+
 Statement
         : Proof DOT                                             { $$ = $1; }
         | Assertion DOT                                         { $$ = $1; }
+        | error DOT                                             { yyerrok; yyclearin; }
 Proof
         : PROVE Conditions                                       { $$ = node("PROVE", $2); }
 Assertion
@@ -113,7 +115,6 @@ void yyerror(char *s) {
         if (s == YYEOF)
         {
                 exit(EXIT_SUCCESS);
-        }
-        fprintf(stderr, "\n%s at %d: nearby \"%s\"\n\n", s, linecounter, yytext);
-        exit(EXIT_FAILURE);
+        } 
+        fprintf(stderr, "(YYERROR \"%s at %d: nearby %s\")\n", s, linecounter, yytext);
 }

@@ -46,6 +46,7 @@ public class ScannerTest
     return Stream.of(
         arguments("(+ X Y Z)", Arrays.asList(LPAR, PLUS, ID, ID, ID, RPAR)),
         arguments("0.5 -3.14 3.3333", Arrays.asList(REAL, REAL, REAL)),
+        arguments("(YYERROR \"syntax error at 1: nearby .\")", Arrays.asList(LPAR, ID, STRING, RPAR)),
         arguments("""
             (ASSERT
               (A N)

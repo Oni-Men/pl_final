@@ -1,7 +1,5 @@
 package vm;
 
-import static parser.ast.TokenType.ID;
-
 import parser.ast.Cell;
 import parser.ast.Leaf;
 import util.Bool;
@@ -32,25 +30,20 @@ public class Evaluator
   {
     this.initialize();
 
-    if (rootCell.head() instanceof Leaf aLeaf)
-    {
-      if (aLeaf.token().tokenType() == ID)
-      {
-        String verb = aLeaf.token().text();
-        if (verb.equalsIgnoreCase("assert"))
-        {
+    String verb = rootCell.head().<Leaf>as().text();
+    Bool.of(verb.equalsIgnoreCase("assert"))
+        .ifTrue(() -> {
           this.handleAssert(rootCell.tail());
-          return;
-        }
-        else if (verb.equalsIgnoreCase("prove"))
-        {
+        });
+    Bool.of(verb.equalsIgnoreCase("prove"))
+        .ifTrue(() -> {
           this.handleProve(rootCell.tail());
-          return;
-        }
-      }
-    }
+        });
 
-    throw new RuntimeException("parser error");
+    Bool.of(verb.equalsIgnoreCase("yyerror"))
+        .ifTrue(() -> {
+          this.handleError(rootCell.tail());
+        });
   }
 
   private void handleAssert(Cell cell)
@@ -76,6 +69,12 @@ public class Evaluator
         }, () -> {
           this.output(evaluationResult.status().ifTrueElse(() -> "yes.", () -> "no."));
         });
+  }
+
+  private void handleError(Cell cell)
+  {
+    String errorMessage = cell.head().text();
+    this.output(errorMessage);
   }
 
   private String nameOfSet(Cell cell)

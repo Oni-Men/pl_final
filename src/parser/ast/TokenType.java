@@ -9,7 +9,7 @@ public enum TokenType
   ID("[_a-zA-Z][_a-zA-Z0-9]*"),
   REAL("-?[0-9]+\\.[0-9]+"),
   NUMBER("-?[0-9]+"),
-  STRING("\"[a-zA-Z0-9_.:;=\\!#$%&\\(\\)/<>\\?-]*\""),
+  STRING("\"[a-zA-Z0-9_\s\t.:;=!#$%&()/<>?-]*\""),
   EQUAL("="),
   NOTEQ("!="),
   LT("<"),

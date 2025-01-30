@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -20,6 +21,28 @@ import vm.pobject.PValue;
 
 public class EvaluatorTest
 {
+
+  @Test
+  void testError()
+  {
+    String inputString = """
+        (YYERROR "syntax error at 1: nearby .")
+        """;
+    Parser parser = new Parser(inputString);
+    List<Cell> statements = parser.parse();
+    SymbolTable symbolTable = new SymbolTable();
+
+    StringBuffer output = new StringBuffer();
+    for (Cell cell : statements)
+    {
+      var evaluator = new Evaluator(cell, symbolTable);
+      evaluator.perform();
+
+      output.append(evaluator.output());
+    }
+
+    assertEquals("\"syntax error at 1: nearby .\"", output.toString().strip());
+  }
 
   @ParameterizedTest
   @MethodSource("testCaseProvider")
