@@ -1,6 +1,8 @@
 %{
 #include "defs.h"
 #define YYSTYPE Cell *
+
+Cell * minus(Cell *leaf);
 %}
 %token  UPPER_ID LOWER_ID INTEGER REAL STRING
         ASSERT PROVE SEMICOLON COMMA DOT LPAR RPAR LBRACE RBRACE LBRACKET RBRACKET VBAR
@@ -41,7 +43,6 @@ SetElements
 Value
         : Variable                                              { $$ = $1; }
         | Constant                                              { $$ = $1; }
-        | SUBTRACT Constant                                     { $$ = node("MINUS", $2); }
         | String                                                { $$ = $1; }
 Values
         : Value                                                 { $$ = node("VALUES", cons($1, NULL)); }
@@ -105,8 +106,12 @@ Factor
 Variable                
         : LOWER_ID                                              { $$ = leaf("LOWER_ID", yytext); }
 Constant                
-        : INTEGER                                               { $$ = leaf("INTEGER", yytext); }
-        | REAL                                                  { $$ = leaf("REAL", yytext); }
+        : Integer                                               { $$ = $1; }
+        | SUBTRACT Integer                                      { $$ = minus($2); }
+        | Real                                                  { $$ = $1; }
+        | SUBTRACT Real                                         { $$ = minus($2); }
+Integer : INTEGER                                               { $$ = leaf("INTEGER", yytext); }
+Real :    REAL                                                  { $$ = leaf("REAL", yytext); }
 String
         : STRING                                                { $$ = leaf("STRING", yytext); }
 %%              
@@ -117,4 +122,12 @@ void yyerror(char *s) {
                 exit(EXIT_SUCCESS);
         } 
         fprintf(stderr, "(YYERROR \"%s at %d: nearby %s\")\n", s, linecounter, yytext);
+}
+
+Cell *minus(Cell *leaf) {
+        size_t len = strlen((char *) leaf->tail);
+        char *negative_value = (char *)malloc(len + 1);
+        sprintf(negative_value, "-%s", (char *) leaf->tail);
+        leaf->tail = (Cell *) negative_value;
+        return leaf;
 }
