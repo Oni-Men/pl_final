@@ -48,7 +48,6 @@ public class Equation extends Relation
       PValue leftValue = leftExpressoin.evaluate(scope);
       PValue rightValue = rightExpression.evaluate(scope);
       Bool equal = Bool.of(leftValue.equals(rightValue));
-      System.out.println("no free vars");
       return Bool.of(elementName.equals("$"))
           .ifTrueElse(
               () -> new EvaluateResult(elementName, PSet.PHI, equal, Bool.of(true), scope),
@@ -95,7 +94,8 @@ public class Equation extends Relation
             .ifTrue(() -> new VMException("無効な等式(不定な変数をふくむ式)"));
 
         String indefiniteVariableName = freeVariablesWithScope.getFirst().getSymbolName();
-        Bool.of(indefiniteVariableName.equals(elementName)).not()
+        Bool.of(!indefiniteVariableName.equals(elementName))
+            .and(!elementName.equals("$"))
             .throwIfTrue(() -> new VMException("不定な変数が集合の要素変数ではありません"));
 
         PValue value = definiteExpression.evaluate(scope);
