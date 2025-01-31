@@ -110,7 +110,7 @@ public class Equation extends Relation
             .toList();
         PSet target = new PSet();
         PSet domain = scope.getAsSet("__" + freeVariable.getSymbolName());
-        Bool status = Bool.of(false);
+        Bool status = Bool.of(true);
         Bool noFreeVariables = Bool.of(true);
         for (PValue pValue : domain.values())
         {
@@ -119,7 +119,7 @@ public class Equation extends Relation
           EvaluateResult evaluated = doEvaluate(elementName, forked, nextfreeVariables,
               leftExpressoin, rightExpression);
           target = target.union(evaluated.generatedSet);
-          status = status.or(evaluated.satisfied);
+          status = status.and(evaluated.satisfied);
           noFreeVariables = noFreeVariables.and(evaluated.noFreeVariables);
         }
         return new EvaluateResult(elementName, target, status, noFreeVariables, scope);

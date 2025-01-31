@@ -100,7 +100,7 @@ public class EvaluatorTest
     String expectedOutput = """
         {-3, 0, 3}
         {-5, 1, 7}
-        yes.
+        no.
         """;
     assertEquals(expectedOutput.strip(), output.toString().strip());
   }
