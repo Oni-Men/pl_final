@@ -1,6 +1,6 @@
 package vm.exception;
 
-public class NoSetError extends VMException
+public class NoSetError extends VMError
 {
   private String setName;
 

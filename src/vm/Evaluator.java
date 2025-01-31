@@ -68,7 +68,7 @@ public class Evaluator
     (evaluationResult.noFreeVariables())
         .ifTrueElse(
             () -> {
-              this.output(evaluationResult.status().ifTrueElse(() -> "yes.", () -> "no."));
+              this.output(evaluationResult.satisfied().ifTrueElse(() -> "yes.", () -> "no."));
             },
             () -> {
               this.output(pSet.toString());

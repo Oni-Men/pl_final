@@ -20,7 +20,7 @@ public interface IEvaluable
     PSet generatedSet;
     SymbolTable symbolTable;
 
-    Bool status;
+    Bool satisfied;
     Bool noFreeVariables;
 
     public EvaluateResult(String variableName, PSet generatedSet, Bool status, Bool noFreeVariables,
@@ -29,7 +29,7 @@ public interface IEvaluable
       this.variableName = variableName;
       this.generatedSet = generatedSet;
       this.symbolTable = symbolTable;
-      this.status = status;
+      this.satisfied = status;
       this.noFreeVariables = noFreeVariables;
     }
 
@@ -54,9 +54,9 @@ public interface IEvaluable
       return this.symbolTable;
     }
 
-    public Bool status()
+    public Bool satisfied()
     {
-      return this.status;
+      return this.satisfied;
     }
 
     public Bool noFreeVariables()

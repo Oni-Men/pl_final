@@ -13,7 +13,7 @@ import parser.ast.Token;
 import parser.ast.TokenType;
 import util.Bool;
 import util.Cond;
-import vm.exception.VMException;
+import vm.exception.VMError;
 import vm.pobject.PSet;
 
 import static parser.ast.TokenType.*;
@@ -45,7 +45,7 @@ public class SetExpression
                 () -> variableSet(operand))
             .get(operatorName, null);
 
-        Bool.of(expression == null).throwIfTrue(() -> new VMException("Invalid expression"));
+        Bool.of(expression == null).throwIfTrue(() -> new VMError("Invalid expression"));
         return expression;
       }
       else
@@ -57,7 +57,7 @@ public class SetExpression
       }
     }
 
-    throw new VMException("Invalid expression");
+    throw new VMError("Invalid expression");
   }
 
   private static SetExpression domainLimitedSet(Cell cell)

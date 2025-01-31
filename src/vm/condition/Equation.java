@@ -7,7 +7,7 @@ import java.util.stream.Stream;
 
 import util.Bool;
 import vm.SymbolTable;
-import vm.exception.VMException;
+import vm.exception.VMError;
 import vm.expression.MathExpression;
 import vm.expression.ValueExpression;
 import vm.pobject.PSet;
@@ -79,24 +79,24 @@ public class Equation extends Relation
             .toList();
 
         // 左右合わせて不定な変数は一つのみ．
-        Bool.of(freeVariablesWithScope.size() != 1).throwIfTrue(() -> new VMException("無効な等式(不定な変数はたかだか1つ)"));
+        Bool.of(freeVariablesWithScope.size() != 1).throwIfTrue(() -> new VMError("無効な等式(不定な変数はたかだか1つ)"));
 
         // 不定な変数は左右の片方
         Bool leftIndefinite = Bool.of(leftFreeVariables.size() == 1).and(rightFreeVariables.size() == 0);
         Bool rightIndefinite = Bool.of(leftFreeVariables.size() == 0).and(rightFreeVariables.size() == 1);
-        leftIndefinite.or(rightIndefinite).not().throwIfTrue(() -> new VMException("無効な等式(不定な変数が両辺に存在)"));
+        leftIndefinite.or(rightIndefinite).not().throwIfTrue(() -> new VMError("無効な等式(不定な変数が両辺に存在)"));
 
         MathExpression definiteExpression = leftIndefinite.ifTrueElse(() -> righExpression, () -> leftExpressoin);
         MathExpression indefiniteExpression = leftIndefinite.ifTrueElse(() -> leftExpressoin, () -> rightExpression);
 
         // 不定な式は変数のみの式でなければならない．（x + 1）とかはだめ
         Bool.of(indefiniteExpression instanceof ValueExpression).not()
-            .ifTrue(() -> new VMException("無効な等式(不定な変数をふくむ式)"));
+            .ifTrue(() -> new VMError("無効な等式(不定な変数をふくむ式)"));
 
         String indefiniteVariableName = freeVariablesWithScope.getFirst().getSymbolName();
         Bool.of(!indefiniteVariableName.equals(elementName))
             .and(!elementName.equals("$"))
-            .throwIfTrue(() -> new VMException("不定な変数が集合の要素変数ではありません"));
+            .throwIfTrue(() -> new VMError("不定な変数が集合の要素変数ではありません"));
 
         PValue value = definiteExpression.evaluate(scope);
         return new EvaluateResult(elementName, new PSet(value), Bool.of(false), scope);
@@ -119,7 +119,7 @@ public class Equation extends Relation
           EvaluateResult evaluated = doEvaluate(elementName, forked, nextfreeVariables,
               leftExpressoin, rightExpression);
           target = target.union(evaluated.generatedSet);
-          status = status.or(evaluated.status);
+          status = status.or(evaluated.satisfied);
           noFreeVariables = noFreeVariables.and(evaluated.noFreeVariables);
         }
         return new EvaluateResult(elementName, target, status, noFreeVariables, scope);

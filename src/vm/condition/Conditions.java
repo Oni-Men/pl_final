@@ -7,7 +7,7 @@ import parser.ast.Cell;
 import util.Bool;
 import util.Cond;
 import vm.SymbolTable;
-import vm.exception.VMException;
+import vm.exception.VMError;
 import vm.pobject.PSet;
 import vm.pobject.PVariable;
 
@@ -29,7 +29,7 @@ public class Conditions implements IEvaluable
             () -> handleDisjunction(conditions.tail()))
         .get(logicType, null);
 
-    Bool.isNull(result).throwIfTrue(() -> new VMException("Invalid condition"));
+    Bool.isNull(result).throwIfTrue(() -> new VMError("Invalid condition"));
     return result;
   }
 
@@ -99,8 +99,8 @@ public class Conditions implements IEvaluable
       currentScope.put(variableName, generatedSet);
 
       Bool status = Cond
-          .when(ConditionType.AND, () -> firstResult.status().and(secondResult.status()))
-          .or(ConditionType.OR, () -> firstResult.status().or(secondResult.status()))
+          .when(ConditionType.AND, () -> firstResult.satisfied().and(secondResult.satisfied()))
+          .or(ConditionType.OR, () -> firstResult.satisfied().or(secondResult.satisfied()))
           .get(operator, Bool.of(false));
       Bool noFreeVariables = firstResult.noFreeVariables().and(secondResult.noFreeVariables());
 
@@ -112,11 +112,11 @@ public class Conditions implements IEvaluable
     {
       currentScope.put(variableName, firstResult.generatedSet);
       return new EvaluateResult(variableName, firstResult.generatedSet,
-          firstResult.status, firstResult.noFreeVariables, currentScope);
+          firstResult.satisfied, firstResult.noFreeVariables, currentScope);
     }
 
     // OR演算がくると結果が不定になる
-    throw new VMException();
+    throw new VMError();
   }
 
   @Override

@@ -21,7 +21,7 @@ import parser.Parser;
 import parser.Scanner;
 import parser.ast.Cell;
 import util.Bool;
-import vm.exception.VMException;
+import vm.exception.VMError;
 
 public class Main
 {
@@ -68,7 +68,7 @@ public class Main
               anEvaluator.perform();
               this.outputStream.println(anEvaluator.output());
             }
-            catch (VMException vmException)
+            catch (VMError vmException)
             {
               this.errorStream.println(vmException.getMessage());
             }

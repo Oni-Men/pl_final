@@ -6,7 +6,7 @@ import parser.ast.TokenType;
 import util.Bool;
 import util.Cond;
 import vm.SymbolTable;
-import vm.exception.VMException;
+import vm.exception.VMError;
 import vm.expression.MathExpression;
 import vm.pobject.PValue;
 
@@ -59,13 +59,13 @@ public abstract class Relation implements IEvaluable
             () -> (Relation) new Inequation(operator, firstOperand, secondOperand))
         .get(operator, null);
 
-    Bool.isNull(result).throwIfTrue(() -> new VMException("Invalid relation"));
+    Bool.isNull(result).throwIfTrue(() -> new VMError("Invalid relation"));
     return result;
   }
 
   public EvaluateResult evaluate(String elementName, SymbolTable scope)
   {
-    throw new VMException("実装されていません");
+    throw new VMError("実装されていません");
   }
 
 }

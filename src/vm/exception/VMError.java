@@ -1,13 +1,13 @@
 package vm.exception;
 
-public class VMException extends RuntimeException
+public class VMError extends RuntimeException
 {
-  public VMException()
+  public VMError()
   {
 
   }
 
-  public VMException(String message)
+  public VMError(String message)
   {
     super(message);
   }

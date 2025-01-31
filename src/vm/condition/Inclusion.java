@@ -7,7 +7,7 @@ import parser.ast.Cell;
 import util.Bool;
 import vm.Evaluator;
 import vm.SymbolTable;
-import vm.exception.VMException;
+import vm.exception.VMError;
 import vm.pobject.PSet;
 import vm.pobject.PValue;
 import vm.pobject.PVariable;
@@ -53,7 +53,7 @@ public class Inclusion extends Relation
   public EvaluateResult evaluate(String elementName, SymbolTable scope)
   {
     PSet domain = Evaluator.handleNotation(domainSetNotation, scope);
-    Bool.of(domain == null).throwIfTrue(() -> new VMException("集合が未定義"));
+    Bool.of(domain == null).throwIfTrue(() -> new VMError("集合が未定義"));
 
     // 集合要素が変数の場合，status = false．具体的な値の場合は，集合にふくまれるとき status = true，
     Bool noFreeVariables = Bool.of(this.setElement instanceof PVariable).not();

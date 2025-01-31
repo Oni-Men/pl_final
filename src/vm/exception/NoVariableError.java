@@ -1,6 +1,6 @@
 package vm.exception;
 
-public class NoVariableError extends VMException
+public class NoVariableError extends VMError
 {
   private String variableName;
 
