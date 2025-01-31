@@ -75,19 +75,18 @@ public class Conditions implements IEvaluable
     this.secondEvaluable = secondEvaluable;
   }
 
-  public EvaluateResult evaluate(SymbolTable symbolTable)
+  public EvaluateResult evaluate(String elementName, SymbolTable symbolTable)
   {
     SymbolTable currentScope = symbolTable.fork();
 
     // 右項（第二項）から評価する
-    EvaluateResult secondResult = secondEvaluable.evaluate(symbolTable);
+    EvaluateResult secondResult = secondEvaluable.evaluate(elementName, symbolTable);
     currentScope.put(secondResult.variableName, secondResult.generatedSet);
 
     // 続いて左項を評価
-    EvaluateResult firstResult = firstEvaluable.evaluate(currentScope);
+    EvaluateResult firstResult = firstEvaluable.evaluate(elementName, currentScope);
 
-    // 結果の変数名は左項（第一項）のものを流用する
-    String variableName = firstResult.variableName;
+    String variableName = "__" + elementName;
 
     // 左項と右項の変数名が同じときはAND，ORに応じて集合演算
     if (firstResult.variableName.equals(secondResult.variableName))
@@ -103,15 +102,17 @@ public class Conditions implements IEvaluable
           .when(ConditionType.AND, () -> firstResult.status().and(secondResult.status()))
           .or(ConditionType.OR, () -> firstResult.status().or(secondResult.status()))
           .get(operator, Bool.of(false));
+      Bool noFreeVariables = firstResult.noFreeVariables().and(secondResult.noFreeVariables());
 
-      return new EvaluateResult(variableName, generatedSet, status, currentScope);
+      return new EvaluateResult(variableName, generatedSet, status, noFreeVariables, currentScope);
     }
 
     // AND演算の場合は左項によって生成される集合が選ばれる
     if (operator == ConditionType.AND)
     {
       currentScope.put(variableName, firstResult.generatedSet);
-      return new EvaluateResult(variableName, firstResult.generatedSet, Bool.of(false), currentScope);
+      return new EvaluateResult(variableName, firstResult.generatedSet,
+          firstResult.status, firstResult.noFreeVariables, currentScope);
     }
 
     // OR演算がくると結果が不定になる

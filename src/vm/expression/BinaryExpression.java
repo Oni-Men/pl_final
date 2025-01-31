@@ -49,4 +49,13 @@ public class BinaryExpression extends MathExpression
     freeVariables.addAll(this.secondOperand.freeVariables());
     return freeVariables;
   }
+
+  @Override
+  public Set<PVariable> freeVariables(SymbolTable symbolTable)
+  {
+    Set<PVariable> freeVariables = new HashSet<>();
+    freeVariables.addAll(this.firstOperand.freeVariables(symbolTable));
+    freeVariables.addAll(this.secondOperand.freeVariables(symbolTable));
+    return freeVariables;
+  }
 }

@@ -13,6 +13,11 @@ import vm.condition.IEvaluable.EvaluateResult;
 
 public class PSet extends PObject
 {
+  /**
+   * 空集合
+   */
+  public static final PSet PHI = new PSet();
+
   private Set<PValue> elements;
   private Set<PValue> complement;
 
@@ -51,12 +56,13 @@ public class PSet extends PObject
 
   public static PSet fromIntension(Cell cell, SymbolTable symbolTable)
   {
+    String elementName = ConsUtil.setElementName(cell.head());
     Cell conditions = cell.next();
     Bool.of(conditions.nil()).throwIfTrue(() -> new RuntimeException("Invalid format: Conditions"));
 
-    EvaluateResult evaluationResult = Conditions.of(conditions).evaluate(symbolTable);
+    EvaluateResult evaluationResult = Conditions.of(conditions).evaluate(elementName, symbolTable);
 
-    String variableName = "__" + ConsUtil.setElementName(cell.head());
+    String variableName = "__" + elementName;
     return evaluationResult.symbolTable().getAsSet(variableName);
   }
 

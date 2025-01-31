@@ -22,8 +22,8 @@ public class PValue extends PObject implements Comparable<PValue>
     PValue result = nil;
     if (cell.head().text().equalsIgnoreCase("setelement"))
     {
-      String elementType = cell.tail().head().head().text();
-      String valueString = cell.tail().head().tail().head().text();
+      String elementType = cell.next().head().text();
+      String valueString = cell.next().next().text();
 
       result = Cond
           .<String, PValue>when((s) -> s.equalsIgnoreCase("string"),

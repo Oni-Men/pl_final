@@ -63,7 +63,7 @@ public abstract class Relation implements IEvaluable
     return result;
   }
 
-  public EvaluateResult evaluate(SymbolTable scope)
+  public EvaluateResult evaluate(String elementName, SymbolTable scope)
   {
     throw new VMException("実装されていません");
   }

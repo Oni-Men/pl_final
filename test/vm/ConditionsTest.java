@@ -28,9 +28,9 @@ public class ConditionsTest
 
   @ParameterizedTest
   @MethodSource("testCaseProvider")
-  void testConditoins(SymbolTable symbolTable, Conditions conditions, PSet expectedSet)
+  void testConditoins(String elementName, SymbolTable symbolTable, Conditions conditions, PSet expectedSet)
   {
-    var result = conditions.evaluate(symbolTable);
+    var result = conditions.evaluate(elementName, symbolTable);
     var actualSet = result.symbolTable().getAsSet(result.variableName());
     assertEquals(expectedSet, actualSet);
   }
@@ -63,7 +63,7 @@ public class ConditionsTest
     Conditions conditions = new Conditions(ConditionType.AND, equation, inclusion);
     PSet expectedSet = fromIntegres(1, 3, 5, 7);
 
-    return arguments(symbolTable, conditions, expectedSet);
+    return arguments("x", symbolTable, conditions, expectedSet);
   }
 
   private static Arguments testCase01()
@@ -105,7 +105,7 @@ public class ConditionsTest
             inclusion1),
         inclusion2);
     PSet expectedSet = fromIntegres(11, 15, 17, 19, 21, 23, 25, 29);
-    return arguments(symbolTable, conditions, expectedSet);
+    return arguments("x", symbolTable, conditions, expectedSet);
   }
 
   static Cell notation(String inputString)

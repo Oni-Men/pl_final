@@ -44,6 +44,67 @@ public class EvaluatorTest
     assertEquals("\"syntax error at 1: nearby .\"", output.toString().strip());
   }
 
+  @Test
+  void testSpecial01()
+  {
+    String inputString = """
+        (ASSERT (UPPER_ID A)
+            (INTENSION
+                (SETELEMENT (LOWER_ID x))
+                (AND
+                    (=
+                        (-
+                            (*
+                                (* (LOWER_ID x) (LOWER_ID x)) (LOWER_ID x))
+                            (* (INTEGER 9) (LOWER_ID x))) (INTEGER 0))
+                    (~
+                        (SETELEMENT (LOWER_ID x))
+                        (EXPRESSION
+                            (DOMLIMMITEDSET (UPPER_ID N)
+                                (DOMAINLIMITER
+                                    (RANGE (INTEGER -10) (INTEGER 10)) (INTEGER 1))))))))
+
+        (ASSERT (UPPER_ID A)
+            (INTENSION
+                (SETELEMENT (LOWER_ID x))
+                (AND
+                    (= (LOWER_ID x)
+                        (+
+                            (* (INTEGER 2) (LOWER_ID y)) (INTEGER 1)))
+                    (~
+                        (SETELEMENT (LOWER_ID y))
+                        (EXPRESSION (UPPER_ID A))))))
+
+        (PROVE
+            (AND
+                (=
+                    (+
+                        (* (LOWER_ID x) (LOWER_ID x)) (INTEGER 1)) (INTEGER 2))
+                (~
+                    (SETELEMENT (LOWER_ID x))
+                    (EXPRESSION (UPPER_ID A)))))
+                    """;
+    Parser parser = new Parser(inputString);
+    List<Cell> statements = parser.parse();
+    SymbolTable symbolTable = new SymbolTable();
+
+    StringBuffer output = new StringBuffer();
+    for (Cell cell : statements)
+    {
+      var evaluator = new Evaluator(cell, symbolTable);
+      evaluator.perform();
+
+      output.append(evaluator.output());
+    }
+
+    String expectedOutput = """
+        {-3, 0, 3}
+        {-5, 1, 7}
+        yes.
+        """;
+    assertEquals(expectedOutput.strip(), output.toString().strip());
+  }
+
   @ParameterizedTest
   @MethodSource("testCaseProvider")
   void testEvaluator(List<Cell> statement, SymbolTable environment, String expectedOutput, String expectedEnvironment)
@@ -78,7 +139,8 @@ public class EvaluatorTest
         testCase11(),
         testCase12(),
         testCase13(),
-        testCase14());
+        testCase14(),
+        testCase15());
   }
 
   /**
@@ -586,6 +648,47 @@ public class EvaluatorTest
         N: <builtin set (natural)>
         R: <builtin set (real)>
         TomLikes: {"apple", "mary", "wine"}
+        """;
+    return arguments(statement, environment, expectedOutput, expectedEnvironment);
+  }
+
+  /**
+   * 方程式をふくむ集合定義
+   * 
+   * @return
+   */
+  private static Arguments testCase15()
+  {
+    String inputString = """
+        (ASSERT (UPPER_ID A)
+            (INTENSION
+                (SETELEMENT (LOWER_ID x))
+                (AND
+                    (=
+                        (-
+                            (* (LOWER_ID x) (LOWER_ID x))
+                            (* (INTEGER 2) (LOWER_ID x))) (INTEGER 0))
+                    (~
+                        (SETELEMENT (LOWER_ID x))
+                        (EXTENSION
+                            (SETELEMENTS
+                                (SETELEMENT (INTEGER -3))
+                                (SETELEMENT (INTEGER -2))
+                                (SETELEMENT (INTEGER -1))
+                                (SETELEMENT (INTEGER 0))
+                                (SETELEMENT (INTEGER 1))
+                                (SETELEMENT (INTEGER 2))
+                                (SETELEMENT (INTEGER 3))))))))
+                    """;
+    List<Cell> statement = new Parser(inputString).parse();
+    SymbolTable environment = new SymbolTable();
+    String expectedOutput = """
+        {0, 2}
+        """;
+    String expectedEnvironment = """
+        A: {0, 2}
+        N: <builtin set (natural)>
+        R: <builtin set (real)>
         """;
     return arguments(statement, environment, expectedOutput, expectedEnvironment);
   }

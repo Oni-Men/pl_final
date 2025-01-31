@@ -21,13 +21,22 @@ public interface IEvaluable
     SymbolTable symbolTable;
 
     Bool status;
+    Bool noFreeVariables;
 
-    public EvaluateResult(String variableName, PSet generatedSet, Bool status, SymbolTable symbolTable)
+    public EvaluateResult(String variableName, PSet generatedSet, Bool status, Bool noFreeVariables,
+        SymbolTable symbolTable)
     {
       this.variableName = variableName;
       this.generatedSet = generatedSet;
       this.symbolTable = symbolTable;
       this.status = status;
+      this.noFreeVariables = noFreeVariables;
+    }
+
+    public EvaluateResult(String variableName, PSet generatedSet, Bool status,
+        SymbolTable symbolTable)
+    {
+      this(variableName, generatedSet, status, Bool.of(false), symbolTable);
     }
 
     public String variableName()
@@ -49,6 +58,16 @@ public interface IEvaluable
     {
       return this.status;
     }
+
+    public Bool noFreeVariables()
+    {
+      return this.noFreeVariables;
+    }
+
+    public void noFreeVariables(Bool value)
+    {
+      this.noFreeVariables = value;
+    }
   }
 
   public static IEvaluable of(Cell evaluable)
@@ -69,7 +88,7 @@ public interface IEvaluable
     return result;
   }
 
-  EvaluateResult evaluate(SymbolTable scope);
+  EvaluateResult evaluate(String elementName, SymbolTable scope);
 
   Set<PVariable> freeVariables();
 }

@@ -47,4 +47,18 @@ public class ValueExpression extends MathExpression
     }
     return freeVriables;
   }
+
+  @Override
+  public Set<PVariable> freeVariables(SymbolTable symbolTable)
+  {
+    Set<PVariable> freeVriables = HashSet.newHashSet(1);
+    if (this.value instanceof PVariable pVariable)
+    {
+      if (pVariable.getSymbol(symbolTable) == null)
+      {
+        freeVriables.add(pVariable);
+      }
+    }
+    return freeVriables;
+  }
 }

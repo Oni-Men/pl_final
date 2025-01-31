@@ -69,4 +69,9 @@ public class MathExpression
   {
     return Collections.emptySet();
   }
+
+  public Set<PVariable> freeVariables(SymbolTable symbolTable)
+  {
+    return Collections.emptySet();
+  }
 }

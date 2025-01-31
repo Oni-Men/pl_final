@@ -28,4 +28,20 @@ public class PVariable extends PValue
     return true;
   }
 
+  @Override
+  public boolean equals(Object obj)
+  {
+    if (obj instanceof PVariable pVariable)
+    {
+      return this.symbolName.equals(pVariable.getSymbolName());
+    }
+
+    return false;
+  }
+
+  @Override
+  public int hashCode()
+  {
+    return this.symbolName.hashCode();
+  }
 }

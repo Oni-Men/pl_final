@@ -58,17 +58,21 @@ public class Evaluator
   private void handleProve(Cell cell)
   {
     IEvaluable evaluable = IEvaluable.of(cell.head());
+    EvaluateResult evaluationResult = evaluable.evaluate("$", environment);
 
-    Bool insufficient = Bool.of(evaluable.freeVariables().size() > 0);
+    PSet pSet = evaluationResult.generatedSet();
+    // this.output(pSet.toString());
+    // this.output(evaluationResult.status().ifTrueElse(() -> "yes.", () -> "no."));
 
-    EvaluateResult evaluationResult = evaluable.evaluate(environment);
-
-    insufficient.ifTrueElse(
-        () -> {
-          this.output(evaluationResult.generatedSet().toString());
-        }, () -> {
-          this.output(evaluationResult.status().ifTrueElse(() -> "yes.", () -> "no."));
-        });
+    // 質問であって，自由変数がない（すべての変数に対する束縛に成功した）ならば yes/ no で答える
+    (evaluationResult.noFreeVariables())
+        .ifTrueElse(
+            () -> {
+              this.output(evaluationResult.status().ifTrueElse(() -> "yes.", () -> "no."));
+            },
+            () -> {
+              this.output(pSet.toString());
+            });
   }
 
   private void handleError(Cell cell)
