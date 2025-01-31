@@ -7,7 +7,7 @@ int linecounter = 1;
 [a-z_][a-zA-Z0-9_]*                             			{ return(LOWER_ID); }
 [0-9]+                                      				{ return(INTEGER); }
 [0-9]*"."[0-9]+                             				{ return(REAL); }
-"\""[a-zA-Z0-9_ \t.:;=\!#$%&\(\)/<>\?-]*"\""					{ return(STRING); }
+"\""[a-zA-Z0-9_ \t.:;=\!#$%&\(\)/<>\?-]*"\""				{ return(STRING); }
 ":="                                            			{ return(ASSERT); }
 "?="                                            			{ return(PROVE); }
 ";"                                             			{ return(SEMICOLON); }
@@ -38,6 +38,7 @@ int linecounter = 1;
 "\r"                                            			{ linecounter++; }
 " "|"\t"                                        			{ }
 "/*"                                            			{ comment(); }
+"//".*    													{ }
 .                                               			{ return(UNKNOWN); }
 %%
 int yywrap(void) {
